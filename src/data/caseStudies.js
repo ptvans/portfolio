@@ -1,7 +1,3 @@
-// Placeholder image generator for demo
-const placeholderImage = (width, height, text) => 
-  `https://via.placeholder.com/${width}x${height}/333/888?text=${encodeURIComponent(text)}`;
-
 export const caseStudies = {
   'on-call': {
     title: 'Reimagining on-call software',
@@ -13,7 +9,7 @@ export const caseStudies = {
         content: [
           {
             type: 'image',
-            src: placeholderImage(1200, 800, 'Mobile+Screens'),
+            src: '/images/case-studies/on-call/mobile-screens.png',
             alt: 'Sample screens from the on-call app',
             caption: 'Sample screens from the on-call app — switch theme to see light/dark examples'
           },
@@ -111,7 +107,7 @@ export const caseStudies = {
           },
           {
             type: 'image',
-            src: placeholderImage(1400, 900, 'Desktop+Interface'),
+            src: '/images/case-studies/on-call/desktop-interface.png',
             alt: 'Desktop scheduling interface',
             caption: 'Web interface for managing on-call schedules'
           }
