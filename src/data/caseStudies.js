@@ -9,7 +9,7 @@ export const caseStudies = {
         content: [
           {
             type: 'image',
-            src: '/images/case-studies/on-call/mobile-screens.png',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/on-call/mobile-screens.png`,
             alt: 'Sample screens from the on-call app',
             caption: 'Sample screens from the on-call app — switch theme to see light/dark examples'
           },
@@ -107,7 +107,7 @@ export const caseStudies = {
           },
           {
             type: 'image',
-            src: '/images/case-studies/on-call/desktop-interface.png',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/on-call/desktop-interface.png`,
             alt: 'Desktop scheduling interface',
             caption: 'Web interface for managing on-call schedules'
           }

@@ -22,9 +22,11 @@
 ```javascript
 {
   type: 'image',
-  src: '/images/case-studies/on-call/mobile-screens.png',
+  src: `${process.env.PUBLIC_URL}/images/case-studies/on-call/mobile-screens.png`,
   alt: 'Mobile app interface',
   caption: 'Sample screens from the on-call app'
 }
 ```
+
+**Note:** Use `process.env.PUBLIC_URL` prefix for images to work correctly on GitHub Pages.
 
