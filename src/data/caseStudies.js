@@ -1,7 +1,7 @@
 export const caseStudies = {
-  'on-call': {
-    title: 'Reimagining on-call software',
-    subtitle: 'Incident.io.',
+  'ai-coding-agents': {
+    title: 'Make Coding Agents Easy to Use',
+    subtitle: 'Replit.com',
     sections: [
       {
         id: 'context',
@@ -19,11 +19,11 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'When I joined Incident.io, the company offered incident management tools focused on communication and coordination inside Slack. But customers still relied on third-party on-call products like PagerDuty and Opsgenie to route alerts — and they hated them.'
+            value: 'Transition from a ai-assisted IDE to an ai-driven app building experience.'
           },
           {
             type: 'text',
-            value: 'PagerDuty in particular was powerful but dated: complex configuration, clunky UX, and a mobile app that was notoriously painful to use. Many of our customers were actively asking, "When are you going to build this too?"'
+            value: 'With the advent of LLM coding models, Replit wanted to open up their product beyond the audience of preofessional developers to anyone with a computer or phone.'
           },
           {
             type: 'text',
@@ -41,11 +41,11 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'On-call software touches every layer of an organisation: alert ingestion, routing, scheduling, escalation, and notifications. It\'s technically deep and full of configuration edge-cases.'
+            value: 'Why do most users abandon ai app creation before achieving a working version?'
           },
           {
             type: 'text',
-            value: 'PagerDuty\'s complexity allows it to handle every imaginable setup — but that same flexibility makes it painful to use day-to-day. Our challenge was to re-imagine on-call from the ground up: preserve the power, remove the pain.'
+            value: 'Most people are missing two key pieces of experience that would enable product creation. They are missing knowledge of the product development process. They also dont know what these coding agents are capabable of.'
           }
         ]
       },

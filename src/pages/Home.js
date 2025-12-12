@@ -14,19 +14,19 @@ function Home({ theme, toggleTheme }) {
               <path d="M8 32c0-6.627 5.373-12 12-12s12 5.373 12 12" fill="currentColor" opacity="0.6"/>
             </svg>
           </div>
-          <h1 className="name">Sam Willis</h1>
+          <h1 className="name">Paul Van Slembrouck</h1>
           <p className="title">
-            Product designer at <a href="https://incident.io" target="_blank" rel="noopener noreferrer">incident.io</a>
+            Senior Product Designer with Front End Engineering experience
           </p>
         </div>
 
         <section className="about-section">
           <h2>About</h2>
-          <p>I specialise in clear, considered interfaces for complex products.</p>
+          <p>I specialize in ai-augmented workflows, process automation, and data visualization in the enterprise space.</p>
           <p>
-            I currently lead design at <a href="https://incident.io" target="_blank" rel="noopener noreferrer">incident.io</a> and previously worked on
-            product teams at <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">GoCardless</a> and{' '}
-            <a href="https://duffel.com" target="_blank" rel="noopener noreferrer">Duffel</a>.
+            I have worked on product teams at{' '}
+            <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">Facebook</a>, <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">Uber</a>, <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">Apple</a> and{' '}
+            <a href="https://duffel.com" target="_blank" rel="noopener noreferrer">Replit</a>.{' '} I've also helped <a href="https://waterinthewest.stanford.edu/" target="_blank" rel="noopener noreferrer">Stanford University</a> publish climate and water use research data.
           </p>
         </section>
 
@@ -34,10 +34,7 @@ function Home({ theme, toggleTheme }) {
           <h2>Case studies</h2>
           <ul>
             <li>
-              <Link to="/case-study/status-pages">Status pages redesign</Link>
-            </li>
-            <li>
-              <Link to="/case-study/on-call">Reimagining on-call software</Link>
+              <Link to="/case-study/ai-coding-agents">Make Coding Agents Easy to Use</Link>
             </li>
           </ul>
         </section>
@@ -46,13 +43,13 @@ function Home({ theme, toggleTheme }) {
           <h2>Connect</h2>
           <ul>
             <li>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a>
+              <a href="https://github.com/ptvans" target="_blank" rel="noopener noreferrer">Github</a>
             </li>
             <li>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <a href="https://www.linkedin.com/in/paul-van-slembrouck-6469a71a4/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             </li>
             <li>
-              <a href="mailto:hello@example.com">Email</a>
+              <a href="mailto:ptvans@gmail.com">Email</a>
             </li>
           </ul>
         </section>
