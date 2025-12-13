@@ -9,7 +9,7 @@ function Home({ theme, toggleTheme }) {
         <div className="profile-section">
           <div className="avatar">
             <img 
-              src="/images/paul-blue-avatar-pfp.jpg" 
+              src="./images/paul-blue-avatar-pfp.jpg" 
               alt="Paul Van Slembrouck" 
               className="avatar-image"
             />
@@ -29,7 +29,7 @@ function Home({ theme, toggleTheme }) {
 
         <section className="about-section">
           <h2>About</h2>
-          <p>I specialize in ai-augmented workflows, process automation, and data visualization. I focus on desktop web experiences in the B2B / enterprise space.</p>
+          <p>I specialize in AI-augmented workflows, process automation, and data visualization. I focus on desktop web experiences in the B2B / enterprise space.</p>
           <p>
             I have worked on product teams at{' '}
             <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">Facebook</a>, <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">Uber</a>, <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">Apple</a> and{' '}

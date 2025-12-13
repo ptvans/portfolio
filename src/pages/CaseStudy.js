@@ -52,7 +52,7 @@ function CaseStudy({ theme, toggleTheme }) {
       <nav className="case-study-nav">
         <Link to="/" className="back-button">
           <img 
-            src="/images/paul-blue-avatar-pfp.jpg" 
+            src="./images/paul-blue-avatar-pfp.jpg" 
             alt="Paul Van Slembrouck" 
             className="avatar-image"
           />
