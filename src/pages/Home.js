@@ -23,13 +23,13 @@ function Home({ theme, toggleTheme }) {
           </div>
           <h2 className="name">Paul Van Slembrouck</h2>
           <p className="title">
-            Product Designer, with front end experience
+            Product designer, with front end experience
           </p>
         </div>
 
         <section className="about-section">
           <h2>About</h2>
-          <p>I specialize in AI-augmented workflows, process automation, and data visualization. I focus on desktop web experiences in the B2B / enterprise space.</p>
+          <p>I have experience in automated and AI / ML workflows, enterprise systems, and data visualization.</p>
           <p>
             I have worked on product teams at{' '}
             <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>, <a href="https://www.uber.com" target="_blank" rel="noopener noreferrer">Uber</a>, <a href="https://www.apple.com" target="_blank" rel="noopener noreferrer">Apple</a> and{' '}
