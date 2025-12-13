@@ -8,11 +8,18 @@ function Home({ theme, toggleTheme }) {
       <div className="home-container">
         <div className="profile-section">
           <div className="avatar">
+            <img 
+              src="/images/paul-blue-avatar-pfp.jpg" 
+              alt="Paul Van Slembrouck" 
+              className="avatar-image"
+            />
+            {/* SVG logo - commented out for potential future use
             <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="20" cy="20" r="20" fill="currentColor" opacity="0.1"/>
               <circle cx="20" cy="16" r="6" fill="currentColor" opacity="0.6"/>
               <path d="M8 32c0-6.627 5.373-12 12-12s12 5.373 12 12" fill="currentColor" opacity="0.6"/>
             </svg>
+            */}
           </div>
           <h2 className="name">Paul Van Slembrouck</h2>
           <p className="title">
@@ -22,7 +29,7 @@ function Home({ theme, toggleTheme }) {
 
         <section className="about-section">
           <h2>About</h2>
-          <p>I specialize in ai-augmented workflows, process automation, and data visualization in the enterprise space.</p>
+          <p>I specialize in ai-augmented workflows, process automation, and data visualization. I focus on desktop web experiences in the B2B / enterprise space.</p>
           <p>
             I have worked on product teams at{' '}
             <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">Facebook</a>, <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">Uber</a>, <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">Apple</a> and{' '}

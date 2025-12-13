@@ -13,7 +13,12 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'Transitioning from a chat-assisted IDE to an ai-driven app building experience...'
+            value: 'Transitioning from a chat-assisted IDE to an AI-driven app building experience...',
+            italic: true
+          },
+          {
+            type: 'text',
+            value: 'With the advent of LLM coding models, Replit wanted to open up their product to anyone with a computer or phone, beyond the audience of professional developers.'
           },
           {
             type: 'image',
@@ -126,10 +131,15 @@ export const caseStudies = {
           {
             type: 'text',
             parts: [
-              'I joined Replit',
-              ' after a round of layoffs, right at the moment they decided to pivot from a developer-targeted IDE to agentic coding for the masses. At that time, revenue was approximately $6M ARR.  I was the only product designer working on the agentic project creation flow. After this product pivot and workflow redesign, ARR quickly grew to $20M and is now at ', 
+              'I joined Replit after a round of layoffs, right at the moment they decided to pivot from a developer-targeted IDE to agentic coding for the masses. At that time, revenue was approximately $6M ARR.'
+            ]
+          },
+          {
+            type: 'text',
+            parts: [
+              'I was the only product designer working on the agentic project creation flow. After this product pivot and workflow redesign, new user dropoff in the app creation flow was reduced by a third. ARR quickly grew to $20M and is now at ', 
               { type: 'link', text: '$150M ARR a year later', url: 'https://www.cnbc.com/2025/12/04/google-replit-ai-vibe-coding-anthropic-cursor.html' },
-              ' and there is still room for significant improvement.'
+              ', and there is still room for significant improvement.'
             ]
           }
         ]
