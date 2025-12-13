@@ -55,12 +55,6 @@ export const caseStudies = {
               'They don\'t know what these coding agents are capable of doing',
               'They don\'t know how to accurately define an MVP app for said coding agent to work on'
             ]
-          },
-          {
-            type: 'image',
-            src: `${process.env.PUBLIC_URL}/images/case-studies/on-call/slide02.png`,
-            alt: 'Agent-guided app development plan',
-            caption: 'Agent-guided app development plan'
           }
         ]
       },
@@ -79,6 +73,12 @@ export const caseStudies = {
           {
             type: 'text',
             value: 'The Planner Agent would help a user define the app they wanted to build. The Product Manager Agent would then monitor plan progress, dole out tasks to the Coding Agent, and check with the user to confirm that features were working as intended. The Coding Agent generated code and set up dependencies and integrations.'
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/on-call/slide02.png`,
+            alt: 'Agent-guided app development plan',
+            caption: 'Agent-guided app development plan'
           },
           {
             type: 'text',

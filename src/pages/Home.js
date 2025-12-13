@@ -32,8 +32,8 @@ function Home({ theme, toggleTheme }) {
           <p>I specialize in AI-augmented workflows, process automation, and data visualization. I focus on desktop web experiences in the B2B / enterprise space.</p>
           <p>
             I have worked on product teams at{' '}
-            <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">Facebook</a>, <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">Uber</a>, <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">Apple</a> and{' '}
-            <a href="https://duffel.com" target="_blank" rel="noopener noreferrer">Replit</a>.{' '} I've also helped <a href="https://waterinthewest.stanford.edu/" target="_blank" rel="noopener noreferrer">Stanford University</a> publish climate and water use research data.
+            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>, <a href="https://www.uber.com" target="_blank" rel="noopener noreferrer">Uber</a>, <a href="https://www.apple.com" target="_blank" rel="noopener noreferrer">Apple</a> and{' '}
+            <a href="https://replit.com" target="_blank" rel="noopener noreferrer">Replit</a>.{' '} I've also helped <a href="https://waterinthewest.stanford.edu/" target="_blank" rel="noopener noreferrer">Stanford University</a> publish climate and water use research data.
           </p>
         </section>
 
