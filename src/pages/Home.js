@@ -14,7 +14,7 @@ function Home({ theme, toggleTheme }) {
               <path d="M8 32c0-6.627 5.373-12 12-12s12 5.373 12 12" fill="currentColor" opacity="0.6"/>
             </svg>
           </div>
-          <h1 className="name">Paul Van Slembrouck</h1>
+          <h2 className="name">Paul Van Slembrouck</h2>
           <p className="title">
             Senior Product Designer with Front End Engineering experience
           </p>

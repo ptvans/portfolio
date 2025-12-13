@@ -81,9 +81,42 @@ function CaseStudy({ theme, toggleTheme }) {
           <section key={section.id} id={section.id} className="content-section">
             {section.content.map((block, index) => {
               if (block.type === 'text') {
+                // Handle text with inline links
+                if (block.parts) {
+                  return (
+                    <p key={index} className="content-text">
+                      {block.parts.map((part, partIndex) => {
+                        if (typeof part === 'string') {
+                          return part;
+                        } else if (part.type === 'link') {
+                          return (
+                            <a
+                              key={partIndex}
+                              href={part.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-link"
+                            >
+                              {part.text}
+                            </a>
+                          );
+                        }
+                        return null;
+                      })}
+                    </p>
+                  );
+                }
                 return <p key={index} className="content-text">{block.value}</p>;
               } else if (block.type === 'heading') {
                 return <h2 key={index} className="content-heading">{block.value}</h2>;
+              } else if (block.type === 'list') {
+                return (
+                  <ol key={index} className="content-list">
+                    {block.items.map((item, i) => (
+                      <li key={i}>{item}</li>
+                    ))}
+                  </ol>
+                );
               } else if (block.type === 'image') {
                 return (
                   <figure key={index} className="content-image">

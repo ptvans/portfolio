@@ -8,26 +8,18 @@ export const caseStudies = {
         title: 'Context',
         content: [
           {
-            type: 'image',
-            src: `${process.env.PUBLIC_URL}/images/case-studies/on-call/mobile-screens.png`,
-            alt: 'Sample screens from the on-call app',
-            caption: 'Sample screens from the on-call app — switch theme to see light/dark examples'
-          },
-          {
             type: 'heading',
             value: 'Context'
           },
           {
             type: 'text',
-            value: 'Transition from a ai-assisted IDE to an ai-driven app building experience.'
+            value: 'Transitioning from a chat-assisted IDE to an ai-driven app building experience...'
           },
           {
-            type: 'text',
-            value: 'With the advent of LLM coding models, Replit wanted to open up their product beyond the audience of preofessional developers to anyone with a computer or phone.'
-          },
-          {
-            type: 'text',
-            value: 'Building our own on-call system was an enormous opportunity. PagerDuty is a billion-dollar business doing this one thing; if we could design something simpler, faster, and friendlier, we could unlock huge value for our users — and for the company.'
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/on-call/slide01.png`,
+            alt: 'From IDE to prompt driven experience',
+            caption: 'From IDE to prompt driven experience'
           }
         ]
       },
@@ -41,75 +33,51 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'Why do most users abandon ai app creation before achieving a working version?'
+            value: 'When first introducing prompt-based coding, we noticed that the majority of users abandoned the project creation flow before achieving a barebones MVP app that worked.'
           },
           {
             type: 'text',
-            value: 'Most people are missing two key pieces of experience that would enable product creation. They are missing knowledge of the product development process. They also dont know what these coding agents are capabable of.'
+            value: 'Why were they abandoning the flow? '
+          },
+          {
+            type: 'text',
+            value: 'Most people are missing a few key pieces of knowledge that is needed to create products:'
+          },
+          {
+            type: 'list',
+            items: [
+              'They don\'t know the steps involved in the product development lifecycle',
+              'They don\'t know what these coding agents are capable of doing',
+              'They don\'t know how to accurately define an MVP app for said coding agent to work on'
+            ]
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/on-call/slide02.png`,
+            alt: 'Agent-guided app development plan',
+            caption: 'Agent-guided app development plan'
           }
         ]
       },
       {
         id: 'approach',
-        title: 'Approach',
+        title: 'Approach & Collaboration',
         content: [
           {
             type: 'heading',
-            value: 'Approach'
+            value: 'Approach & Collaboration'
           },
           {
             type: 'text',
-            value: 'We started by deeply understanding the problem space. I conducted extensive user research with our existing customers, studying how they used PagerDuty and other tools, what frustrated them most, and what they couldn\'t live without.'
+            value: 'Working with the AI team, we developed three agents with their needed respective tools.'
           },
           {
             type: 'text',
-            value: 'We identified key principles: make the common case simple, hide complexity until it\'s needed, and design for the mobile experience first (since responders are often on-call outside work hours).'
+            value: 'The Planner Agent would help a user define the app they wanted to build. The Product Manager Agent would then monitor plan progress, dole out tasks to the Coding Agent, and check with the user to confirm that features were working as intended. The Coding Agent generated code and set up dependencies and integrations.'
           },
           {
             type: 'text',
-            value: 'I created prototypes and tested them with users iteratively, refining the flows based on feedback. We focused on three core areas: a streamlined scheduling interface, an intuitive mobile app for responders, and clear escalation policies that were easy to understand and configure.'
-          }
-        ]
-      },
-      {
-        id: 'collaboration',
-        title: 'Collaboration',
-        content: [
-          {
-            type: 'heading',
-            value: 'Collaboration'
-          },
-          {
-            type: 'text',
-            value: 'This project required close collaboration with engineering, product, and customer success teams. I worked closely with engineers to understand technical constraints and find creative solutions that balanced simplicity with power.'
-          },
-          {
-            type: 'text',
-            value: 'Regular design reviews and user testing sessions ensured we were solving the right problems. Customer success provided invaluable insights from support tickets and customer calls, helping us prioritize features that would have the biggest impact.'
-          }
-        ]
-      },
-      {
-        id: 'multi-surface',
-        title: 'Multi-surface design',
-        content: [
-          {
-            type: 'heading',
-            value: 'Multi-surface design'
-          },
-          {
-            type: 'text',
-            value: 'One of the unique challenges was designing for multiple surfaces: web dashboard for configuration, mobile app for responders, and Slack integration for notifications. Each surface had different constraints and user needs.'
-          },
-          {
-            type: 'text',
-            value: 'The web interface needed to handle complex configuration while remaining approachable. The mobile app needed to be fast and reliable under pressure, with notifications that cut through the noise. The Slack integration needed to feel native while providing just enough information and actions.'
-          },
-          {
-            type: 'image',
-            src: `${process.env.PUBLIC_URL}/images/case-studies/on-call/desktop-interface.png`,
-            alt: 'Desktop scheduling interface',
-            caption: 'Web interface for managing on-call schedules'
+            value: 'All of these agentic behaviors must progress in a way that makes sense to the user, and is constrained in the number of tokens spent for each step.'
           }
         ]
       },
@@ -123,11 +91,27 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'The final product launched with a beautiful mobile app, intuitive scheduling interface, and powerful routing capabilities. Early feedback was overwhelmingly positive, with customers praising the ease of use and reliability.'
+            value: 'Our goal was to get the user to a working version of their requested app as quickly as possible — in a single shot agent build.'
           },
           {
             type: 'text',
-            value: 'We achieved our goal of preserving power while removing pain. Configuration that took hours in PagerDuty now took minutes. The mobile app became something people actually wanted to use, not dreaded.'
+            value: 'The solution consisted of a simplified project creation flow that allows user to start with a simple text prompt and iteratively add features and technical requirements with help from the Planner Agent.'
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/on-call/slide04.png`,
+            alt: 'Reducing the knowledge barrier to building apps',
+            caption: 'Reducing the knowledge barrier to building apps'
+          },
+          {
+            type: 'text',
+            value: 'Instead of overwhelming users with a dense, expert-level interface, they are now presented with a layout that centers their conversation with the agent alongside the live rendered output of their application build.'
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/on-call/slide03.png`,
+            alt: 'From prompt to working app',
+            caption: 'Move the user from prompt to working app in a single step'
           }
         ]
       },
@@ -141,11 +125,12 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'Within six months of launch, dozens of customers had migrated from PagerDuty to our on-call product. Support tickets related to on-call were minimal compared to other features, indicating the UX was intuitive and robust.'
-          },
-          {
-            type: 'text',
-            value: 'The mobile app achieved a 4.8-star rating on the App Store, with reviewers specifically calling out the superior UX compared to alternatives. The product became a key differentiator in sales conversations and helped accelerate company growth.'
+            parts: [
+              'I joined Replit',
+              ' after a round of layoffs, right at the moment they decided to pivot from a developer-targeted IDE to agentic coding for the masses. At that time, revenue was approximately $6M ARR.  I was the only product designer working on the agentic project creation flow. After this product pivot and workflow redesign, ARR quickly grew to $20M and is now at ', 
+              { type: 'link', text: '$150M ARR a year later', url: 'https://www.cnbc.com/2025/12/04/google-replit-ai-vibe-coding-anthropic-cursor.html' },
+              ' and there is still room for significant improvement.'
+            ]
           }
         ]
       }
