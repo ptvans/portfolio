@@ -23,7 +23,7 @@ function Home({ theme, toggleTheme }) {
           </div>
           <h2 className="name">Paul Van Slembrouck</h2>
           <p className="title">
-            Senior Product Designer with Front End Engineering experience
+            Senior Product Designer, with front end experience
           </p>
         </div>
 
