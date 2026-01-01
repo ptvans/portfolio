@@ -209,6 +209,16 @@ export const caseStudies = {
             src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/design-process.png`,
             alt: 'High level design process',
             caption: 'High level design process'
+          },
+          {
+            type: 'text',
+            value: 'A handful of specialist engineers at the company knew how to do raw call stack tracing on the fleet of mobile apps. Call stack tracing tells us how many milliseconds of CPU time each function in the code is taking. When we see a function taking more time than it should, we manually (very painfully) track down the code change that caused the slowdown and fix it. '
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/single-trace-flamegraph.png`,
+            alt: 'A single call stack trace from one device',
+            caption: 'A single call stack trace from one device -- not easy to see trends'
           }
         ]
       },
@@ -222,17 +232,7 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'A handful of specialist engineers at the company knew how to do call stack tracing on the fleet of mobile apps. Call stack tracing tells us how many milliseconds of CPU time each function in the code is using. When we see a function taking more time than it should, we can track down the product engineer who last modified that function and ask them to fix it.'
-          },
-          {
-            type: 'image',
-            src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/single-trace-flamegraph.png`,
-            alt: 'A single call stack trace from one device',
-            caption: 'A single call stack trace from one device -- not easy to see trends'
-          },
-          {
-            type: 'text',
-            value: 'To do effective call stack analysis, trace logs from thousands of real world devices must be aggregated before a meaningful pattern emerges.  There was no tool in the world that could do this type of aggregate trace data comparison between two versions of an application. '
+            value: 'To do effective call stack analysis, trace logs from thousands of real world devices must be normalized and aggregated before a meaningful pattern emerges.  There was no tool in the world that could do this type of aggregate trace data comparison between two versions of an application. '
           },
           {
             type: 'text',
@@ -248,11 +248,11 @@ export const caseStudies = {
       },
       {
         id: 'process',
-        title: 'Design Process',
+        title: 'Design Artifacts',
         content: [
           {
             type: 'heading',
-            value: 'Design Process'
+            value: 'Design Artifacts'
           },
           {
             type: 'text',
@@ -306,11 +306,11 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'Now, an employee could easily pull up data from two mobile appversions and perform root cause analysis of a feature that got slow or stopped working. '
+            value: 'Now, an employee could easily pull up data from two mobile app versions and perform root cause analysis of a feature that got slow or stopped working. '
           },
           {
             type: 'text',
-            value: 'A very powerful feature was the integration of code changes ("diffs") engineers had made that impacted function performance. We could now easily view within the tool who caused an issue and assign a task direclty to the source.  '
+            value: 'A very powerful feature was the integration of code changes ("diffs") engineers had made that impacted function performance. We could now easily view within the tool who caused an issue and assign a task direclty to its source.  '
           },
           {
             type: 'image',
@@ -320,7 +320,7 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'The time required to diagnose an issue was cut in half. Performance engineers could now diagnose small problems in 2 hours when it used to take a day. They could now diagnose large problems within 1 day when it had taken multiple days before.'
+            value: 'The time required to diagnose an issue was cut in half. Performance engineers could now diagnose small problems in two hours when it used to take a day. They could now diagnose large problems within one day when it had taken multiple days before.'
           },
           {
             type: 'text',
