@@ -147,7 +147,7 @@ export const caseStudies = {
     ]
   },
   'app-performance': {
-    title: 'Mobile App Speed',
+    title: 'Make the Mobile Apps Faster',
     subtitle: 'Facebook',
     sections: [
       {
@@ -216,7 +216,7 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'A handful of specialist engineers at the company knew how to do call stack tracing on the various mobile apps. Call stack tracing tells us how many milliseconds of CPU time each function in the code is using. When we see a function taking more time than it should, we can track down the product engineer who last modified that function and ask them to fix it.'
+            value: 'A handful of specialist engineers at the company knew how to do call stack tracing on the fleet of mobile apps. Call stack tracing tells us how many milliseconds of CPU time each function in the code is using. When we see a function taking more time than it should, we can track down the product engineer who last modified that function and ask them to fix it.'
           },
           {
             type: 'image',
@@ -241,6 +241,56 @@ export const caseStudies = {
         ]
       },
       {
+        id: 'process',
+        title: 'Design Process',
+        content: [
+          {
+            type: 'heading',
+            value: 'Design Process'
+          },
+          {
+            type: 'text',
+            value: 'Heres a look at the sequence of design artifacts from rough sketches to the final product. '
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/design-01.png`,
+            alt: 'Low fidelity prototypes',
+            caption: '1: Low fidelity prototypes'
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/design-02.png`,
+            alt: 'High fidelity prototype',
+            caption: '2: High fidelity prototype'
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/design-05.png`,
+            alt: 'Low fidelity prototypes',
+            caption: '3: Tradeoffs between tables and graphs'
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/design-03.png`,
+            alt: 'Low fidelity prototypes',
+            caption: '4: First iteration call graph using Cytoscape.js'
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/design-04.png`,
+            alt: 'High fidelity prototype',
+            caption: '5: Second iteration call graph using Cytoscape.js'
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/design-06.png`,
+            alt: 'High fidelity prototype',
+            caption: '6: Final design -- a zooming and panning interactive graph with inspectors'
+          }
+        ]
+      },
+      {
         id: 'impact',
         title: 'Impact',
         content: [
@@ -250,11 +300,21 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'Now an employee could easily pull up data from two versions and perform root cause analysis of a feature that got slow or stopped working. '
+            value: 'Now, an employee could easily pull up data from two versions and perform root cause analysis of a feature that got slow or stopped working. '
           },
           {
             type: 'text',
-            value: 'The time required to diagnose an issue was cut in half. '
+            value: 'A very powerful feature was the integration of code changes ("diffs") engineers had made that impacted function performance. We could now easily view within the tool who caused an issue and assign a task direclty to the source.  '
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/diffs.png`,
+            alt: 'View code changes affecting this function',
+            caption: 'View code changes affecting this function'
+          },
+          {
+            type: 'text',
+            value: 'The time required to diagnose an issue was cut in half. Performance engineers could now diagnose small problems in 2 hours when it used to take a day. They could now diagnose large problems within 1 day when it had taken multiple days before.'
           }
         ]
       }
