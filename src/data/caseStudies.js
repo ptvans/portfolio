@@ -306,7 +306,7 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'Now, an employee could easily pull up data from two versions and perform root cause analysis of a feature that got slow or stopped working. '
+            value: 'Now, an employee could easily pull up data from two mobile appversions and perform root cause analysis of a feature that got slow or stopped working. '
           },
           {
             type: 'text',
