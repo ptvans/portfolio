@@ -202,7 +202,7 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'Facebook, Messenger, Instagram, WhatsApp... these apps need to boot up quickly and be responsive when a user tries any feature. Waiting 5 seconds for a screen to load is not acceptable. Using a half-dozen half-baked tools to put out fires was not working. '
+            value: 'Facebook, Messenger, Instagram, WhatsApp... these apps need to boot up quickly and be responsive when a user tries any feature. Waiting 5 seconds for a screen to load is not acceptable. Using a half-dozen half-baked internal tools to put out fires was not working. '
           }, 
           {
             type: 'image',
@@ -228,7 +228,7 @@ export const caseStudies = {
             type: 'image',
             src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/single-trace-flamegraph.png`,
             alt: 'A single call stack trace from one device',
-            caption: 'A single call stack trace from one device, shown as a flame graph'
+            caption: 'A single call stack trace from one device -- not easy to see trends'
           },
           {
             type: 'text',
