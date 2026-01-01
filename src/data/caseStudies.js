@@ -202,7 +202,13 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'Facebook, Messenger, Instagram, WhatsApp... these apps need to boot up quickly and be responsive when a user tries any feature. Waiting 5 seconds for a screen to load is not acceptable. '
+            value: 'Facebook, Messenger, Instagram, WhatsApp... these apps need to boot up quickly and be responsive when a user tries any feature. Waiting 5 seconds for a screen to load is not acceptable. Using a half-dozen half-baked tools to put out fires was not working. '
+          }, 
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/design-process.png`,
+            alt: 'High level design process',
+            caption: 'High level design process'
           }
         ]
       },
@@ -235,8 +241,8 @@ export const caseStudies = {
           {
             type: 'image',
             src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/trace-flow-01-lg.png`,
-            alt: 'trace flow',
-            caption: 'trace flow'
+            alt: 'Its like a Google Maps explorer for your mobile app code',
+            caption: 'Its like a Google Maps explorer for your mobile app code'
           }
         ]
       },
@@ -315,6 +321,10 @@ export const caseStudies = {
           {
             type: 'text',
             value: 'The time required to diagnose an issue was cut in half. Performance engineers could now diagnose small problems in 2 hours when it used to take a day. They could now diagnose large problems within 1 day when it had taken multiple days before.'
+          },
+          {
+            type: 'text',
+            value: 'All 10,000 product engineers were now empowered to take responsibility for reducing app bloat and improving speediness.'
           }
         ]
       }
