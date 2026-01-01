@@ -146,9 +146,9 @@ export const caseStudies = {
       }
     ]
   },
-  'status-pages': {
-    title: 'Status pages redesign',
-    subtitle: 'Incident.io.',
+  'app-performance': {
+    title: 'Mobile App Speed',
+    subtitle: 'Facebook',
     sections: [
       {
         id: 'context',
@@ -160,11 +160,17 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'Status pages are critical for communicating with customers during incidents. When something goes wrong, customers need to know what\'s happening, what\'s affected, and when it will be fixed.'
+            value: 'At company all-hands, Zuckerberg announced that he was concerned about how long it took for our mobile apps to load. '
           },
           {
             type: 'text',
-            value: 'Our existing status page solution was functional but basic. It lacked the polish and features that modern companies expected, and customers were frequently asking for improvements.'
+            value: 'With 10,000 engineers shipping code, the applications were becoming bloated and laggy.'
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/fb4a-cold-start.png`,
+            alt: 'It takes 5 seconds for the Big Blue app to cold start on Android',
+            caption: 'It takes 5 seconds for the Big Blue app to cold start on Android'
           }
         ]
       },
@@ -178,7 +184,7 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'The main issues were around customization, update workflows, and subscriber experience. Companies wanted status pages that matched their brand. Incident responders wanted faster ways to post updates. Subscribers wanted better notifications and historical views.'
+            value: 'Everyone was adding features, but nobody was responsible for catching bugs and performance losses with respect to the hardware limitations (CPU & memory) of Android and iOS phones.'
           }
         ]
       },
@@ -192,11 +198,11 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'I conducted a competitive analysis of status page products and interviewed customers about their needs. We identified three key areas: brand customization, update workflows, and subscriber management.'
+            value: 'Since no one at the company was handling this problem, we spun up an ad-hoc team to solve it. With a couple engineers and a product designer (myself), we set out to determine how the company was currently troubleshooting mobile app performance and build a tool to proactively take app quality and performance up to a higher level.'
           },
           {
             type: 'text',
-            value: 'The redesign focused on making it easy for companies to create beautiful, on-brand status pages in minutes, streamlining the update process during incidents, and giving subscribers control over how they receive notifications.'
+            value: 'Facebook, Messenger, Instagram, WhatsApp... these apps need to boot up quickly and be responsive when a user tries any feature. Waiting 5 seconds for a screen to load is not acceptable. '
           }
         ]
       },
@@ -210,7 +216,27 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'We launched a completely redesigned status page builder with live preview, custom branding options, and flexible theming. Updates could be posted directly from Slack during incidents, and subscribers could choose exactly which services they wanted to follow.'
+            value: 'A handful of specialist engineers at the company knew how to do call stack tracing on the various mobile apps. Call stack tracing tells us how many milliseconds of CPU time each function in the code is using. When we see a function taking more time than it should, we can track down the product engineer who last modified that function and ask them to fix it.'
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/single-trace-flamegraph.png`,
+            alt: 'A single call stack trace from one device',
+            caption: 'A single call stack trace from one device, shown as a flame graph'
+          },
+          {
+            type: 'text',
+            value: 'To do effective call stack analysis, trace logs from thousands of real world devices must be aggregated before a meaningful pattern emerges.  There was no tool in the world that could do this type of aggregate trace data comparison between two versions of an application. '
+          },
+          {
+            type: 'text',
+            value: 'We built a custom application that allowed a user to see granular performance (speed) changes between any two versions of a mobile application.  The work to prepare the data pipeline for this tool was not trivial. '
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/status-pages/trace-flow-01-lg.png`,
+            alt: 'trace flow',
+            caption: 'trace flow'
           }
         ]
       },
@@ -224,7 +250,11 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'Adoption increased significantly after the redesign, with many customers who had been using third-party tools switching to our status pages. Time to set up a new status page dropped from hours to minutes.'
+            value: 'Now an employee could easily pull up data from two versions and perform root cause analysis of a feature that got slow or stopped working. '
+          },
+          {
+            type: 'text',
+            value: 'The time required to diagnose an issue was cut in half. '
           }
         ]
       }

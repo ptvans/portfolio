@@ -41,7 +41,10 @@ function Home({ theme, toggleTheme }) {
           <h2>Case studies</h2>
           <ul>
             <li>
-              <Link to="/case-study/ai-coding-agents">Make Coding Agents Easy to Use</Link>
+              <Link to="/case-study/ai-coding-agents">Replit: Make Coding Agents Easy to Use</Link>
+            </li>
+            <li>
+              <Link to="/case-study/app-performance">Facebook: Make the Mobile Apps Faster</Link>
             </li>
           </ul>
         </section>
