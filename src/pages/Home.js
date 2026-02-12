@@ -21,7 +21,7 @@ function Home({ theme, toggleTheme }) {
             </svg>
             */}
           </div>
-          <h2 className="name">Paul Thom Van Slembrouck</h2>
+          <h2 className="name">Thom Van Slembrouck</h2>
           <p className="title">
             Product designer, with front end experience
           </p>
