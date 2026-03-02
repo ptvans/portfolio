@@ -10,7 +10,7 @@ function Home({ theme, toggleTheme }) {
           <div className="avatar">
             <img 
               src="./images/paul-blue-avatar-pfp.jpg" 
-              alt="Paul Van Slembrouck" 
+              alt="Thom Van Slembrouck" 
               className="avatar-image"
             />
             {/* SVG logo - commented out for potential future use
