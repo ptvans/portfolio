@@ -329,6 +329,133 @@ export const caseStudies = {
         ]
       }
     ]
+  },
+  'uber-freight': {
+    title: 'Reduce Deadhead Miles for Truckers',
+    subtitle: 'Uber Freight',
+    sections: [
+      {
+        id: 'context',
+        title: 'Context',
+        content: [
+          {
+            type: 'heading',
+            value: 'Context'
+          },
+          {
+            type: 'text',
+            value: 'Provide intelligent load bundling to get truckers back home',
+            italic: true
+          },
+          {
+            type: 'text',
+            value: 'Truckers don\'t enjoy hauling air -- they don\'t get paid for that. Uber Freight has many shipper contracts providing a large pool of loads. They wanted to provide multiple combinations of loads to help truckers get out on the road and back with minimal deadheading.'
+          }
+        ]
+      },
+      {
+        id: 'problem',
+        title: 'Problem',
+        content: [
+          {
+            type: 'heading',
+            value: 'Problem'
+          },
+          {
+            type: 'text',
+            value: 'For a driver booking their own loads, it\'s a challenge to identify the best combination of individual loads that will:'
+          },
+          {
+            type: 'list',
+            items: [
+              'Maximize profit',
+              'Minimize empty running',
+              'Return them a target location (usually home)'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'approach',
+        title: 'Approach & Collaboration',
+        content: [
+          {
+            type: 'heading',
+            value: 'Approach & Collaboration'
+          },
+          {
+            type: 'text',
+            value: 'The Marketplace team (which secures the contracted loads) worked with the Carrier team to build a workflow to ingest and finalize contract loads efficiently, then sending them to an engine that generates combinations of loads (called bundles) based on various factors.'
+          },
+          {
+            type: 'text',
+            value: 'My process involved speaking with both our shipper pricing team and our carriers to understand points of friction and other important drivers of their decision making.'
+          },
+          {
+            type: 'text',
+            value: 'As we created the first version of the load bundling algorithm, we also explored various approaches for presenting bundled loads to carriers. '
+          },
+          {
+            type: 'text',
+            value: ' tbd  '
+          }
+        ]
+      },
+      {
+        id: 'solution',
+        title: 'Solution',
+        content: [
+          {
+            type: 'heading',
+            value: 'Solution'
+          },
+          {
+            type: 'text',
+            value: 'It starts with contract generation. All requests lanes and volumes are submitted by the shipper. Our tool uses market data to automatically generate prices for each lane. Any lanes that need review are flagged for attention. '
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/uber-freight/freight-pricing-screenshot.png`,
+            alt: 'Review automated lane pricing for contracts',
+            caption: 'Review automated lane pricing for contracts'
+          },
+          {
+            type: 'text',
+            value: 'Automatically priced loads can be reviewed and adjusted as needed. Unpriced loads can be priced manually.'
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/uber-freight/book-load-bundle.gif`,
+            alt: 'Book a load bundle that returns to Fort Worth, TX',
+            caption: 'Book a load bundle that returns to Fort Worth, TX'
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/uber-freight/sort-loads-by-deadhead.JPEG`,
+            alt: 'Agent-guided app development plan',
+            caption: 'Agent-guided app development plan'
+          }
+        ]
+      },
+      {
+        id: 'impact',
+        title: 'Impact',
+        content: [
+          {
+            type: 'heading',
+            value: 'Impact'
+          },
+          {
+            type: 'text',
+            parts: [
+              'The reponse from carriers was overwhelmingly positive. ', 
+              { type: 'link', text: 'Read more about this work on uberfreight.com', url: 'https://www.uberfreight.com/en-US/blog/uber-freight-load-bundles' },
+              '.'
+            ]
+          }
+        ]
+      }
+    ]
   }
 };
 
