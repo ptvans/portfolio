@@ -349,7 +349,13 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'Truckers don\'t enjoy hauling air -- they don\'t get paid for that. Uber Freight has many shipper contracts providing a large pool of loads. They wanted to provide multiple combinations of loads to help truckers get out on the road and back with minimal deadheading.'
+            value: 'Truckers don\'t enjoy hauling air -- they don\'t get paid for that. Uber Freight has shipper contracts providing a large pool of loads. They wanted to help truckers get out on the road and back with minimal deadheading by providing multiple combinations of loads that could be booked with one click.'
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/uber-freight/UF-spot-load-board.webp`,
+            alt: 'Searching for the best loads to book can be hard',
+            caption: 'Searching for the best loads to book can be hard'
           }
         ]
       },
@@ -368,10 +374,17 @@ export const caseStudies = {
           {
             type: 'list',
             items: [
+              'Match their equipment',
               'Maximize profit',
               'Minimize empty running',
               'Return them a target location (usually home)'
             ]
+          },
+          {
+            type: 'image',
+            src: `${process.env.PUBLIC_URL}/images/case-studies/uber-freight/sort-loads-by-deadhead.JPEG`,
+            alt: 'In this mobile view, loads are sorted by deadhead miles',
+            caption: 'In this mobile view, loads are sorted by deadhead miles'
           }
         ]
       },
@@ -385,19 +398,15 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'The Marketplace team (which secures the contracted loads) worked with the Carrier team to build a workflow to ingest and finalize contract loads efficiently, then sending them to an engine that generates combinations of loads (called bundles) based on various factors.'
+            value: 'On the Marketplace team (which secures loads from shippers), I worked with the Carrier team to build a workflow that ingests and finalizes contract loads efficiently. Loads are then sent to an engine that generates combinations of loads based on multiple factors.'
           },
           {
             type: 'text',
-            value: 'My process involved speaking with both our shipper pricing team and our carriers to understand points of friction and other important drivers of their decision making.'
+            value: 'My process involved working with both our shipper pricing team and our carriers to understand points of friction and other important drivers of their decision making.'
           },
           {
             type: 'text',
-            value: 'As we created the first version of the load bundling algorithm, we also explored various approaches for presenting bundled loads to carriers. '
-          },
-          {
-            type: 'text',
-            value: ' tbd  '
+            value: 'As we created the first version of the load bundling algorithm, we explored various approaches for presenting bundled loads to carriers in the web and mobile apps. '
           }
         ]
       },
@@ -421,19 +430,21 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'Automatically priced loads can be reviewed and adjusted as needed. Unpriced loads can be priced manually.'
+            value: 'After a human reviews and finalizes lane prices, the contract goes live and loads are populated into the carrier app.'
+          },
+          {
+            type: 'text',
+            value: 'Loads are then combined to form bundles that are bookable in a single click.'
+          },
+          {
+            type: 'text',
+            value: 'These bundles could take a driver to multiple dropoff and pickup points for a complete roundtrip loop. Bundles are designed to minimize the distance between pickups and dropoffs, among other variables.'
           },
           {
             type: 'image',
             src: `${process.env.PUBLIC_URL}/images/case-studies/uber-freight/book-load-bundle.gif`,
-            alt: 'Book a load bundle that returns to Fort Worth, TX',
-            caption: 'Book a load bundle that returns to Fort Worth, TX'
-          },
-          {
-            type: 'image',
-            src: `${process.env.PUBLIC_URL}/images/case-studies/uber-freight/sort-loads-by-deadhead.JPEG`,
-            alt: 'Agent-guided app development plan',
-            caption: 'Agent-guided app development plan'
+            alt: 'Book a roundtrip bundle that returns to Fort Worth, TX',
+            caption: 'Book a roundtrip bundle that returns to Fort Worth, TX'
           }
         ]
       },
@@ -448,7 +459,7 @@ export const caseStudies = {
           {
             type: 'text',
             parts: [
-              'The reponse from carriers was overwhelmingly positive. ', 
+              'With this new feature, carriers were able to spend less time searching for and booking loads. It was easier for them to book loads that would bring them back home while also reducing deadhead losses. ', 
               { type: 'link', text: 'Read more about this work on uberfreight.com', url: 'https://www.uberfreight.com/en-US/blog/uber-freight-load-bundles' },
               '.'
             ]

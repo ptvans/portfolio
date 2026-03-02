@@ -44,10 +44,10 @@ function Home({ theme, toggleTheme }) {
               <Link to="/case-study/ai-coding-agents">Replit: Make Coding Agents Easy to Use</Link>
             </li>
             <li>
-              <Link to="/case-study/ai-coding-agents">Uber Freight: Reduce Deadhead Miles for Truckers</Link>
+              <Link to="/case-study/uber-freight">Uber Freight: Reduce Deadhead Miles for Truckers</Link>
             </li>
             <li>
-              <Link to="/case-study/uber-freight">Facebook: Make the Mobile Apps Faster</Link>
+              <Link to="/case-study/app-performance">Facebook: Make the Mobile Apps Faster</Link>
             </li>
           </ul>
         </section>
