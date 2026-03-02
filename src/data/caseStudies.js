@@ -420,7 +420,7 @@ export const caseStudies = {
           },
           {
             type: 'text',
-            value: 'It starts with contract generation. All requests lanes and volumes are submitted by the shipper. Our tool uses market data to automatically generate prices for each lane. Any lanes that need review are flagged for attention. '
+            value: 'It starts with contract generation. All requested lanes and volumes are submitted by the shipper. Our tool uses market data to automatically generate prices for each lane. Any lanes that need review are flagged for attention. '
           },
           {
             type: 'image',
