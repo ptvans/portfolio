@@ -428,21 +428,13 @@ export function SopAuthor() {
                   className="h-full w-full"
                 />
               )}
-              {/* Controls on the left, Close Graph on the right. Scope first:
-                  it decides how much of the flow the other two describe. */}
+              {/* Controls along the top. Scope first: it decides how much of
+                  the flow the other two describe. */}
               <div className="absolute left-4 top-4 flex flex-wrap items-center gap-3">
                 <ScopeToggle scope={scope} onPick={setScope} />
                 {stateModel && <LensToggle lens={lens} onPick={setLens} />}
                 {lens === "states" ? <StateLegend /> : versionMode ? <ExecutorLegend /> : <GraphLegend />}
               </div>
-              <button
-                type="button"
-                onClick={() => setView(null)}
-                className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
-              >
-                Close Graph
-                <X className="h-4 w-4" strokeWidth={2} />
-              </button>
             </div>
           ) : (
             // The document has the pane to itself; the graph lives behind

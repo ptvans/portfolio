@@ -339,10 +339,128 @@ function shiftHoursRuns(sop: Sop): SopActivityRun[] {
 }
 
 // ---------------------------------------------------------------------------
+// Robot dispatch (simulated)
+// ---------------------------------------------------------------------------
+//
+// Robot Dispatch has no node-run logs, so its feed is a hand-written set of
+// shifts: one run per market per day, in the dispatch steps' own terms
+// (MRO, Mission Control, Portal, RECOs, groundings, the overnight handoff).
+// Times are Central, the zone the feed shows.
+
+const ROBOT_DISPATCH = "sop-coco-dispatch";
+
+const CHI = "<#C07RCHIDSP01|robot-chi-dispatch>";
+const MIA = "<#C07RMIADSP01|robot-mia-dispatch>";
+const CHI_LEAD = "<@U07RCHILEAD|chi-dispatch-lead>";
+const MIA_LEAD = "<@U07RMIALEAD|mia-dispatch-lead>";
+
+type DispatchEntry = [time: string, type: SopActivityType, step: string, summary: string];
+
+interface DispatchShift {
+  key: string;
+  date: string; // Central calendar date
+  label: string;
+  running?: boolean;
+  entries: DispatchEntry[]; // oldest first
+}
+
+const DISPATCH_SHIFTS: DispatchShift[] = [
+  {
+    key: "chi-1028",
+    date: "2026-10-28",
+    label: "Chicago shift",
+    running: true,
+    entries: [
+      ["07:20", "check", "Read the shift instructions", `Read today's standing instructions in ${CHI}. No change to the default priorities; Chicago is a deploy/undeploy market, so the fleet starts the day indoors at the West Loop MRO.`],
+      ["07:34", "check", "Can this robot take a trip?", "Ran the MRO health check on all 46 robots before the first wave: 43 healthy, battery 20% or above and not grounded. RBT-2291, RBT-2307 and RBT-2318 failed and were held back."],
+      ["07:41", "action", "Reboot from MRO and re-check", "Rebooted RBT-2291 and RBT-2307 from MRO. Both passed the re-check and joined the first wave."],
+      ["07:46", "alert", "Ask the dispatch lead about the health readout", `RBT-2318 still shows a drivetrain fault after a reboot. Posted the robot ID and the MRO readout in ${CHI} and asked ${CHI_LEAD} whether it needs a field visit.`],
+      ["07:52", "proposal", "Deploy robots from the MRO to merchants", "Mission Control shows 45 deployable robots but the Portal deploy plan lists 47. Held the first wave for a bot-count reconciliation, the 7th hold like this since Oct 6, and proposed an automation to hold deployments whenever the counts don't match."],
+      ["08:06", "action", "Deploy robots from the MRO to merchants", "Counts reconciled at 45 after two retired robots were dropped from the plan. Deployed 45 robots to 31 merchants in three batches of 15, so the MRO dock never queued more than one batch."],
+      ["10:12", "action", "Dispatch a field operator", `Created 6 Portal tasks from the low-battery list, lowest first (RBT-2244 at 22%), and posted the assignments in ${CHI}: three to the Loop operator, three to West Town.`],
+      ["11:30", "check", "Is the robot where the task says?", "RBT-2260 was 0.06 mi from its task location on a return trip, under the 0.1 mi threshold. Told the operator to wait for it rather than chase it."],
+      ["12:48", "alert", "Action the emergency RECO first", `RECO in ${CHI}: RBT-2233 is blocking a sidewalk ramp on W Randolph St. Dropped the current batch and sent the nearest operator; cleared in 14 minutes.`],
+      ["13:55", "action", "Can it be piloted instead of visited?", "Cleared a return-to-park on RBT-2279 by piloting it in DriveU over an unobstructed path, saving an operator trip. Queued 5 battery swaps; left 2 food-removal tasks alone while their robots were still moving."],
+    ],
+  },
+  {
+    key: "mia-1027",
+    date: "2026-10-27",
+    label: "Miami shift",
+    entries: [
+      ["06:10", "check", "Which kind of market is this?", "Miami is a leave-out market: robots stay at merchants overnight, so there is no deployment phase this morning."],
+      ["06:25", "check", "Morning health scan of the fleet", "Scanned 39 robots in Mission Control. Rain overnight, so flagged 4 robots for a swap or towel-down check when an operator next touches them."],
+      ["09:40", "action", "Dispatch a field operator", `Pulled 9 robots under 35% from the low-battery list and created Portal tasks for the lowest 6. Posted the assignments in ${MIA}.`],
+      ["13:15", "alert", "Work the flagged robot", `RBT-3104 stopped mid-trip on Brickell Ave showing healthy, with no task generated. Per Miami's rule, raised a manual pickup and told ${MIA_LEAD}.`],
+      ["18:30", "action", "Post the overnight handoff", `Posted the overnight list in ${MIA}: 38 robots at merchants with confirmed locations, 1 open pickup (RBT-3104).`],
+    ],
+  },
+  {
+    key: "chi-1027",
+    date: "2026-10-27",
+    label: "Chicago shift",
+    entries: [
+      ["07:18", "check", "Read the shift instructions", `Standing instructions in ${CHI}: home game at Soldier Field, so keep tasks out of the Museum Campus corridor after 3 p.m.`],
+      ["07:35", "check", "Can this robot take a trip?", "45 of 46 robots passed the MRO health check. RBT-2251 is grounded for a modem failure."],
+      ["07:37", "alert", "Leave it grounded and route to the engineer", "RBT-2251 is grounded for a modem failure. Left it grounded and opened a ticket for Robot's fleet quality engineer; no state change made."],
+      ["07:50", "proposal", "Deploy robots from the MRO to merchants", "Mission Control shows 44 deployable robots, the Portal plan 45. Held the deployment for a bot-count reconciliation until the dispatch lead confirmed the plan."],
+      ["08:03", "action", "Deploy robots from the MRO to merchants", "Deployed 44 robots to 30 merchants in three batches."],
+      ["11:20", "action", "Dispatch a field operator", `Created 7 Portal tasks for battery swaps and posted the assignments in ${CHI}.`],
+      ["14:05", "proposal", "Can this robot be ungrounded now?", `RBT-2209 was grounded for a bumper sensor and its repair ticket, WO-8812, closed at 1:40 p.m. Proposed changing it to ready to deploy, then parked, and asked ${CHI_LEAD} to approve because it was on a trip when it was grounded.`],
+      ["14:31", "action", "Change state to ready to deploy, then parked", "Dispatch lead approved. Changed RBT-2209 from grounded to ready to deploy, then to parked, in MRO."],
+      ["15:10", "check", "Triage the task queue by type", "Worked 9 pending tasks. None routed through the Museum Campus corridor, per today's instructions."],
+      ["19:30", "check", "Is it undeploy time yet?", "Chicago's undeploy time arrived at 7:30 p.m. Moved to Phase 3."],
+      ["19:52", "action", "Undeploy the fleet for the night", "Health-checked and mapped 44 robots to their overnight destinations (West Loop MRO 30, Fulton Market hub 14), deploying one destination at a time."],
+      ["21:05", "alert", "Work the flagged robot", "RBT-2266 stopped 0.4 mi short of the MRO on its return trip. It shows healthy in MRO, but a reboot didn't move it and the path is blocked for a pilot, so raised a pickup task for the morning sweep."],
+      ["22:40", "action", "Post the overnight handoff", `Posted the overnight list in ${CHI}: 43 robots confirmed indoors, 1 open pickup (RBT-2266) and 1 open grounding (RBT-2251, modem).`],
+    ],
+  },
+  {
+    key: "chi-1026",
+    date: "2026-10-26",
+    label: "Chicago shift",
+    entries: [
+      ["07:22", "check", "Can this robot take a trip?", "All 46 robots passed the MRO health check."],
+      ["07:40", "proposal", "Deploy robots from the MRO to merchants", "Mission Control and the Portal deploy plan disagree by one robot (46 vs 47). Held the first wave for a bot-count reconciliation."],
+      ["07:58", "action", "Deploy robots from the MRO to merchants", "Deployed 46 robots to 31 merchants in three batches once the plan was corrected."],
+      ["16:45", "check", "Triage the task queue by type", "Quiet afternoon: 4 pending tasks, all battery swaps already assigned. Nothing new to action."],
+      ["19:30", "action", "Undeploy the fleet for the night", "Mapped 46 robots to their overnight destinations and deployed them one destination at a time."],
+      ["22:15", "action", "Post the overnight handoff", `Posted the overnight list in ${CHI}: all 46 robots confirmed indoors, no open pickups or groundings.`],
+    ],
+  },
+];
+
+// "2026-10-27" + "07:35" Central (CDT, UTC−5 until Nov 1) → ISO
+const centralIso = (date: string, hhmm: string) => new Date(`${date}T${hhmm}:00-05:00`).toISOString();
+
+function robotDispatchRuns(sop: Sop): SopActivityRun[] {
+  return DISPATCH_SHIFTS.map((shift) => {
+    const entries = shift.entries
+      .map<SopActivityEntry>(([time, type, step, summary], i) => ({
+        id: `${sop.id}-${shift.key}-${i}`,
+        at: centralIso(shift.date, time),
+        type,
+        subject: { label: step },
+        summary,
+      }))
+      .reverse();
+    return {
+      id: `${sop.id}-${shift.key}`,
+      label: shift.label,
+      startedAt: entries.at(-1)!.at,
+      endedAt: entries[0].at,
+      running: shift.running,
+      entries,
+    };
+  }).sort((a, b) => b.startedAt.localeCompare(a.startedAt));
+}
+
+// ---------------------------------------------------------------------------
 
 // Every run of an SOP with what it did, newest run first.
 export function activityForSop(sop: Sop): SopActivityRun[] {
   if (sop.id === SHIFT_HOURS) return shiftHoursRuns(sop);
+  if (sop.id === ROBOT_DISPATCH) return robotDispatchRuns(sop);
   return sopRuns
     .filter((r) => r.sopId === sop.id)
     .sort((a, b) => b.startedAt.localeCompare(a.startedAt))
