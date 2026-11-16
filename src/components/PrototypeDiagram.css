@@ -6,7 +6,7 @@
   --pd-card: rgba(255, 255, 255, 0.03);
 
   display: grid;
-  grid-template-columns: minmax(150px, 0.8fr) 40px minmax(0, 1.2fr);
+  grid-template-columns: minmax(170px, 0.8fr) 64px minmax(0, 1.2fr);
   grid-template-areas:
     'data a1 enterprise'
     'data a2 consumer';
@@ -75,8 +75,8 @@ body.light .pd-cluster circle {
 }
 
 .pd-arrow {
-  width: 40px;
-  height: 14px;
+  width: 64px;
+  height: 22px;
   overflow: visible;
   justify-self: center;
 }
@@ -85,7 +85,7 @@ body.light .pd-cluster circle {
 .pd-arrow polyline {
   fill: none;
   stroke: var(--pd-muted);
-  stroke-width: 1.5;
+  stroke-width: 2.5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -102,12 +102,15 @@ body.light .pd-cluster circle {
 }
 
 .pd-thumb {
-  aspect-ratio: 16 / 10;
   overflow: hidden;
   border-radius: 8px;
   border: 1px solid var(--pd-border);
   background: var(--pd-card);
 }
+
+/* The graph is wide; the phone is tall, so show more of it. */
+.pd-card-enterprise .pd-thumb { aspect-ratio: 2 / 1; }
+.pd-card-consumer .pd-thumb { aspect-ratio: 4 / 5; }
 
 .pd-thumb img {
   display: block;
@@ -150,6 +153,10 @@ body.light .pd-cluster circle {
 
   .pd-arrow {
     transform: rotate(90deg);
+  }
+
+  .pd-card {
+    align-self: start;
   }
 
   .pd-card .pd-label {

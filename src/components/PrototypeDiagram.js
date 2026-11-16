@@ -35,8 +35,8 @@ const PROTOTYPES = [
     caption: 'Ops console: automation graph inspector',
     href: './protos/#/internal-ops/sops/sop-coco-dispatch/versions/3?view=graph',
     image: './images/protos/coco-graph.jpg',
-    alt: 'Internal ops web app showing an SOP workflow graph with a node inspector panel',
-    position: 'left top',
+    alt: 'Internal ops web app showing a large automation workflow graph',
+    position: 'center',
   },
   {
     area: 'consumer',
@@ -45,15 +45,15 @@ const PROTOTYPES = [
     href: './protos/#/brick-ops',
     image: './images/protos/brick-ops.jpg',
     alt: 'Mobile app where an AI agent explains an automation it learned',
-    position: 'center 18%',
+    position: 'center top',
   },
 ];
 
 function Arrow({ area }) {
   return (
-    <svg className={`pd-arrow pd-arrow-${area}`} viewBox="0 0 48 16" aria-hidden="true">
-      <line x1="2" y1="8" x2="42" y2="8" />
-      <polyline points="36,3 43,8 36,13" />
+    <svg className={`pd-arrow pd-arrow-${area}`} viewBox="0 0 64 22" aria-hidden="true">
+      <line x1="2" y1="11" x2="58" y2="11" />
+      <polyline points="49,3 59,11 49,19" />
     </svg>
   );
 }
