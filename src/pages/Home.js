@@ -26,17 +26,20 @@ function Home({ theme, toggleTheme }) {
             models like Opus and Sol, we can now prototype 20 times faster. ⚡
           </p>
           <p>
-            In a few hours, we can generate multiple new product concepts to test with users, based
-            on the appropriate sample data.
+            In a few hours, we can generate multiple new product concepts to test with users, as long as we 
+            have appropriate sample data to build with.
           </p>
           <PrototypeDiagram />
         </section>
 
         <section className="about-section">
           <h2>About</h2>
-          <p>As a product designer and engineer, I have experience building web and mobile apps across many industries. 
-            These experiences are powered by complex workflows, automation, and AI agents behind the scenes that 
-            make things simple and easy to digest for people.
+          <p>As a product designer and engineer, I have helped build web & mobile apps across many industries. 
+            These products are powered by complex workflows, automation, and AI agents. 
+            </p>
+            <p>They are complex under the hood, but we strive to make their surfaces simple... designed 
+           to bring clarity —
+            <em>What do I need to know right now? What should I do next?</em>
             </p>
           <p>
             I have worked on product teams at{' '}
@@ -56,6 +59,9 @@ function Home({ theme, toggleTheme }) {
             </li>
             <li>
               <Link to="/case-study/app-performance">Facebook: Make the Mobile Apps Faster</Link>
+            </li>
+            <li>
+              (More available upon request...)
             </li>
           </ul>
         </section>
