@@ -17,11 +17,13 @@ body {
 body.dark {
   background-color: #1a1a1a;
   color: #e0e0e0;
+  --body-text: #b4b7e3; /* faint light blue-purple */
 }
 
 body.light {
   background-color: #ffffff;
   color: #1a1a1a;
+  --body-text: #7a7fb8; /* same hue, deep enough to read on white */
 }
 
 a {

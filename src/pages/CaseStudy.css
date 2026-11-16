@@ -137,11 +137,11 @@ body.light .case-study-header .subtitle {
   letter-spacing: -0.4px;
   line-height: 1.6;
   margin-bottom: 20px;
-  color: rgb(165, 165, 165);
+  color: var(--body-text);
 }
 
 body.light .content-text {
-  color: #666;
+  color: var(--body-text);
 }
 
 .content-text .inline-link {
@@ -166,7 +166,7 @@ body.light .content-text .inline-link {
   letter-spacing: -0.4px;
   line-height: 1.2;
   margin-bottom: 20px;
-  color: rgb(165, 165, 165);
+  color: var(--body-text);
   padding-left: 24px;
 }
 
@@ -179,7 +179,7 @@ body.light .content-text .inline-link {
 }
 
 body.light .content-list {
-  color: #666;
+  color: var(--body-text);
 }
 
 .content-image {

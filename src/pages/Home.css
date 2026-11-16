@@ -67,7 +67,7 @@ body.light .hero-subtitle {
   letter-spacing: -0.4px;
   line-height: 1.6;
   margin-bottom: 16px;
-  color: rgb(162, 162, 162);
+  color: var(--body-text);
 }
 
 .about-section,
@@ -91,11 +91,11 @@ body.light .hero-subtitle {
   letter-spacing: -0.4px;
   line-height: 1.6;
   margin-bottom: 16px;
-  color: rgb(162, 162, 162);
+  color: var(--body-text);
 }
 
 body.light .about-section p {
-  color: rgb(162, 162, 162);
+  color: var(--body-text);
 }
 
 .case-studies-section ul,
