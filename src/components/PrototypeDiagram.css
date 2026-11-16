@@ -151,6 +151,12 @@ body.light .pd-cluster circle {
   border-radius: 8px;
   border: 1px solid var(--pd-border);
   background: var(--pd-card);
+  /* Lifts the screenshots off the page; deeper on dark so it still reads. */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), 0 8px 22px rgba(0, 0, 0, 0.5);
+}
+
+body.light .pd-thumb {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.14);
 }
 
 /* The graph is wide; the phone is tall, so show more of it. */
@@ -170,7 +176,7 @@ body.light .pd-cluster circle {
 }
 
 .pd-caption {
-  margin-top: 8px;
+  margin-top: 14px;
   font-size: 13px;
   color: var(--pd-muted);
 }
