@@ -14,13 +14,17 @@ import type { ReactNode } from "react";
 export function PhoneFrame({
   children,
   statusBarTone = "dark",
+  above,
 }: {
   children: ReactNode;
+  /** Shown above the phone, aligned to its left edge (e.g. a link back out). */
+  above?: ReactNode;
   /** "light" for screens with a dark top edge (the sign-in splash). */
   statusBarTone?: "dark" | "light";
 }) {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-5 bg-slate-900 py-8">
+      {above && <div className="w-[405px] max-w-full px-2">{above}</div>}
       <div className="relative flex h-[860px] w-[405px] flex-col overflow-hidden rounded-[3.4rem] border-[6px] border-slate-950 bg-slate-950 shadow-2xl ring-1 ring-slate-700/60">
         <StatusBar tone={statusBarTone} />
         <div className="pointer-events-none absolute left-1/2 top-[11px] z-30 h-[34px] w-[122px] -translate-x-1/2 rounded-full bg-black" />

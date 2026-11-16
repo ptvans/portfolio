@@ -7,6 +7,7 @@
 // tab bar. The menu sits under the screen: opening it slides the screen
 // right, as Muse does, and a tap on the screen's edge closes it again.
 
+import { ArrowLeft } from "lucide-react";
 import { Route, Routes, useLocation, useParams } from "react-router-dom";
 import { PhoneFrame } from "../../components/PhoneFrame";
 import { BrickOpsProvider, useBrickOps } from "./BrickOpsContext";
@@ -65,7 +66,18 @@ function Shell() {
 export default function BrickOpsApp() {
   return (
     <BrickOpsProvider>
-      <PhoneFrame statusBarTone="light">
+      <PhoneFrame
+        statusBarTone="light"
+        above={
+          <a
+            href="../"
+            className="inline-flex items-center gap-1.5 rounded-md py-1 text-sm font-medium text-slate-300 hover:text-white"
+          >
+            <ArrowLeft className="h-4 w-4" strokeWidth={2} aria-hidden />
+            Back to site home
+          </a>
+        }
+      >
         <Shell />
       </PhoneFrame>
     </BrickOpsProvider>
