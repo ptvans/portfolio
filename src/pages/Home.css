@@ -113,12 +113,12 @@ body.light .about-section p {
 .connect-section a {
   font-size: 16px;
   line-height: 1.2;
-  color: rgb(162, 162, 162);
+  color: var(--link-text);
 }
 
-body.light .case-studies-section a,
-body.light .connect-section a {
-  color: rgb(162, 162, 162);
+.pitch-section p a,
+.about-section p a {
+  color: var(--link-text);
 }
 
 .home-footer {

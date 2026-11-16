@@ -145,7 +145,7 @@ body.light .content-text {
 }
 
 .content-text .inline-link {
-  color: inherit;
+  color: var(--link-text);
   text-decoration: underline;
   text-decoration-color: rgba(165, 165, 165, 0.4);
   text-underline-offset: 3px;
