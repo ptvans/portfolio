@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './PrototypeDiagram.css';
 
 // Sample data entities, laid out as a small interconnected graph.
 const NODES = {
-  vendors: { x: 104, y: 28 },
-  customers: { x: 34, y: 86 },
-  products: { x: 168, y: 96 },
+  vendors: { x: 104, y: 26 },
+  customers: { x: 34, y: 84 },
+  products: { x: 168, y: 94 },
   billing: { x: 70, y: 164 },
-  compliance: { x: 160, y: 182 },
-  workflows: { x: 38, y: 246 },
-  projects: { x: 140, y: 272 },
+  compliance: { x: 164, y: 184 },
+  workflows: { x: 34, y: 250 },
+  equipment: { x: 168, y: 272 },
+  projects: { x: 96, y: 314 },
 };
+
+// The pastel palette the links sweep through (same hues as the dots).
+const SWEEP = ['#f9a8d4', '#fdba74', '#fde68a', '#86efac', '#7dd3fc', '#a5b4fc', '#d8b4fe', '#fca5a5', '#f9a8d4'];
 
 const EDGES = [
   ['vendors', 'customers'],
@@ -26,6 +30,9 @@ const EDGES = [
   ['compliance', 'projects'],
   ['workflows', 'projects'],
   ['billing', 'projects'],
+  ['compliance', 'equipment'],
+  ['equipment', 'projects'],
+  ['products', 'equipment'],
 ];
 
 const PROTOTYPES = [
@@ -58,19 +65,48 @@ function Arrow({ area }) {
   );
 }
 
+// The link animation is decoration; skip it for people who ask for less motion.
+function usePrefersReducedMotion() {
+  const query = '(prefers-reduced-motion: reduce)';
+  const [reduced, setReduced] = useState(() => typeof window !== 'undefined' && window.matchMedia?.(query).matches);
+  useEffect(() => {
+    const mq = window.matchMedia?.(query);
+    if (!mq) return undefined;
+    const onChange = () => setReduced(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+  return reduced;
+}
+
 function PrototypeDiagram() {
+  const reducedMotion = usePrefersReducedMotion();
   return (
     <figure className="prototype-diagram">
       <div className="pd-data">
         <div className="pd-label">Your Sample Data</div>
         <svg
           className="pd-cluster"
-          viewBox="0 0 200 300"
+          viewBox="0 0 200 336"
           role="img"
-          aria-label="Interconnected sample data: vendors, customers, products, billing, compliance, workflows and projects"
+          aria-label="Interconnected sample data: vendors, customers, products, billing, compliance, workflows, equipment and projects"
         >
+          <defs>
+            {/* One gradient across the whole cluster, in user space so
+                vertical links still get color; sliding it sideways (with
+                repeat) sweeps the palette through every link. */}
+            <linearGradient id="pd-link-sweep" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="200" y2="120" spreadMethod="repeat">
+              {SWEEP.map((color, i) => (
+                <stop key={i} offset={i / (SWEEP.length - 1)} stopColor={color} />
+              ))}
+              {!reducedMotion && (
+                <animateTransform attributeName="gradientTransform" type="translate" from="0 0" to="200 120" dur="6s" repeatCount="indefinite" />
+              )}
+            </linearGradient>
+          </defs>
           {EDGES.map(([a, b]) => (
             <line
+              className="pd-link"
               key={`${a}-${b}`}
               x1={NODES[a].x}
               y1={NODES[a].y}

@@ -5,6 +5,7 @@
   --pd-border: rgba(128, 128, 128, 0.25);
   --pd-card: rgba(255, 255, 255, 0.03);
   --pd-arrow: #3cc3cf; /* teal-blue */
+  --pd-bg: #1a1a1a; /* page background, for the label halo */
 
   display: grid;
   grid-template-columns: minmax(170px, 0.8fr) 64px minmax(0, 1.2fr);
@@ -24,6 +25,7 @@ body.light .prototype-diagram {
   --pd-border: rgba(0, 0, 0, 0.12);
   --pd-card: rgba(0, 0, 0, 0.02);
   --pd-arrow: #1a97a8; /* same teal-blue, deeper for white */
+  --pd-bg: #ffffff;
 }
 
 .pd-label {
@@ -46,9 +48,32 @@ body.light .prototype-diagram {
   overflow: visible;
 }
 
-.pd-cluster line {
-  stroke: var(--pd-line);
-  stroke-width: 1;
+/* Links: dashed, stroked with a pastel gradient that sweeps across the
+   cluster (animated in the SVG), with the dashes flowing along each link. */
+.pd-cluster .pd-link {
+  stroke: url(#pd-link-sweep);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 4 5;
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pd-cluster .pd-link {
+    animation: pd-link-flow 1.4s linear infinite;
+  }
+}
+
+@keyframes pd-link-flow {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+
+/* Pastels wash out on white: thicker and fully opaque there. */
+body.light .pd-cluster .pd-link {
+  stroke-width: 2;
+  opacity: 1;
 }
 
 .pd-cluster circle {
@@ -63,6 +88,7 @@ body.light .prototype-diagram {
 .pd-cluster .pd-dot-compliance { fill: #7dd3fc; }
 .pd-cluster .pd-dot-workflows { fill: #a5b4fc; }
 .pd-cluster .pd-dot-projects { fill: #d8b4fe; }
+.pd-cluster .pd-dot-equipment { fill: #fca5a5; }
 
 /* On white, a faint ring keeps the pale dots from washing out. */
 body.light .pd-cluster circle {
@@ -72,6 +98,11 @@ body.light .pd-cluster circle {
 
 .pd-cluster text {
   fill: var(--pd-muted);
+  /* A halo in the page color keeps labels readable where links cross them. */
+  paint-order: stroke;
+  stroke: var(--pd-bg);
+  stroke-width: 4px;
+  stroke-linejoin: round;
   font-size: 12px;
   font-family: inherit;
 }
