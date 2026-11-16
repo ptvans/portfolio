@@ -16,7 +16,6 @@ import { EmptyState } from "../../../components/EmptyState";
 import { getBrand, nodeRunsForRun, runsForSop } from "../../../data";
 import type { SopNode, SopNodeRun, SopRun } from "../../../types/domain";
 import { ACTION_KIND_LABEL } from "../components/sop/SopActionGutter";
-import { SopTopBar } from "../components/sop/SopTopBar";
 import {
   EXECUTOR_LABEL,
   executorFor,
@@ -156,8 +155,7 @@ export function SopAnalysis() {
 
   if (!sop) {
     return (
-      <div className="flex h-screen flex-col bg-slate-50">
-        <SopTopBar />
+      <div className="flex h-full flex-col bg-slate-50">
         <div className="p-8">
           <EmptyState icon={Workflow} title="Automation not found" description={`No Automation with id "${id}".`} />
           <Link to="/internal-ops/sops/list" className="mt-4 inline-block text-sm font-medium text-brand-600 hover:underline">
@@ -185,8 +183,7 @@ export function SopAnalysis() {
   const maxTouches = Math.max(1, ...runs.map((r) => r.humanTouches));
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-slate-50">
-      <SopTopBar />
+    <div className="flex h-full flex-col overflow-hidden bg-slate-50">
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         <div className="mx-auto max-w-6xl px-6 pb-12 pt-4">

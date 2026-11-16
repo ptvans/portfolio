@@ -45,24 +45,14 @@ function showBrandFilter(pathname: string): boolean {
   return true;
 }
 
-// The three views of an SOP are focused, full-window workspaces with their own
-// top bar, so they render outside the app shell entirely: the definition
-// (…/versions/:version), one run instance (…/runs/:runId), and the aggregate
-// analysis across every run (…/analysis). The SOP detail page at sops/:id,
-// which indexes the runs and versions, stays in the shell.
+// The three views of an SOP are focused, full-height workspaces: the definition
+// (…/versions/:version, including the full graph), one run instance
+// (…/runs/:runId), and the aggregate analysis across every run (…/analysis).
+// They sit under the app header, full bleed, and fill the rest of the window.
 const SOP_WORKSPACE_PATH = /^\/internal-ops\/sops\/[^/]+\/((runs|versions)\/[^/]+|analysis)\/?$/;
 
 function InternalOpsShell() {
   const { pathname } = useLocation();
-  if (SOP_WORKSPACE_PATH.test(pathname)) {
-    return (
-      <Routes>
-        <Route path="sops/:id/runs/:runId" element={<SopAuthor />} />
-        <Route path="sops/:id/versions/:version" element={<SopAuthor />} />
-        <Route path="sops/:id/analysis" element={<SopAnalysis />} />
-      </Routes>
-    );
-  }
   return (
     <AppShell
       personaLabel="Build Internal Ops"
@@ -75,7 +65,8 @@ function InternalOpsShell() {
         /^\/internal-ops\/?$/.test(pathname) ||
         /^\/internal-ops\/(messages|sops|my-work|my-work\/resolved)\/?$/.test(pathname) ||
         // The SOP page scrolls itself, so its instructions can stay pinned.
-        (/^\/internal-ops\/sops\/[^/]+\/?$/.test(pathname) && !/\/sops\/list\/?$/.test(pathname))
+        (/^\/internal-ops\/sops\/[^/]+\/?$/.test(pathname) && !/\/sops\/list\/?$/.test(pathname)) ||
+        SOP_WORKSPACE_PATH.test(pathname)
       }
     >
       <Routes>
@@ -104,6 +95,9 @@ function InternalOpsShell() {
         {/* SOPs written in a Stella chat, read from the chat. */}
         <Route path="sops/created/:draftId" element={<CreatedSop />} />
         <Route path="sops/:id" element={<SopDetail />} />
+        <Route path="sops/:id/runs/:runId" element={<SopAuthor />} />
+        <Route path="sops/:id/versions/:version" element={<SopAuthor />} />
+        <Route path="sops/:id/analysis" element={<SopAnalysis />} />
         <Route path="alerts" element={<Navigate to="/internal-ops/sops/list" replace />} />
         <Route path="alerts/new" element={<AlertRuleEditor />} />
         <Route path="alerts/:ruleId" element={<AlertRuleDetail />} />

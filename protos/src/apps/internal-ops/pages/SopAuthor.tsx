@@ -27,7 +27,6 @@ import type { SopAction, SopAttachment, SopDocBlock, SopNodeHealth, SopNodeRun }
 import { attachmentFromFile, SopDocumentEditor } from "../components/sop/SopDocumentEditor";
 import { SopGraph } from "../components/sop/SopGraph";
 import { SopNodeInspector } from "../components/sop/SopNodeInspector";
-import { SopTopBar } from "../components/sop/SopTopBar";
 import { SopStateInspector } from "../components/sop/SopStateInspector";
 import { StellaIcon } from "../components/stella/StellaIcon";
 import { StellaChat } from "../components/sop/StellaChat";
@@ -219,8 +218,7 @@ export function SopAuthor() {
 
   if (!sop || !viewSop) {
     return (
-      <div className="flex h-screen flex-col bg-slate-50">
-        <SopTopBar />
+      <div className="flex h-full flex-col bg-slate-50">
         <div className="p-8">
           <EmptyState icon={Workflow} title="Automation not found" description={`No Automation with id "${id}".`} />
           <Link to="/internal-ops/sops/list" className="mt-4 inline-block text-sm font-medium text-brand-600 hover:underline">
@@ -247,8 +245,7 @@ export function SopAuthor() {
     : null;
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-slate-50">
-      <SopTopBar />
+    <div className="flex h-full flex-col overflow-hidden bg-slate-50">
 
       <div
         className={`grid min-h-0 flex-1 ${
