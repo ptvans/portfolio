@@ -35,7 +35,8 @@ function Home({ theme, toggleTheme }) {
         <section className="about-section">
           <h2>About</h2>
           <p>As a product designer and engineer, I have experience building web and mobile apps across many industries. 
-            These experiences are powered by complex workflows, automation, and AI agents that make things simple and easy to digest. 
+            These experiences are powered by complex workflows, automation, and AI agents behind the scenes that 
+            make things simple and easy to digest for people.
             </p>
           <p>
             I have worked on product teams at{' '}
@@ -66,7 +67,7 @@ function Home({ theme, toggleTheme }) {
               <a href="https://github.com/ptvans" target="_blank" rel="noopener noreferrer">Github</a>
             </li>
             <li>
-              <a href="https://www.linkedin.com/in/thom-van-slembrouck-6469a71a4/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <a href="https://www.linkedin.com/in/thom-van-6469a71a4/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             </li>
             <li>
               <a href="mailto:ptvans@gmail.com">Email</a>
