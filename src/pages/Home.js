@@ -27,7 +27,7 @@ function Home({ theme, toggleTheme }) {
           </p>
           <p>
             In a few hours, we can generate multiple new product concepts to test with users, as long as we 
-            have appropriate sample data to build with.
+            have appropriate sample data to build with. These are real examples... 
           </p>
           <PrototypeDiagram />
         </section>
