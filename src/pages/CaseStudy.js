@@ -53,7 +53,7 @@ function CaseStudy({ theme, toggleTheme }) {
         <Link to="/" className="back-button">
           <img 
             src="./images/paul-blue-avatar-pfp.jpg" 
-            alt="Thom Van Slembrouck" 
+            alt="Thom Van" 
             className="avatar-image"
           />
           {/* SVG logo - commented out for potential future use
