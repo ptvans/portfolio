@@ -4,6 +4,7 @@
   --pd-muted: rgb(162, 162, 162);
   --pd-border: rgba(128, 128, 128, 0.25);
   --pd-card: rgba(255, 255, 255, 0.03);
+  --pd-arrow: #3cc3cf; /* teal-blue */
 
   display: grid;
   grid-template-columns: minmax(170px, 0.8fr) 64px minmax(0, 1.2fr);
@@ -22,6 +23,7 @@ body.light .prototype-diagram {
   --pd-muted: #666;
   --pd-border: rgba(0, 0, 0, 0.12);
   --pd-card: rgba(0, 0, 0, 0.02);
+  --pd-arrow: #1a97a8; /* same teal-blue, deeper for white */
 }
 
 .pd-label {
@@ -84,8 +86,8 @@ body.light .pd-cluster circle {
 .pd-arrow line,
 .pd-arrow polyline {
   fill: none;
-  stroke: var(--pd-muted);
-  stroke-width: 2.5;
+  stroke: var(--pd-arrow);
+  stroke-width: 5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
