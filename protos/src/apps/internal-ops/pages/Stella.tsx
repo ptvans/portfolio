@@ -283,7 +283,7 @@ export function Stella({ view = "chat" }: { view?: "chat" | "digest" | "resolved
             <div className="flex min-h-0 flex-1 items-center justify-center px-6">
               <p className="max-w-sm text-center text-base text-slate-400">
                 This is an earlier conversation. Its transcript is not kept in the prototype — start a new chat to run
-                the SOP composer.
+                the Automation composer.
               </p>
             </div>
           )}

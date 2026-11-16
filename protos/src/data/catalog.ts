@@ -140,7 +140,7 @@ export const taskKinds: TaskKind[] = [
   { id: "task-kind-co-rescue", name: "Bot Rescue", description: "Recover a stranded robot (emergency rescues carry a 3-minute response SLA).", requiredSkillIds: ["skill-vehicle"] },
   { id: "task-kind-co-mech-drop", name: "Dropoff Bots at Mechanic", description: "Drive grounded bots to the mechanic facility.", requiredSkillIds: ["skill-vehicle"] },
   { id: "task-kind-co-mech-pick", name: "Pickup Bots at Mechanic", description: "Retrieve repaired bots from the mechanic facility.", requiredSkillIds: ["skill-vehicle"] },
-  { id: "task-kind-co-adhoc", name: "Ad Hoc Task", description: "Ad hoc request made by Coco.", requiredSkillIds: [] },
+  { id: "task-kind-co-adhoc", name: "Ad Hoc Task", description: "Ad hoc request made by Robot.", requiredSkillIds: [] },
 
   // --- FIGS — Distributed Inventory + Order Fulfillment ---
   { id: "task-kind-fg-ack", name: "Acknowledgement", description: "Acknowledge and confirm the request.", requiredSkillIds: [] },
@@ -313,11 +313,11 @@ export const orderKinds: OrderKind[] = [
   { id: "order-kind-husqvarna-pickup", brandId: "brand-husqvarna", name: "Pre-Event Pickup", description: "Pick up product inbound from a manufacturer or prior show, with optional on-site setup.", taskKindIds: ["task-kind-hg-pickup", "task-kind-hg-setup"] },
 
   // --- Coco — Fleet Daily Cycle ---
-  { id: "order-kind-coco-daily", brandId: "brand-coco", name: "Daily Deployment & Undeployment", description: "Daily morning deploy and evening undeploy of Coco robots.", taskKindIds: ["task-kind-co-deploy", "task-kind-co-undeploy"] },
+  { id: "order-kind-coco-daily", brandId: "brand-coco", name: "Daily Deployment & Undeployment", description: "Daily morning deploy and evening undeploy of Robot robots.", taskKindIds: ["task-kind-co-deploy", "task-kind-co-undeploy"] },
   { id: "order-kind-coco-battery", brandId: "brand-coco", name: "Daily Battery Swaps", description: "Swap and stage robot batteries daily.", taskKindIds: ["task-kind-co-battery"] },
   { id: "order-kind-coco-rescue", brandId: "brand-coco", name: "Emergency Robot Rescue (3-min SLA)", description: "Recover a stranded robot under a 3-minute emergency response SLA.", taskKindIds: ["task-kind-co-rescue"] },
   { id: "order-kind-coco-mechanic", brandId: "brand-coco", name: "Mechanic Dropoff / Pickup", description: "Route grounded bots to the mechanic and return repaired units.", taskKindIds: ["task-kind-co-mech-drop", "task-kind-co-mech-pick"] },
-  { id: "order-kind-coco-adhoc", brandId: "brand-coco", name: "Ad Hoc Request", description: "Ad hoc request made by Coco.", taskKindIds: ["task-kind-co-adhoc"] },
+  { id: "order-kind-coco-adhoc", brandId: "brand-coco", name: "Ad Hoc Request", description: "Ad hoc request made by Robot.", taskKindIds: ["task-kind-co-adhoc"] },
 
   // --- FIGS — Distributed Inventory + Order Fulfillment ---
   { id: "order-kind-figs-deliver-store", brandId: "brand-figs", name: "Store: Deliver to Store", description: "Deliver items from storage to the store.", taskKindIds: ["task-kind-fg-ack", "task-kind-fg-deliver-store"] },

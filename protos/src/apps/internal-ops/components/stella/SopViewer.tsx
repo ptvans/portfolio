@@ -78,7 +78,7 @@ export function SopViewer({
         <MessageTypeBadge type="sop" size={22} className="mt-px" />
         <div className="min-w-0 flex-1">
           <p className="text-md font-semibold leading-snug text-slate-900">
-            <span className="font-normal text-slate-500">SOP:</span> {draft.name}
+            <span className="font-normal text-slate-500">Automation:</span> {draft.name}
           </p>
           <div className="mt-1 flex items-center gap-2.5">
             <SopDraftStatus status={draft.status} />
@@ -94,7 +94,7 @@ export function SopViewer({
           type="button"
           onClick={onClose}
           aria-label="Close"
-          title="Back to the SOP cards"
+          title="Back to the Automation cards"
           className="-mr-1 mt-px rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
         >
           <X className="h-4 w-4" strokeWidth={2} />

@@ -206,24 +206,24 @@ export const STELLA_SOP_URL = "https://app.notion.com/p/3dc71cfae62e811a9452c418
 
 const createSopTask: StellaTask = {
   id: "create-sop",
-  title: "Create SOP: Finalization for Project-based work orders",
+  title: "Create Automation: Finalization for Project-based work orders",
   brandId: null,
-  chip: "Create SOP",
+  chip: "Create Automation",
   chipPrompt: STELLA_SOP_URL,
   route: /notion\.(com|so)|3dc71cfae62e81|\bsop\b/i,
   progress: [
     { label: "Read the source document", detail: "Fetch the Notion page and its properties" },
     { label: "Draft the steps", detail: "Compile prose into steps, decisions and edges" },
     { label: "Detect actions and tools", detail: "Resolve each section against the tool catalog" },
-    { label: "Publish the SOP", detail: "Write it to the SOP library and open the views" },
+    { label: "Publish the Automation", detail: "Write it to the Automation library and open the views" },
   ],
-  doneNote: "Task complete. The SOP is in the library as a draft; the card in the conversation links to all three views.",
+  doneNote: "Task complete. The Automation is in the library as a draft; the card in the conversation links to all three views.",
   turns: [
     // ---- 1. The link -----------------------------------------------------
     {
       suggestion: STELLA_SOP_URL,
       match: /notion\.(com|so)|3dc71cfae62e81/i,
-      nudge: "I need the Notion link to the SOP page to start. Paste the URL from the SOP Hub and I'll open it.",
+      nudge: "I need the Notion link to the Automation page to start. Paste the URL from the Automation Hub and I'll open it.",
       completes: 0,
       beats: [
         { after: 300, status: "Opening the document", holds: 1600 },
@@ -355,7 +355,7 @@ const createSopTask: StellaTask = {
           entry: {
             kind: "agent",
             text:
-              "Published as a draft, so it shows in the SOP library but nothing runs off it until someone activates it. The sweeps that have already been done by hand since July are attached to it, which is why the analysis view has history to read on a SOP that was only just written down.\n\nThree ways in:",
+              "Published as a draft, so it shows in the Automation library but nothing runs off it until someone activates it. The sweeps that have already been done by hand since July are attached to it, which is why the analysis view has history to read on an Automation that was only just written down.\n\nThree ways in:",
           },
         },
         {
@@ -373,7 +373,7 @@ const createSopTask: StellaTask = {
           entry: {
             kind: "agent",
             text:
-              "Worth knowing before anyone activates it: the SOP still has no permanent owner on the Notion page, and the margin bands for every work type except event ops are undefined. Until those land, the finalization check cannot be fully automated — it stays at L2, where I propose and the account manager approves.",
+              "Worth knowing before anyone activates it: the Automation still has no permanent owner on the Notion page, and the margin bands for every work type except event ops are undefined. Until those land, the finalization check cannot be fully automated — it stays at L2, where I propose and the account manager approves.",
           },
         },
       ],
@@ -446,7 +446,7 @@ const scheduleShiftsTask: StellaTask = {
           entry: {
             kind: "agent",
             text:
-              "The grid arrived on time this week. Cherrywood, Mueller and South Congress; Lunch, Dinner and Dinner Peak; 27 shifts and 31 supervisor slots across the Tue–Mon week.\n\nOne conflict: the notes at the bottom say “no lunch at Mueller this week”, but the grid shows Lunch at Mueller on Wed 9/16 with one supervisor. The SOP makes the grid win — that is a hard constraint, not something I get to weigh — so I have taken the Lunch shift and flagged the contradiction for Moises rather than dropping it quietly.\n\nNext: existing work orders for that week, then the five Autolane records the draft depends on.",
+              "The grid arrived on time this week. Cherrywood, Mueller and South Congress; Lunch, Dinner and Dinner Peak; 27 shifts and 31 supervisor slots across the Tue–Mon week.\n\nOne conflict: the notes at the bottom say “no lunch at Mueller this week”, but the grid shows Lunch at Mueller on Wed 9/16 with one supervisor. The Automation makes the grid win — that is a hard constraint, not something I get to weigh — so I have taken the Lunch shift and flagged the contradiction for Moises rather than dropping it quietly.\n\nNext: existing work orders for that week, then the five Autolane records the draft depends on.",
           },
         },
       ],
@@ -483,7 +483,7 @@ const scheduleShiftsTask: StellaTask = {
           entry: {
             kind: "agent",
             text:
-              "Same wall the Sep 8 run hit, and it has not been cleared since.\n\n• The product reference moved again — `prod_4c1e9a` is gone, re-resolved by name to `prod_7b20d3` “Tesla Model Y (2026)”. Saved reference updated; that one is self-healing.\n• The Austin assignment to the network operator is **inactive**, ended Sep 1. Nothing active resolves by name either.\n\nThe SOP says confirm setup is live before anything is drafted, so I am not drafting Austin. There is also that one manually created Cherrywood work order for Tue 9/15 — not a full week, so I have left it alone rather than deciding for you.\n\nI can draft Cherrywood and Mueller now and escalate Austin to Moises, or hold the whole week until the assignment is sorted.",
+              "Same wall the Sep 8 run hit, and it has not been cleared since.\n\n• The product reference moved again — `prod_4c1e9a` is gone, re-resolved by name to `prod_7b20d3` “Tesla Model Y (2026)”. Saved reference updated; that one is self-healing.\n• The Austin assignment to the network operator is **inactive**, ended Sep 1. Nothing active resolves by name either.\n\nThe Automation says confirm setup is live before anything is drafted, so I am not drafting Austin. There is also that one manually created Cherrywood work order for Tue 9/15 — not a full week, so I have left it alone rather than deciding for you.\n\nI can draft Cherrywood and Mueller now and escalate Austin to Moises, or hold the whole week until the assignment is sorted.",
           },
         },
       ],
@@ -520,7 +520,7 @@ const scheduleShiftsTask: StellaTask = {
           entry: {
             kind: "agent",
             text:
-              "Drafted 17 work orders and 21 supervisor tasks for Cherrywood and Mueller, named to the week's convention and skipping the Cherrywood Tue 9/15 one that already exists. Austin's 9 shifts are held back and the escalation is with Moises.\n\nNothing is created yet. Approval is the gate on this SOP — that step is L1, the owner approves and I do not get to skip it. Review the draft and tell me to create it.",
+              "Drafted 17 work orders and 21 supervisor tasks for Cherrywood and Mueller, named to the week's convention and skipping the Cherrywood Tue 9/15 one that already exists. Austin's 9 shifts are held back and the escalation is with Moises.\n\nNothing is created yet. Approval is the gate on this Automation — that step is L1, the owner approves and I do not get to skip it. Review the draft and tell me to create it.",
           },
         },
       ],
@@ -585,7 +585,7 @@ const scheduleShiftsTask: StellaTask = {
           entry: {
             kind: "agent",
             text:
-              "Austin stays blocked until someone reactivates the assignment or names a different network operator. That is the second week running, so it is worth fixing at the source rather than escalating again next Sunday — “Confirm setup is live” is the step carrying the SOP's only failing health flag.",
+              "Austin stays blocked until someone reactivates the assignment or names a different network operator. That is the second week running, so it is worth fixing at the source rather than escalating again next Sunday — “Confirm setup is live” is the step carrying the Automation's only failing health flag.",
           },
         },
       ],
@@ -630,15 +630,15 @@ const ZERO_COMPILED = [
 
 const financeTask: StellaTask = {
   id: "finance-sops",
-  title: "Create SOPs: Financial Correctness",
+  title: "Create Automations: Financial Correctness",
   brandId: null,
-  chip: "Write SOPs",
+  chip: "Write Automations",
   chipPrompt: STELLA_FINANCE_PROMPT,
   route: /unusual margins?|unfinali[sz]ed|nets? to \$0|financial correctness/i,
   progress: [
-    { label: "Read the request", detail: "Split it into SOPs and find what it leaves open" },
+    { label: "Read the request", detail: "Split it into Automations and find what it leaves open" },
     { label: "Compile the instructions", detail: "Translate each description into what its agent runs" },
-    { label: "Save as drafts", detail: "Write both SOPs to the library" },
+    { label: "Save as drafts", detail: "Write both Automations to the library" },
     { label: "Make them live", detail: "Start each on its weekday schedule" },
   ],
   doneNote: "Task complete. Financial Correctness and Zero-Dollar Task Approval are live and run weekdays at 5:00 PM PT, starting today.",
@@ -647,7 +647,7 @@ const financeTask: StellaTask = {
     {
       suggestion: STELLA_FINANCE_PROMPT,
       match: /unusual margins?|unfinali[sz]ed|nets? to \$0|financial correctness/i,
-      nudge: "Tell me what the SOP should check and I'll draft it — for example, which work orders to review and what counts as a problem.",
+      nudge: "Tell me what the Automation should check and I'll draft it — for example, which work orders to review and what counts as a problem.",
       completes: 0,
       beats: [
         { after: 300, status: "Reading the request", holds: 1800 },
@@ -676,7 +676,7 @@ const financeTask: StellaTask = {
           entry: {
             kind: "agent",
             text:
-              "That's two SOPs, not one. They look at different records and end in different decisions, so I've split them. Each gets its own subject, schedule and owner, and either can run without the other:\n\n1. Financial Correctness: margins on today's completed work orders that haven't been finalized. Subject: work order.\n2. Zero-Dollar Task Approval: completed tasks whose charges net to $0. Subject: task.\n\nBefore I compile them into instructions, three things the request leaves open:\n\n1. What counts as an unusual margin? I'd rather have your bands than invent them.\n2. Does “Exclude Stack and test brands” cover the $0 check too, or only the margins?\n3. How often they run and who owns them. “Today's” suggests once a day, near the end of it, but the request doesn't say.",
+              "That's two Automations, not one. They look at different records and end in different decisions, so I've split them. Each gets its own subject, schedule and owner, and either can run without the other:\n\n1. Financial Correctness: margins on today's completed work orders that haven't been finalized. Subject: work order.\n2. Zero-Dollar Task Approval: completed tasks whose charges net to $0. Subject: task.\n\nBefore I compile them into instructions, three things the request leaves open:\n\n1. What counts as an unusual margin? I'd rather have your bands than invent them.\n2. Does “Exclude Stack and test brands” cover the $0 check too, or only the margins?\n3. How often they run and who owns them. “Today's” suggests once a day, near the end of it, but the request doesn't say.",
           },
         },
       ],
@@ -688,7 +688,7 @@ const financeTask: StellaTask = {
         "Unusual is negative, under 10%, or over 60%. Exclude Stack and test brands from both. Run them every weekday at 5pm Pacific; Kenny owns both.",
       completes: 1,
       beats: [
-        { after: 300, status: "Compiling both SOPs", holds: 2400 },
+        { after: 300, status: "Compiling both Automations", holds: 2400 },
         {
           after: 2700,
           entry: {
@@ -714,7 +714,7 @@ const financeTask: StellaTask = {
           entry: {
             kind: "agent",
             text:
-              "Both are compiled. I've translated each description into the instructions its agent will follow every weekday at 5:00 PM PT; the panel on the right shows them beside your words, so you can check my reading against them.\n\nA few choices I made that you should check:\n\n• “Today” means today in each work order's own timezone, so a late finish on the West Coast isn't missed.\n• A work order with no brand charges has no margin to calculate. I mark it undefined and flag it rather than skip it.\n• Neither SOP writes anything. Financial Correctness proposes a charge, asks you, or recommends finalizing; the $0 check asks you to approve the $0 or remove the credit.\n• If Slack or Granola can't be searched, the finding says “Unverified—not confirmed incorrect” instead of guessing.\n\nSay the word and I'll save both as drafts.",
+              "Both are compiled. I've translated each description into the instructions its agent will follow every weekday at 5:00 PM PT; the panel on the right shows them beside your words, so you can check my reading against them.\n\nA few choices I made that you should check:\n\n• “Today” means today in each work order's own timezone, so a late finish on the West Coast isn't missed.\n• A work order with no brand charges has no margin to calculate. I mark it undefined and flag it rather than skip it.\n• Neither Automation writes anything. Financial Correctness proposes a charge, asks you, or recommends finalizing; the $0 check asks you to approve the $0 or remove the credit.\n• If Slack or Granola can't be searched, the finding says “Unverified—not confirmed incorrect” instead of guessing.\n\nSay the word and I'll save both as drafts.",
           },
         },
       ],
@@ -725,7 +725,7 @@ const financeTask: StellaTask = {
       suggestion: "Save both as drafts.",
       completes: 2,
       beats: [
-        { after: 300, status: "Saving both SOPs", holds: 1500 },
+        { after: 300, status: "Saving both Automations", holds: 1500 },
         {
           after: 1800,
           entry: {
@@ -763,7 +763,7 @@ const financeTask: StellaTask = {
       nudge: "They'll stay as drafts until you say so. Tell me to make them live when you're ready.",
       completes: 3,
       beats: [
-        { after: 300, status: "Making both SOPs live", holds: 1500 },
+        { after: 300, status: "Making both Automations live", holds: 1500 },
         {
           after: 1800,
           entry: {
@@ -901,7 +901,7 @@ export function rewriteSopPart(text: string, draft: SopDraft | undefined, ref: S
   }
   return {
     edits,
-    reply: `Done. In ${where} of ${draft.name}, ${swap.from}% is now ${swap.to}%; it's marked in the viewer. Nothing else in the SOP changed.`,
+    reply: `Done. In ${where} of ${draft.name}, ${swap.from}% is now ${swap.to}%; it's marked in the viewer. Nothing else in the Automation changed.`,
   };
 }
 
@@ -911,9 +911,9 @@ export const STELLA_NEW_TITLE = "New task";
 // the questions people ask most, which Stella answers honestly with what she
 // can actually run (STELLA_NO_ROUTE) rather than pretending to.
 export const STELLA_STARTERS: { label: string; prompt: string }[] = [
-  { label: "Write SOPs from a plain-language description.", prompt: financeTask.chipPrompt },
-  { label: "Create SOPs from the Work Order Finalization page.", prompt: wofTask.chipPrompt },
-  { label: "Compose an SOP from its Notion page.", prompt: createSopTask.chipPrompt },
+  { label: "Write Automations from a plain-language description.", prompt: financeTask.chipPrompt },
+  { label: "Create Automations from the Work Order Finalization page.", prompt: wofTask.chipPrompt },
+  { label: "Compose an Automation from its Notion page.", prompt: createSopTask.chipPrompt },
   { label: scheduleShiftsTask.chipPrompt, prompt: scheduleShiftsTask.chipPrompt },
   ...[
     "I want to make an alert.",
@@ -925,7 +925,7 @@ export const STELLA_STARTERS: { label: string; prompt: string }[] = [
 ];
 
 export const STELLA_NO_ROUTE =
-  "I can't run that one yet. The four I can run end to end are writing SOPs from a description of what you want checked, creating SOPs from the Work Order Finalization page, composing an SOP from its Notion page, and scheduling a week of supervision shifts. Start a new chat and pick one from the suggestions.";
+  "I can't run that one yet. The four I can run end to end are writing Automations from a description of what you want checked, creating Automations from the Work Order Finalization page, composing an Automation from its Notion page, and scheduling a week of supervision shifts. Start a new chat and pick one from the suggestions.";
 
 // ---------------------------------------------------------------------------
 // Incoming — requests Stella raises herself
@@ -1118,8 +1118,8 @@ export interface SeedSession {
 }
 
 export const STELLA_HISTORY: SeedSession[] = [
-  { id: "ses-hub-drift", title: "Which SOPs drifted from the Notion Hub?", status: "idle", when: "Last week", brandId: null, pinned: true },
-  { id: "ses-coco-dispatch", title: "Coco Dispatch: reconcile v3 against the Hub", status: "done", when: "Yesterday", brandId: "brand-coco", unread: true },
+  { id: "ses-hub-drift", title: "Which Automations drifted from the Notion Hub?", status: "idle", when: "Last week", brandId: null, pinned: true },
+  { id: "ses-coco-dispatch", title: "Robot Dispatch: reconcile v3 against the Hub", status: "done", when: "Yesterday", brandId: "brand-coco", unread: true },
   { id: "ses-margin-sweep", title: "Why did Promobile Sep 11 stop at the AM ping?", status: "waiting", when: "Yesterday", brandId: "brand-promobile" },
   { id: "ses-autolane", title: "Autolane pre-shift dispatch: draft the escalation ladder", status: "done", when: "2 days ago", brandId: "brand-autolane" },
   { id: "ses-zero-charge", title: "Find every $0 task across project-based brands", status: "done", when: "3 days ago", brandId: null, unread: true },

@@ -23,14 +23,14 @@ function openingMessage(sop: Sop, version: SopVersion | undefined): string {
   if (version) {
     const current = version.version === sop.version;
     if (sop.nodes.length === 0) {
-      return `This SOP is empty. Describe the process the way you would for a new hire, one step per block, and I'll compile it into nodes with an owner, rules and a done condition each.`;
+      return `This Automation is empty. Describe the process the way you would for a new hire, one step per block, and I'll compile it into nodes with an owner, rules and a done condition each.`;
     }
     return current
       ? `You're on version ${version.version} of "${sop.name}", the current one. ${version.note} Ask me to change a step, or select a block and choose Modify with prompt; saving publishes version ${sop.version + 1}.`
       : `You're reading version ${version.version} of "${sop.name}", published ${new Date(version.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })} by ${version.publishedBy}. ${version.note} The current version is ${sop.version}. Edits made here save as version ${sop.version + 1}, based on this one.`;
   }
   if (sop.nodes.length === 0) {
-    return `This SOP is empty. Describe the process the way you would for a new hire, one step per block, and I'll compile it into nodes with an owner, rules and a done condition each.`;
+    return `This Automation is empty. Describe the process the way you would for a new hire, one step per block, and I'll compile it into nodes with an owner, rules and a done condition each.`;
   }
   const failing = sop.nodes.find((n) => n.health === "failing");
   if (failing) {
@@ -201,7 +201,7 @@ export function StellaChat({
               }
             }}
             rows={3}
-            placeholder={attachedBlock ? `How should "${attachedBlock.heading}" change?` : "Ask Stella to change the SOP…"}
+            placeholder={attachedBlock ? `How should "${attachedBlock.heading}" change?` : "Ask Stella to change the Automation…"}
             className="w-full resize-none rounded-xl border border-slate-200 bg-white px-3 py-2.5 pr-11 text-sm text-slate-800 placeholder:text-slate-400 focus:border-brand-400 focus:outline-none focus:ring-1 focus:ring-brand-400"
           />
           <button

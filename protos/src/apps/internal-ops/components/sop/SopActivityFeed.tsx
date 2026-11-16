@@ -130,7 +130,7 @@ export function SopActivityFeed({ sop, pending, className = "" }: { sop: Sop; pe
           <EmptyState
             icon={ListChecks}
             title={runs.length === 0 ? "No runs yet" : "Nothing of this type"}
-            description={runs.length === 0 ? "What this SOP does on each run will show here." : "No run has an entry of this type. Pick another filter."}
+            description={runs.length === 0 ? "What this Automation does on each run will show here." : "No run has an entry of this type. Pick another filter."}
           />
         </div>
       ) : (

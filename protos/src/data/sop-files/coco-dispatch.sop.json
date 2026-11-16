@@ -1,19 +1,26 @@
 {
   "$schema": "../../../docs/sop-file.schema.json",
   "id": "sop-coco-dispatch",
-  "name": "Coco Dispatch",
+  "name": "Robot Dispatch",
   "status": "active",
   "version": 3,
-  "scope": { "brandId": "brand-coco", "customer": "Coco" },
+  "scope": {
+    "brandId": "brand-coco",
+    "customer": "Robot"
+  },
   "team": "Ops",
   "sopType": "external",
   "owner": "Bryan Hanley",
   "escalationContact": "Dispatch lead",
   "trigger": "The deployment window opens for the market. The shift has three phases: deployment in the morning, field operations all day, undeployment at night.",
-  "purpose": "Coco pays for Usable Supply Hours, the time robots are parked at a merchant and able to take orders. A robot at 15% battery, holding food, stuck, or parked at the wrong merchant earns zero USH. Dispatch is the loop that keeps the fleet healthy and parked where it can take orders. A bad dispatcher does not just miss tasks, they burn USH by deploying to the wrong restaurant or pulling a robot off an active delivery. Scope: Coco, all markets, Brick dispatch team.",
+  "purpose": "Robot pays for Usable Supply Hours, the time robots are parked at a merchant and able to take orders. A robot at 15% battery, holding food, stuck, or parked at the wrong merchant earns zero USH. Dispatch is the loop that keeps the fleet healthy and parked where it can take orders. A bad dispatcher does not just miss tasks, they burn USH by deploying to the wrong restaurant or pulling a robot off an active delivery. Scope: Robot, all markets, Brick dispatch team.",
   "doneWhen": "Undeployment is complete for the market, the field task queue is at zero or every open task has a documented reason, and the handoff is posted in Slack.",
-  "timeToRun": "One shift. No fixed window for Coco; shift length and handoff time are TBD.",
-  "tags": ["Deployment & Undeployment", "Fleet & Vehicles", "Alerts & Monitoring"],
+  "timeToRun": "One shift. No fixed window for Robot; shift length and handoff time are TBD.",
+  "tags": [
+    "Deployment & Undeployment",
+    "Fleet & Vehicles",
+    "Alerts & Monitoring"
+  ],
   "source": {
     "system": "notion",
     "url": "https://app.notion.com/p/3e371cfae62e81e0ae7cebb042d4bf2b",
@@ -30,7 +37,11 @@
       "where": "Dispatch Slack channel",
       "when": "First thing at shift start",
       "doneWhen": "You can say what this market needs today beyond the default battery and task work.",
-      "next": [{ "to": "market-type" }]
+      "next": [
+        {
+          "to": "market-type"
+        }
+      ]
     },
     {
       "id": "market-type",
@@ -38,11 +49,19 @@
       "title": "Which kind of market is this?",
       "owner": "Dispatch lead",
       "trigger": "The standing instructions have been read.",
-      "work": "The city sets this, not Coco or Brick, and it does not change without a permit change. A deploy/undeploy market requires every robot indoors overnight, so robots deploy out of the MRO each morning: Chicago and Hoboken. A leave-out market has robots living on the street overnight at rally points or overnight merchants, with no morning deployment: Miami, Jersey City, Washington DC and San Jose. The distinction changes almost every step that follows.",
-      "rules": ["Know which kind of market you are running before you touch anything."],
+      "work": "The city sets this, not Robot or Brick, and it does not change without a permit change. A deploy/undeploy market requires every robot indoors overnight, so robots deploy out of the MRO each morning: Chicago and Hoboken. A leave-out market has robots living on the street overnight at rally points or overnight merchants, with no morning deployment: Miami, Jersey City, Washington DC and San Jose. The distinction changes almost every step that follows.",
+      "rules": [
+        "Know which kind of market you are running before you touch anything."
+      ],
       "next": [
-        { "to": "health-check", "label": "Deploy/undeploy market" },
-        { "to": "health-scan", "label": "Leave-out market" }
+        {
+          "to": "health-check",
+          "label": "Deploy/undeploy market"
+        },
+        {
+          "to": "health-scan",
+          "label": "Leave-out market"
+        }
       ]
     },
     {
@@ -52,7 +71,11 @@
       "trigger": "A leave-out market, where robots are already on the street.",
       "work": "Scan the fleet's health in Mission Control. There is no deployment phase here; the robots are already out. After rain, check any robot an operator touches for a swap or task rather than running a dedicated water ingress sweep.",
       "where": "Mission Control",
-      "next": [{ "to": "low-battery-list" }]
+      "next": [
+        {
+          "to": "low-battery-list"
+        }
+      ]
     },
     {
       "id": "health-check",
@@ -66,9 +89,18 @@
       "verification": "automated",
       "autonomy": 2,
       "next": [
-        { "to": "deploy-robots", "label": "All yes: deploy" },
-        { "to": "reboot-recheck", "label": "Any no: reboot and re-check" },
-        { "to": "ask-lead-health", "label": "Not sure" }
+        {
+          "to": "deploy-robots",
+          "label": "All yes: deploy"
+        },
+        {
+          "to": "reboot-recheck",
+          "label": "Any no: reboot and re-check"
+        },
+        {
+          "to": "ask-lead-health",
+          "label": "Not sure"
+        }
       ]
     },
     {
@@ -78,7 +110,11 @@
       "trigger": "A robot failed the health check.",
       "work": "Try a reboot from MRO, then re-run the health check. What symptoms mean a field visit rather than a pickup is TBD for the owner to fill in.",
       "where": "MRO",
-      "next": [{ "to": "health-check" }]
+      "next": [
+        {
+          "to": "health-check"
+        }
+      ]
     },
     {
       "id": "ask-lead-health",
@@ -88,7 +124,11 @@
       "trigger": "You cannot tell whether the robot is fit for a trip.",
       "work": "Post the robot ID and the MRO health readout in the dispatch channel and ask the dispatch lead.",
       "where": "Dispatch Slack channel",
-      "next": [{ "to": "health-check" }]
+      "next": [
+        {
+          "to": "health-check"
+        }
+      ]
     },
     {
       "id": "deploy-robots",
@@ -97,10 +137,16 @@
       "trigger": "The robot passed its health check and the deployment window is open.",
       "work": "Deploy healthy robots out to their assigned merchants. The procedure, batch size and order of merchants are TBD for the owner to fill in. Deploying too many from one MRO at once has caused problems; the cap is TBD.",
       "where": "Mission Control",
-      "rules": ["Never deploy more than the market cap of robots from one MRO at once."],
+      "rules": [
+        "Never deploy more than the market cap of robots from one MRO at once."
+      ],
       "verification": "human",
       "doneWhen": "Every robot shows parked at its assigned merchant in Mission Control.",
-      "next": [{ "to": "low-battery-list" }]
+      "next": [
+        {
+          "to": "low-battery-list"
+        }
+      ]
     },
     {
       "id": "low-battery-list",
@@ -109,12 +155,20 @@
       "trigger": "Start of field operations, and again each time the action list runs down.",
       "work": "In Mission Control, apply the low-battery filter, a fixed cutoff around 35%. Then scan the rest manually and pull the lowest 10 robots above the cutoff. Sort lowest to highest. Low battery does not generate a task on its own: if you do not build this list, nobody swaps the battery. Do not wait for robots to go low. The fleet depletes at roughly the same rate, so if one is low they all are, and you spend the night chasing unhealthy robots while USH bleeds across the fleet. Swapping ahead also evens out charging and means fewer swaps at undeployment.",
       "actor": "agent",
-      "actors": ["stella"],
+      "actors": [
+        "stella"
+      ],
       "where": "Mission Control",
-      "rules": ["Never assume a robot below 20% can make a trip; it is unhealthy and needs a swap, not a deploy."],
+      "rules": [
+        "Never assume a robot below 20% can make a trip; it is unhealthy and needs a swap, not a deploy."
+      ],
       "autonomy": 3,
       "doneWhen": "A sorted list of every robot under 35% plus the 10 lowest above it, with robot ID, battery and current merchant.",
-      "next": [{ "to": "action-list" }]
+      "next": [
+        {
+          "to": "action-list"
+        }
+      ]
     },
     {
       "id": "action-list",
@@ -126,9 +180,18 @@
       "verification": "human",
       "autonomy": 2,
       "next": [
-        { "to": "dispatch-operator", "label": "All yes: add it" },
-        { "to": "phase-check", "label": "Any no: leave it for the next pass" },
-        { "to": "ask-lead-list", "label": "Not sure" }
+        {
+          "to": "dispatch-operator",
+          "label": "All yes: add it"
+        },
+        {
+          "to": "phase-check",
+          "label": "Any no: leave it for the next pass"
+        },
+        {
+          "to": "ask-lead-list",
+          "label": "Not sure"
+        }
       ]
     },
     {
@@ -139,7 +202,11 @@
       "trigger": "You cannot tell whether a robot belongs on the action list.",
       "work": "Post the robot ID, battery, task status and merchant in the dispatch channel and ask the dispatch lead.",
       "where": "Dispatch Slack channel",
-      "next": [{ "to": "action-list" }]
+      "next": [
+        {
+          "to": "action-list"
+        }
+      ]
     },
     {
       "id": "dispatch-operator",
@@ -147,11 +214,20 @@
       "owner": "Dispatch lead",
       "trigger": "The action list is approved.",
       "work": "For each robot on the list, create a task in Portal with robot ID, location, task type and battery, then post the assignment in the dispatch Slack channel. Field operators are NO assets and work from the Portal task. If an operator is already at a robot for a task, swap the battery too even if it is above the threshold. Never send anyone back to the same robot twice. Locations go to operators as a Google Maps pin, not MRO coordinates.",
-      "actors": ["brick_operator", "network_operator"],
+      "actors": [
+        "brick_operator",
+        "network_operator"
+      ],
       "where": "Portal, dispatch Slack channel",
       "when": "Immediately after the action list is approved",
-      "rules": ["Never dispatch against a robot whose task is Scheduled with an empty bot; that is an active delivery and interrupting it kills the order and the USH."],
-      "next": [{ "to": "robot-moved" }]
+      "rules": [
+        "Never dispatch against a robot whose task is Scheduled with an empty bot; that is an active delivery and interrupting it kills the order and the USH."
+      ],
+      "next": [
+        {
+          "to": "robot-moved"
+        }
+      ]
     },
     {
       "id": "robot-moved",
@@ -163,8 +239,14 @@
       "where": "Mission Control",
       "verification": "human",
       "next": [
-        { "to": "triage", "label": "Yes, or a short wait under 0.1 mi" },
-        { "to": "requeue", "label": "Moved further: re-queue it" }
+        {
+          "to": "triage",
+          "label": "Yes, or a short wait under 0.1 mi"
+        },
+        {
+          "to": "requeue",
+          "label": "Moved further: re-queue it"
+        }
       ]
     },
     {
@@ -173,7 +255,11 @@
       "owner": "Dispatch lead",
       "trigger": "The robot moved too far for the operator to wait.",
       "work": "Put the robot back on the list for the next pass and send the operator to the next task.",
-      "next": [{ "to": "phase-check" }]
+      "next": [
+        {
+          "to": "phase-check"
+        }
+      ]
     },
     {
       "id": "triage",
@@ -183,15 +269,38 @@
       "trigger": "A pending task is attached to a robot on the list.",
       "work": "Work pending tasks in Mission Control by type. Pending is the only state you action. For food removal, a pending robot that has stopped moving gets actioned; pending but still moving means wait, because it will not be where you send the operator. A robot stops in place when the failure was robot-side, and returns to its origin merchant when the failure was customer-side such as a no-show or lid problem.",
       "where": "Mission Control",
-      "rules": ["Never touch a robot whose empty-bot task is Scheduled."],
+      "rules": [
+        "Never touch a robot whose empty-bot task is Scheduled."
+      ],
       "next": [
-        { "to": "dispatch-operator", "label": "Swap, flag, unflip or clean camera" },
-        { "to": "pilot-first", "label": "Return to parking lot, or unstuck" },
-        { "to": "collect-pickups", "label": "Bot pickup: grounded mid-trip" },
-        { "to": "reco", "label": "Emergency RECO in Slack" },
-        { "to": "unground", "label": "Grounded, repair ticket closed" },
-        { "to": "redeploy", "label": "Parked at the wrong merchant" },
-        { "to": "phase-check", "label": "Scheduled with empty bot: leave it alone" }
+        {
+          "to": "dispatch-operator",
+          "label": "Swap, flag, unflip or clean camera"
+        },
+        {
+          "to": "pilot-first",
+          "label": "Return to parking lot, or unstuck"
+        },
+        {
+          "to": "collect-pickups",
+          "label": "Bot pickup: grounded mid-trip"
+        },
+        {
+          "to": "reco",
+          "label": "Emergency RECO in Slack"
+        },
+        {
+          "to": "unground",
+          "label": "Grounded, repair ticket closed"
+        },
+        {
+          "to": "redeploy",
+          "label": "Parked at the wrong merchant"
+        },
+        {
+          "to": "phase-check",
+          "label": "Scheduled with empty bot: leave it alone"
+        }
       ]
     },
     {
@@ -204,9 +313,18 @@
       "where": "DriveU",
       "verification": "human",
       "next": [
-        { "to": "phase-check", "label": "Path clear: pilot it and clear the task" },
-        { "to": "dispatch-operator", "label": "Obstructed: send an operator with a van" },
-        { "to": "phase-check", "label": "Never left the merchant: no return needed" }
+        {
+          "to": "phase-check",
+          "label": "Path clear: pilot it and clear the task"
+        },
+        {
+          "to": "dispatch-operator",
+          "label": "Obstructed: send an operator with a van"
+        },
+        {
+          "to": "phase-check",
+          "label": "Never left the merchant: no return needed"
+        }
       ]
     },
     {
@@ -215,7 +333,11 @@
       "owner": "Dispatch lead",
       "trigger": "A robot grounded mid-trip and needs a van.",
       "work": "Not every operator has a van. Collect grounded robots through the shift and send the full list to the dispatch lead at end of shift. Pickups run as one sweep on the next van shift.",
-      "next": [{ "to": "phase-check" }]
+      "next": [
+        {
+          "to": "phase-check"
+        }
+      ]
     },
     {
       "id": "reco",
@@ -225,8 +347,14 @@
       "trigger": "A RECO is posted in the dispatch Slack channel.",
       "work": "Drop the current batch and action the RECO first. RECOs arrive only through Slack and are invisible in MRO and Mission Control, so watching only the tools will miss them. The dispatcher is not in Slack, so the dispatch lead relays. Most emergencies also generate a normal task, unstuck, unflip or empty bot, so it gets done within about an hour regardless, but the dispatcher cannot tell it is an emergency from the task alone. If it needs to jump the queue, say so.",
       "where": "Dispatch Slack channel",
-      "rules": ["RECOs are top priority and never appear in MRO or Mission Control."],
-      "next": [{ "to": "dispatch-operator" }]
+      "rules": [
+        "RECOs are top priority and never appear in MRO or Mission Control."
+      ],
+      "next": [
+        {
+          "to": "dispatch-operator"
+        }
+      ]
     },
     {
       "id": "unground",
@@ -243,9 +371,18 @@
       "verification": "automated",
       "autonomy": 2,
       "next": [
-        { "to": "unground-do", "label": "All yes: change state" },
-        { "to": "stay-grounded", "label": "Any no: leave it grounded" },
-        { "to": "ask-lead-grounding", "label": "Not sure" }
+        {
+          "to": "unground-do",
+          "label": "All yes: change state"
+        },
+        {
+          "to": "stay-grounded",
+          "label": "Any no: leave it grounded"
+        },
+        {
+          "to": "ask-lead-grounding",
+          "label": "Not sure"
+        }
       ]
     },
     {
@@ -257,16 +394,26 @@
       "where": "MRO",
       "verification": "automated",
       "doneWhen": "The robot shows parked in MRO and accepts orders in Mission Control.",
-      "next": [{ "to": "phase-check" }]
+      "next": [
+        {
+          "to": "phase-check"
+        }
+      ]
     },
     {
       "id": "stay-grounded",
       "title": "Leave it grounded and route to the engineer",
-      "owner": "Coco fleet quality engineer",
+      "owner": "Robot fleet quality engineer",
       "trigger": "The grounding type needs review, or the ticket is still open.",
-      "work": "Leave the robot grounded. Modem failures go to Coco's fleet quality engineer through the ticket system before anyone acts. Both this and the no-state-change-mid-trip rule exist because of the train incident.",
-      "actors": ["external"],
-      "next": [{ "to": "phase-check" }]
+      "work": "Leave the robot grounded. Modem failures go to Robot's fleet quality engineer through the ticket system before anyone acts. Both this and the no-state-change-mid-trip rule exist because of the train incident.",
+      "actors": [
+        "external"
+      ],
+      "next": [
+        {
+          "to": "phase-check"
+        }
+      ]
     },
     {
       "id": "ask-lead-grounding",
@@ -276,7 +423,11 @@
       "trigger": "You do not recognise the grounding type.",
       "work": "Leave it grounded and post the robot ID, grounding reason and ticket link in the dispatch channel.",
       "where": "Dispatch Slack channel",
-      "next": [{ "to": "unground" }]
+      "next": [
+        {
+          "to": "unground"
+        }
+      ]
     },
     {
       "id": "redeploy",
@@ -287,7 +438,11 @@
       "where": "Mission Control",
       "verification": "human",
       "doneWhen": "The robot shows parked at the correct merchant in Mission Control.",
-      "next": [{ "to": "phase-check" }]
+      "next": [
+        {
+          "to": "phase-check"
+        }
+      ]
     },
     {
       "id": "phase-check",
@@ -297,8 +452,14 @@
       "trigger": "A batch of field work is finished.",
       "work": "Rebuild the action list when a wave runs down, not before. When the market's undeploy time arrives, move to Phase 3. The exact time is TBD per market.",
       "next": [
-        { "to": "low-battery-list", "label": "Shift continues: rebuild the wave" },
-        { "to": "undeploy", "label": "Undeploy time reached" }
+        {
+          "to": "low-battery-list",
+          "label": "Shift continues: rebuild the wave"
+        },
+        {
+          "to": "undeploy",
+          "label": "Undeploy time reached"
+        }
       ]
     },
     {
@@ -309,7 +470,11 @@
       "work": "Map each robot to its overnight destination and deploy via the Mission Control deploy function, one destination at a time. Run the health check on each robot first. Anything outside the market's zones gets a pickup task instead. In a deploy/undeploy market every robot must be inside the MRO by the city's deadline, routed to rally points then vanned in or tripped straight to the MRO; a robot left outside overnight is a compliance problem, not just lost USH. In a leave-out market the destination is the rally point or overnight merchant. Current practice is one rally point at a time, and why is TBD.",
       "where": "Mission Control",
       "doneWhen": "Every robot has a destination and a trip started, or a pickup task in Portal.",
-      "next": [{ "to": "monitor-returns" }]
+      "next": [
+        {
+          "to": "monitor-returns"
+        }
+      ]
     },
     {
       "id": "monitor-returns",
@@ -318,10 +483,16 @@
       "trigger": "The first undeploy trip is under way.",
       "work": "Watch trip status in Mission Control, refreshing manually because it never auto-refreshes. Flag any robot that stalls, stops short or misses its destination. A clean night with zero pickups is rare; expect a few.",
       "actor": "agent",
-      "actors": ["stella"],
+      "actors": [
+        "stella"
+      ],
       "where": "Mission Control",
       "autonomy": 3,
-      "next": [{ "to": "arrival-check" }]
+      "next": [
+        {
+          "to": "arrival-check"
+        }
+      ]
     },
     {
       "id": "arrival-check",
@@ -332,8 +503,14 @@
       "work": "Every robot either shows arrived or goes on the flagged list for troubleshooting.",
       "verification": "human",
       "next": [
-        { "to": "handoff", "label": "All arrived" },
-        { "to": "troubleshoot", "label": "Stalled, stopped short or missed" }
+        {
+          "to": "handoff",
+          "label": "All arrived"
+        },
+        {
+          "to": "troubleshoot",
+          "label": "Stalled, stopped short or missed"
+        }
       ]
     },
     {
@@ -341,9 +518,13 @@
       "title": "Work the flagged robot",
       "owner": "Dispatch lead",
       "trigger": "A robot missed its rally point or stalled mid-trip.",
-      "work": "Check health in MRO, reboot if unhealthy, pilot if possible, otherwise raise a pickup task. In Miami, a robot that stopped mid-trip showing healthy with no task generated is probably a failed bridge crossing between Brickell and downtown: Coco cancels the trip manually and no return-to-parking-lot task fires, so it is only caught by eye. Treat it as a return to parking lot and decide fast, because the robot is still trip-eligible.",
+      "work": "Check health in MRO, reboot if unhealthy, pilot if possible, otherwise raise a pickup task. In Miami, a robot that stopped mid-trip showing healthy with no task generated is probably a failed bridge crossing between Brickell and downtown: Robot cancels the trip manually and no return-to-parking-lot task fires, so it is only caught by eye. Treat it as a return to parking lot and decide fast, because the robot is still trip-eligible.",
       "where": "MRO, DriveU, Portal",
-      "next": [{ "to": "arrival-check" }]
+      "next": [
+        {
+          "to": "arrival-check"
+        }
+      ]
     },
     {
       "id": "handoff",
@@ -353,8 +534,14 @@
       "work": "Post the overnight list in the dispatch Slack channel: every robot, its confirmed location, and any open pickups or unresolved groundings. The morning crew uses this to locate, clean and prep.",
       "where": "Dispatch Slack channel",
       "when": "End of shift",
-      "rules": ["Every location on the list is one you clicked into and confirmed, never one read off the merchant assignment."],
-      "next": [{ "to": "done" }]
+      "rules": [
+        "Every location on the list is one you clicked into and confirmed, never one read off the merchant assignment."
+      ],
+      "next": [
+        {
+          "to": "done"
+        }
+      ]
     }
   ]
 }

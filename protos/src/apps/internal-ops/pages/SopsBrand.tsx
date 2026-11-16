@@ -22,7 +22,7 @@ import { useSops } from "../context/SopContext";
 type SortKey = "status" | "triggered" | "active" | "name";
 const STATUS_RANK: Record<AlertRuleStatus, number> = { active: 0, draft: 1, inactive: 2 };
 
-const CRUMBS = [{ label: "SOPs", to: "/internal-ops/sops/list" }];
+const CRUMBS = [{ label: "Automations", to: "/internal-ops/sops/list" }];
 
 // A brand's SOPs of both types: its Standard SOPs, then its Alerts (active, draft
 // and inactive). "brick" is the Brick-wide group, which has Standard SOPs only.
@@ -66,7 +66,7 @@ export function SopsBrand() {
       <Breadcrumbs items={CRUMBS} />
       <div className="mb-6 flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <h1 className="text-xl font-semibold text-slate-900">SOPs</h1>
+          <h1 className="text-xl font-semibold text-slate-900">Automations</h1>
           {brand ? <BrandChip name={brand.name} color={brand.color} /> : <span className="text-sm font-semibold text-slate-600">Brick-wide</span>}
         </div>
         {brand && (
@@ -85,7 +85,7 @@ export function SopsBrand() {
         </h2>
         {processes.length === 0 ? (
           <p className="rounded-md border border-dashed border-slate-200 px-4 py-3 text-sm text-slate-400">
-            {brand ? `${brand.name} has no standard SOPs yet.` : "No Brick-wide standard SOPs."}
+            {brand ? `${brand.name} has no standard Automations yet.` : "No Brick-wide standard Automations."}
           </p>
         ) : (
           <SopTable sops={processes} />

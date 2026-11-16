@@ -33,7 +33,7 @@ export const SOP_AUTONOMY_LABELS: Record<1 | 2 | 3 | 4, string> = {
 export const SOP_ACTOR_LABELS: Record<SopNode["actors"][number], string> = {
   stella: "Stella",
   brick_operator: "Brick operator",
-  sop_owner: "SOP owner",
+  sop_owner: "Automation owner",
   verifier_agent: "Verifier agent",
   network_operator: "Network operator",
   brand_user: "Brand user",
@@ -260,11 +260,11 @@ const alNodes: SopNode[] = authored([
   },
   {
     id: "al-escalate",
-    trigger: "Any step hits something the SOP does not cover.",
+    trigger: "Any step hits something the Automation does not cover.",
     kind: "escalation",
-    title: "Escalate to the SOP owner",
+    title: "Escalate to the Automation owner",
     summary: "Anything unusual, with everything known so far.",
-    work: "Send the owner everything known so far: an unreadable schedule, a new site, a new kind of shift, missing Autolane records in Brick, or work orders that only partly saved. Resolving the escalation offers a one-click SOP change for the owner to approve.",
+    work: "Send the owner everything known so far: an unreadable schedule, a new site, a new kind of shift, missing Autolane records in Brick, or work orders that only partly saved. Resolving the escalation offers a one-click Automation change for the owner to approve.",
     ownerName: OWNER,
     actors: ["stella", "sop_owner"],
     hardConstraints: [],
@@ -322,7 +322,7 @@ const alEdges: SopEdge[] = [
 const alBlocks: SopDocBlock[] = [
   {
     id: "al-b-intro",
-    heading: "Why this SOP exists",
+    heading: "Why this Automation exists",
     body: "Each week Autolane sends a supervision shift schedule. We turn it into work orders in Brick so the network operator can staff them. Stella does the work; a person approves before anything is created.",
     nodeId: null,
   },
@@ -349,7 +349,7 @@ const alBlocks: SopDocBlock[] = [
   {
     id: "al-b-esc",
     heading: "Anything unusual",
-    body: "Anything unusual goes to the SOP owner with everything known so far: an unreadable schedule, a new site, a new kind of shift, missing Autolane records in Brick, or work orders that only partly saved.",
+    body: "Anything unusual goes to the Automation owner with everything known so far: an unreadable schedule, a new site, a new kind of shift, missing Autolane records in Brick, or work orders that only partly saved.",
     nodeId: "al-escalate",
   },
 ];
@@ -410,7 +410,7 @@ export const autolaneWeeklyShiftsSop: Sop = {
     rule: "Every Sunday at 8:00 PM Central (6:00 PM Pacific, where the owner sits), ahead of the Tue–Mon operating week",
   },
   versions: [
-    { version: 1, publishedAt: "2026-07-02T11:05:00-07:00", publishedBy: "Moises Reyes", note: "Compiled from the Autolane weekly shifts SOP document.", snapshot: alV1 },
+    { version: 1, publishedAt: "2026-07-02T11:05:00-07:00", publishedBy: "Moises Reyes", note: "Compiled from the Autolane weekly shifts Automation document.", snapshot: alV1 },
     { version: 2, publishedAt: "2026-07-27T09:40:00-07:00", publishedBy: "Moises Reyes", note: "Codified from escalation: a schedule posted as an image counts as arrived.", snapshot: alV2 },
     { version: 3, publishedAt: "2026-08-24T16:15:00-07:00", publishedBy: "Priya Natarajan", note: "Codified from escalation: retry only the work orders that failed to save; spot-check 20%." },
   ],
@@ -739,7 +739,7 @@ function generateSweepRun(run: SopRun): SopNodeRun[] {
     node("trigger", 1, {
       subtasksTriggered: 1,
       logs: [L(min(0), "info", `Finalization sweep opened for ${shape.brand}.`)],
-      objectsCreated: [{ kind: "SOP run", label: run.label, ref: run.id }],
+      objectsCreated: [{ kind: "Automation run", label: run.label, ref: run.id }],
     }),
     node("open-brand", 3, {
       logs: [
@@ -899,7 +899,7 @@ const handwrittenNodeRuns: SopNodeRun[] = [
     runtimeSeconds: 2,
     subtasksTriggered: 1,
     logs: [L("2026-09-06T18:00:01-07:00", "info", "Run opened for operating week Tue Sep 8 – Mon Sep 14 (America/Chicago).")],
-    objectsCreated: [{ kind: "SOP run", label: "Week of Sep 8 – Sep 14", ref: "run-al-10" }],
+    objectsCreated: [{ kind: "Automation run", label: "Week of Sep 8 – Sep 14", ref: "run-al-10" }],
     errors: [],
     issues: [],
   },
@@ -990,7 +990,7 @@ const handwrittenNodeRuns: SopNodeRun[] = [
     subtasksTriggered: 1,
     logs: [
       L("2026-09-07T10:20:36-07:00", "info", "Escalation sent to Moises Reyes in Slack with the run summary and the two setup findings."),
-      L("2026-09-07T10:20:40-07:00", "info", "Awaiting acknowledgement. Suggested SOP change: re-resolve inactive assignments by region name before failing."),
+      L("2026-09-07T10:20:40-07:00", "info", "Awaiting acknowledgement. Suggested Automation change: re-resolve inactive assignments by region name before failing."),
     ],
     objectsCreated: [{ kind: "Escalation", label: "Setup check failed for week of Sep 8", ref: "esc-al10-01" }],
     errors: [],
@@ -1173,7 +1173,7 @@ function generateCompletedRun(run: SopRun): SopNodeRun[] {
     {
       id: id("trigger"), sopRunId: run.id, nodeId: "al-trigger", status: "succeeded", startedAt: run.startedAt, runtimeSeconds: 2, subtasksTriggered: 1,
       logs: [L(run.startedAt, "info", `Run opened for operating week ${week} (America/Chicago).`)],
-      objectsCreated: [{ kind: "SOP run", label: run.label, ref: run.id }], errors: [], issues: [],
+      objectsCreated: [{ kind: "Automation run", label: run.label, ref: run.id }], errors: [], issues: [],
     },
     {
       id: id("1"), sopRunId: run.id, nodeId: "al-1", status: "succeeded", startedAt: run.startedAt, runtimeSeconds: minutesBetween(run.startedAt, arrived), subtasksTriggered: w.reminder ? 2 : 1,

@@ -20,7 +20,7 @@ import type { SopDraft, SopProposal, StellaBeat, StellaEntry, StellaQuestion, St
 
 export const STELLA_WOF_URL =
   "https://app.notion.com/p/Work-Order-Finalization-Project-Based-Customers-3dc71cfae62e811a9452c418d4132e3a?source=copy_link";
-export const STELLA_WOF_PROMPT = `Create a SOP from ${STELLA_WOF_URL}`;
+export const STELLA_WOF_PROMPT = `Create an Automation from ${STELLA_WOF_URL}`;
 
 const page = sops.find((s) => s.id === "sop-work-order-finalization-project-based");
 // One step of the page, as "Title: what it says".
@@ -84,10 +84,10 @@ function card(
   return { kind: "questions", id, heading, answersTitle, questions, submitLabel: extra.submitLabel ?? "Send answers", sop: extra.sop, intro: extra.intro, picks: null };
 }
 
-const SWEEP_HEADING = `Questions about ${SWEEP} (SOP 1 of 3)`;
-const SWEEP_ANSWERS = `Answers for ${SWEEP} (SOP 1 of 3):`;
-const CHASE_HEADING = `Questions about ${CHASE} (SOP 2 of 3)`;
-const CHASE_ANSWERS = `Answers for ${CHASE} (SOP 2 of 3):`;
+const SWEEP_HEADING = `Questions about ${SWEEP} (Automation 1 of 3)`;
+const SWEEP_ANSWERS = `Answers for ${SWEEP} (Automation 1 of 3):`;
+const CHASE_HEADING = `Questions about ${CHASE} (Automation 2 of 3)`;
+const CHASE_ANSWERS = `Answers for ${CHASE} (Automation 2 of 3):`;
 
 const sweepFirst = card("q-sweep-1", SWEEP_HEADING, SWEEP_ANSWERS, [
   q({
@@ -290,8 +290,8 @@ const chaseSecond = card("q-chase-2", CHASE_HEADING, CHASE_ANSWERS, [
 
 const finalizeQuestions = card(
   "q-finalize",
-  `Questions about ${FINALIZE} (SOP 3 of 3)`,
-  `Answers for ${FINALIZE} (SOP 3 of 3):`,
+  `Questions about ${FINALIZE} (Automation 3 of 3)`,
+  `Answers for ${FINALIZE} (Automation 3 of 3):`,
   [
     q({
       key: "authority.finalize-approved-work-order",
@@ -318,7 +318,7 @@ const finalizeQuestions = card(
     q({
       key: "cadence.finalize-approved-work-order",
       text: `How often should “${FINALIZE}” run?`,
-      consequence: "Sets how often the engine runs this SOP; Brick sets the run time (16:00 UTC). Nothing on the page states it.",
+      consequence: "Sets how often the engine runs this Automation; Brick sets the run time (16:00 UTC). Nothing on the page states it.",
       options: [
         { label: "Weekdays", value: "weekdays" },
         { label: "Daily", value: "daily" },
@@ -350,7 +350,7 @@ const confirmSave = card(
     key,
     text: name,
     tag: "New",
-    note: `${key} · No SOP exists yet.`,
+    note: `${key} · No Automation exists yet.`,
     options: [
       { label: "Create", value: "create" },
       { label: "Don't save", value: "skip" },
@@ -408,19 +408,19 @@ const checking = (status: string, entry: StellaEntry & { kind: "questions" }, te
 
 export const wofTask: StellaTask = {
   id: "wof-sops",
-  title: "Create SOPs: Work Order Finalization",
+  title: "Create Automations: Work Order Finalization",
   brandId: null,
-  chip: "Notion → SOPs",
+  chip: "Notion → Automations",
   chipPrompt: STELLA_WOF_PROMPT,
   route: /\bcreate (an? )?sops? from\b/i,
   progress: [
-    { label: "Read the page", detail: "Check it against Brick data and split it into SOPs" },
-    { label: "SOP 1, first questions", detail: SWEEP },
-    { label: "SOP 1, more questions", detail: SWEEP },
-    { label: "SOP 2, first questions", detail: CHASE },
-    { label: "SOP 2, more questions", detail: CHASE },
-    { label: "SOP 3 questions", detail: FINALIZE },
-    { label: "Save and schedule", detail: "Save the SOPs that can run" },
+    { label: "Read the page", detail: "Check it against Brick data and split it into Automations" },
+    { label: "Automation 1, first questions", detail: SWEEP },
+    { label: "Automation 1, more questions", detail: SWEEP },
+    { label: "Automation 2, first questions", detail: CHASE },
+    { label: "Automation 2, more questions", detail: CHASE },
+    { label: "Automation 3 questions", detail: FINALIZE },
+    { label: "Save and schedule", detail: "Save the Automations that can run" },
   ],
   doneNote: `Task complete. ${SWEEP} and ${FINALIZE} are saved and scheduled; ${CHASE} was skipped as not executable.`,
   turns: [
@@ -428,7 +428,7 @@ export const wofTask: StellaTask = {
     {
       suggestion: STELLA_WOF_PROMPT,
       match: /notion\.(com|so)|3dc71cfae62e81/i,
-      nudge: "Paste the Notion link to the SOP page and I'll hand it to the SOP builder.",
+      nudge: "Paste the Notion link to the Automation page and I'll hand it to the Automation builder.",
       completes: 0,
       beats: [
         { after: 300, status: "Working through 1 step", holds: 1200 },
@@ -436,7 +436,7 @@ export const wofTask: StellaTask = {
           after: 1600,
           entry: {
             kind: "agent",
-            text: "I’m switching to the SOP builder now; it will read the page, check it against Brick data, and ask a few questions.",
+            text: "I’m switching to the Automation builder now; it will read the page, check it against Brick data, and ask a few questions.",
           },
         },
         { after: 2000, status: "Reading the page and checking it against Brick data", holds: 2600 },
@@ -466,7 +466,7 @@ export const wofTask: StellaTask = {
             kind: "tool",
             tool: "sop_builder.split",
             args: "source=notion:3dc71cfae62e81…",
-            result: "3 SOPs · 2 steps not in any SOP · 3 page checks not recorded in the data",
+            result: "3 Automations · 2 steps not in any Automation · 3 page checks not recorded in the data",
             ok: false,
           },
         },
@@ -474,9 +474,9 @@ export const wofTask: StellaTask = {
           after: 4800,
           entry: {
             kind: "agent",
-            heading: "What this page becomes: 3 SOPs",
+            heading: "What this page becomes: 3 Automations",
             text:
-              "The page as written is not an executable SOP yet. It has no owner, 9 TBDs left open (“[TBD - no permanent owner assigned yet]”; “[TBD - exact cadence]”; “[TBD - where to look this up]”; …).\n\nKeep the core checks: finalization has a clear purpose and is not covered by another SOP. As written, the page lacks an assigned human owner, exact cadence, executable margin and $0 rules, an approved finalization actor, and record-backed evidence and failure paths; its clean-work-order completion test is therefore not yet publishable.\n\nThe SOPs below are what it should become; the questions fill these gaps. Update the page afterwards so it says the same thing.",
+              "The page as written is not an executable Automation yet. It has no owner, 9 TBDs left open (“[TBD - no permanent owner assigned yet]”; “[TBD - exact cadence]”; “[TBD - where to look this up]”; …).\n\nKeep the core checks: finalization has a clear purpose and is not covered by another Automation. As written, the page lacks an assigned human owner, exact cadence, executable margin and $0 rules, an approved finalization actor, and record-backed evidence and failure paths; its clean-work-order completion test is therefore not yet publishable.\n\nThe Automations below are what it should become; the questions fill these gaps. Update the page afterwards so it says the same thing.",
           },
         },
         { after: 5200, entry: { kind: "proposals", sops: [sweep, chase, finalize] } },
@@ -484,14 +484,14 @@ export const wofTask: StellaTask = {
           after: 5600,
           entry: {
             kind: "agent",
-            text: "Built from the page’s steps as listed; the written SOP after your answers puts checks before actions and the irreversible step last.",
+            text: "Built from the page’s steps as listed; the written Automation after your answers puts checks before actions and the irreversible step last.",
           },
         },
         {
           after: 6000,
           entry: {
             kind: "agent",
-            heading: "Not in any SOP",
+            heading: "Not in any Automation",
             text:
               "• Dropped step 1 (Open the brand on the finalization page): portal navigation adds no check; Stella reads work order records directly.\n• Step 4 (Check how the brand's rates are set up) is a brand variable, not a step: the page identifies rate setup as a brand variable; its default/custom/rate-sheet classification is not a reliable Brick field.",
           },
@@ -502,14 +502,14 @@ export const wofTask: StellaTask = {
             kind: "agent",
             heading: "What the data showed",
             text:
-              "• “NEVER finalize a work order that still has an in-progress or overdue task. Finalization cannot be undone, so that task's charge is gone.” (step 2): could not be checked; not recorded in the fixture.\n• “Every task is complete. Nothing in progress, nothing overdue.” (step 9): could not be checked; not recorded in the fixture.\n• “Finalize each one that clears the checklist below.” (step 9): could not be checked; not recorded in the fixture.\n• The proposed default/custom/brand-rate-sheet test cannot determine pricing: Brick pricing uses charge configs per task kind and their versions; the available rate sheets are for NOs.\n• The event-ops band does not cover the work order kinds present in the Brick-wide sample.\n• The reviewer's Acknowledgement example makes an unconditional completed-task charge rule unsafe.\n\nOutside Brick, left out: the network operator's own tracker (steps 6, 7). Stella has no connection to it, so the SOP runs on Brick records and connected apps and says so.",
+              "• “NEVER finalize a work order that still has an in-progress or overdue task. Finalization cannot be undone, so that task's charge is gone.” (step 2): could not be checked; not recorded in the fixture.\n• “Every task is complete. Nothing in progress, nothing overdue.” (step 9): could not be checked; not recorded in the fixture.\n• “Finalize each one that clears the checklist below.” (step 9): could not be checked; not recorded in the fixture.\n• The proposed default/custom/brand-rate-sheet test cannot determine pricing: Brick pricing uses charge configs per task kind and their versions; the available rate sheets are for NOs.\n• The event-ops band does not cover the work order kinds present in the Brick-wide sample.\n• The reviewer's Acknowledgement example makes an unconditional completed-task charge rule unsafe.\n\nOutside Brick, left out: the network operator's own tracker (steps 6, 7). Stella has no connection to it, so the Automation runs on Brick records and connected apps and says so.",
           },
         },
         {
           after: 7000,
           entry: {
             kind: "agent",
-            text: `Next: a few things the page and the data do not settle, one SOP at a time, starting with ${SWEEP}. Where a rule depends on a fact that differs by brand, the question says so and asks how the SOP should get it.`,
+            text: `Next: a few things the page and the data do not settle, one Automation at a time, starting with ${SWEEP}. Where a rule depends on a fact that differs by brand, the question says so and asks how the Automation should get it.`,
           },
         },
         { after: 7400, entry: sweepFirst },
@@ -527,7 +527,7 @@ export const wofTask: StellaTask = {
       match: ANSWERS,
       nudge: ANSWER_NUDGE,
       completes: 2,
-      beats: checking("Writing up SOP 1", chaseFirst, `That settles ${SWEEP}. Next, ${CHASE}.`),
+      beats: checking("Writing up Automation 1", chaseFirst, `That settles ${SWEEP}. Next, ${CHASE}.`),
     },
     {
       match: ANSWERS,
@@ -539,7 +539,7 @@ export const wofTask: StellaTask = {
       match: ANSWERS,
       nudge: ANSWER_NUDGE,
       completes: 4,
-      beats: checking("Writing up SOP 2", finalizeQuestions, `That settles ${CHASE}. Last, ${FINALIZE}.`),
+      beats: checking("Writing up Automation 2", finalizeQuestions, `That settles ${CHASE}. Last, ${FINALIZE}.`),
     },
 
     // ---- 7. Write all three, then confirm what to save -------------------
@@ -548,7 +548,7 @@ export const wofTask: StellaTask = {
       nudge: ANSWER_NUDGE,
       completes: 5,
       beats: (answers) => [
-        { after: 300, status: "Writing the SOPs", holds: 2400 },
+        { after: 300, status: "Writing the Automations", holds: 2400 },
         {
           after: 2700,
           entry: {
@@ -563,7 +563,7 @@ export const wofTask: StellaTask = {
           after: 3200,
           entry: {
             kind: "sopList",
-            heading: "3 SOPs written",
+            heading: "3 Automations written",
             rows: SAVE_ORDER.map(({ key, name, executable }) => ({
               name,
               status: executable ? "Executable" : "Not executable yet",
@@ -576,8 +576,8 @@ export const wofTask: StellaTask = {
           after: 3700,
           entry: {
             kind: "agent",
-            heading: "Checked against the saved SOPs",
-            text: `Not executable, so not saved this time: ${CHASE}. Their blockers are listed in the SOPs above; fix the page and run again.\n\nNothing like these exists yet. Confirm what to save:`,
+            heading: "Checked against the saved Automations",
+            text: `Not executable, so not saved this time: ${CHASE}. Their blockers are listed in the Automations above; fix the page and run again.\n\nNothing like these exists yet. Confirm what to save:`,
           },
         },
         { after: 4100, entry: confirmSave },
@@ -592,7 +592,7 @@ export const wofTask: StellaTask = {
       beats: (answers) => {
         const saved = SAVE_ORDER.filter((s) => s.executable && answers[s.key] === "create");
         const skipped = SAVE_ORDER.filter((s) => !s.executable && answers[s.key] === "create");
-        const count = saved.length === 1 ? "1 SOP" : `${saved.length} SOPs`;
+        const count = saved.length === 1 ? "1 Automation" : `${saved.length} Automations`;
         const when = (key: string) => schedule(answers[`cadence.${key}`]) ?? "Daily at 16:00 UTC";
         const sameWhen = new Set(saved.map((s) => when(s.key))).size === 1;
         const beats: StellaBeat[] = [
@@ -640,7 +640,7 @@ export const wofTask: StellaTask = {
             kind: "agent",
             text: [
               saved.length
-                ? `${saved.length === 1 ? "One SOP was" : saved.length === 2 ? "Two SOPs were" : "Three SOPs were"} saved and scheduled${
+                ? `${saved.length === 1 ? "One Automation was" : saved.length === 2 ? "Two Automations were" : "Three Automations were"} saved and scheduled${
                     sameWhen ? `, ${saved.length === 1 ? "" : "both "}${when(saved[0].key).replace(/^./, (c) => c.toLowerCase())}` : ""
                   }:\n\n${names}`
                 : "Nothing was saved.",

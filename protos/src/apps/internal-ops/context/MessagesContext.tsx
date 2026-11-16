@@ -148,7 +148,7 @@ const SEED_SAVED: SavedFilter[] = [
   },
   {
     id: "saved-sops",
-    name: "Raised by an SOP",
+    name: "Raised by an Automation",
     filters: { ...EMPTY_FILTERS, type: ["sop"] },
   },
 ];
@@ -282,7 +282,7 @@ export function MessagesProvider({ children }: { children: ReactNode }) {
           raised: [],
           refId: r.id,
           ask: status === "needs_input" ? (SOP_ASK[r.status] ?? null) : null,
-          title: `${sop?.name ?? "SOP"} — ${r.label}`,
+          title: `${sop?.name ?? "Automation"} — ${r.label}`,
           body: issues.join(" "),
           type: "sop",
           status,
@@ -665,7 +665,7 @@ export const STATUS_LABEL: Record<MessageStatus, string> = {
 };
 
 export const TYPE_LABEL: Record<MessageType, string> = {
-  sop: "SOP",
+  sop: "Automation",
   goal: "Goal",
   project: "Project",
   audit: "Task Completion Audit",

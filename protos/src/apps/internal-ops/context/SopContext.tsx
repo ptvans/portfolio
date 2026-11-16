@@ -64,7 +64,7 @@ export function SopProvider({ children }: { children: ReactNode }) {
           versions: [
             // The outgoing current version keeps a snapshot of what it was.
             ...s.versions.map((v) => (v.version === s.version && !v.snapshot ? { ...v, snapshot: { blocks: s.blocks, nodes: s.nodes } } : v)),
-            { version: s.version + 1, publishedAt: now, publishedBy: "Thom Van", note: "Edited in the SOP authoring page." },
+            { version: s.version + 1, publishedAt: now, publishedBy: "Thom Van", note: "Edited in the Automation authoring page." },
           ],
         };
       }),
@@ -126,7 +126,7 @@ export function SopProvider({ children }: { children: ReactNode }) {
       blocks: [
         {
           id: `${id}-intro`,
-          heading: "Why this SOP exists",
+          heading: "Why this Automation exists",
           body: "",
           nodeId: null,
         },

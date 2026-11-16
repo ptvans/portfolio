@@ -158,7 +158,7 @@ export function SopRequests() {
             <EmptyState
               icon={Workflow}
               title={q.trim() ? `No requests match "${q.trim()}"` : "No requests here"}
-              description={view === "action" ? "Nothing an SOP raised is waiting on you." : undefined}
+              description={view === "action" ? "Nothing an Automation raised is waiting on you." : undefined}
             />
           ) : (
             <ul className="space-y-2.5">

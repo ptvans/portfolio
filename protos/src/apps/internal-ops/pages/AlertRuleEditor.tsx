@@ -188,7 +188,7 @@ export function AlertRuleEditor() {
   );
 
   const crumbs = [
-    { label: "SOPs", to: "/internal-ops/sops/list" },
+    { label: "Automations", to: "/internal-ops/sops/list" },
     ...(brand ? [{ label: brand.name, to: `/internal-ops/sops/brands/${brand.id}` }] : []),
   ];
   const cancelTo = existing

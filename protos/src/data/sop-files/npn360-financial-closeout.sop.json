@@ -13,7 +13,7 @@
   "owner": "Brandon H.",
   "escalationContact": "Finance lead",
   "trigger": "Daily, for every npn360 project with delivered work.",
-  "purpose": "Delivered npn360 work only turns into revenue once its work orders are finalized and their brand charges and operator credits land on statements. This SOP finds delivered work that has stalled before closeout and makes sure someone owns getting it over the line.",
+  "purpose": "Delivered npn360 work only turns into revenue once its work orders are finalized and their brand charges and operator credits land on statements. This Automation finds delivered work that has stalled before closeout and makes sure someone owns getting it over the line.",
   "doneWhen": "Every completed npn360 work order is finalized, or has a documented blocker and a dated follow-up with an owner.",
   "tags": [
     "Finance & Invoicing"
@@ -73,9 +73,9 @@
       "owner": "Brandon H.",
       "actor": "agent",
       "trigger": "Nothing documents why the project isn't closed out.",
-      "work": "Write up what blocks closeout and ask the SOP owner to approve assigning a dated project follow-up to the project's ops lead. Change no records.",
+      "work": "Write up what blocks closeout and ask the Automation owner to approve assigning a dated project follow-up to the project's ops lead. Change no records.",
       "rules": [
-        "Never finalize a work order or edit charges from this SOP."
+        "Never finalize a work order or edit charges from this Automation."
       ],
       "next": [
         {

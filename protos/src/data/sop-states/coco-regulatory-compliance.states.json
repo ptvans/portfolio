@@ -2,7 +2,7 @@
   "id": "states-coco-regulatory-compliance",
   "sopId": "sop-coco-regulatory-compliance",
   "name": "Bot states: compliance watch",
-  "subject": "A deployed Coco bot under Coco's monitoring agent",
+  "subject": "A deployed Robot under Robot's monitoring agent",
   "description": "What happens to a bot between the agent spotting a problem and the bot being back in service. Runs the whole time a bot is deployed, in any market, alongside the Deployment and Undeployment models. Every path ends either back in service or at depot.",
   "start": "in-service",
   "states": [
@@ -10,7 +10,7 @@
       "id": "in-service",
       "label": "In service, under watch",
       "kind": "active",
-      "description": "Deployed and working, with Coco's automated monitoring agent watching for twelve conditions that could cause a regulatory problem.",
+      "description": "Deployed and working, with Robot's automated monitoring agent watching for twelve conditions that could cause a regulatory problem.",
       "rule": "Never more than 4 bots at any one merchant"
     },
     {
@@ -20,8 +20,14 @@
       "description": "The agent has spotted one of the watched conditions: an oversized cluster, clusters under 50 feet apart, too many bots driving together, right-of-way or ADA ramp or doorway obstruction, a tipped bot, one stuck in a road or crosswalk, a missing or bent flag, or graffiti. Nothing is dispatched yet.",
       "rule": "Two minutes to self-resolve before a worker is sent",
       "steps": [
-        { "sopId": "sop-coco-regulatory-compliance", "stepId": "detect" },
-        { "sopId": "sop-coco-regulatory-compliance", "stepId": "self-resolve" }
+        {
+          "sopId": "sop-coco-regulatory-compliance",
+          "stepId": "detect"
+        },
+        {
+          "sopId": "sop-coco-regulatory-compliance",
+          "stepId": "self-resolve"
+        }
       ]
     },
     {
@@ -29,7 +35,12 @@
       "label": "Worker dispatched",
       "kind": "exception",
       "description": "The condition held past two minutes, so the agent has sent a worker with the condition and the expected resolution.",
-      "steps": [{ "sopId": "sop-coco-regulatory-compliance", "stepId": "dispatch" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-regulatory-compliance",
+          "stepId": "dispatch"
+        }
+      ]
     },
     {
       "id": "on-site",
@@ -38,8 +49,14 @@
       "description": "The worker has arrived and photographed the bot before touching anything, then compared what they see against the watched-conditions table.",
       "rule": "Arrival photo before anything is moved",
       "steps": [
-        { "sopId": "sop-coco-regulatory-compliance", "stepId": "arrive" },
-        { "sopId": "sop-coco-regulatory-compliance", "stepId": "known-condition" }
+        {
+          "sopId": "sop-coco-regulatory-compliance",
+          "stepId": "arrive"
+        },
+        {
+          "sopId": "sop-coco-regulatory-compliance",
+          "stepId": "known-condition"
+        }
       ]
     },
     {
@@ -48,7 +65,12 @@
       "kind": "exception",
       "description": "What the worker found matches none of the twelve conditions, so it goes to the owner's contact with the arrival photo rather than being improvised. That contact is not yet filled in on the source page.",
       "rule": "Anything off the list is escalated, never improvised",
-      "steps": [{ "sopId": "sop-coco-regulatory-compliance", "stepId": "escalate" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-regulatory-compliance",
+          "stepId": "escalate"
+        }
+      ]
     },
     {
       "id": "resolved",
@@ -56,34 +78,100 @@
       "kind": "active",
       "description": "The condition is cleared and the worker has photographed the resolved state, which is what completes the task.",
       "rule": "The task is not complete without the after-photo",
-      "steps": [{ "sopId": "sop-coco-regulatory-compliance", "stepId": "after-photo" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-regulatory-compliance",
+          "stepId": "after-photo"
+        }
+      ]
     },
     {
       "id": "grounded",
       "label": "Grounded on site",
       "kind": "exception",
       "description": "A missing flag or graffiti the worker cannot fix here, because they do not have the part or the supplies. The bot is grounded rather than left working in that condition.",
-      "steps": [{ "sopId": "sop-coco-regulatory-compliance", "stepId": "resolve" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-regulatory-compliance",
+          "stepId": "resolve"
+        }
+      ]
     },
     {
       "id": "at-depot",
       "label": "Returned to depot",
       "kind": "resting",
-      "description": "Taken back rather than left in place. This is where the compliance path ends; repair and return to the fleet are not documented in this SOP.",
+      "description": "Taken back rather than left in place. This is where the compliance path ends; repair and return to the fleet are not documented in this Automation.",
       "rule": "Never leave a grounded bot in place",
-      "steps": [{ "sopId": "sop-coco-regulatory-compliance", "stepId": "depot" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-regulatory-compliance",
+          "stepId": "depot"
+        }
+      ]
     }
   ],
   "transitions": [
-    { "id": "t-detect", "from": "in-service", "to": "flagged", "label": "Agent detects a watched condition" },
-    { "id": "t-selfheal", "from": "flagged", "to": "in-service", "label": "Self-resolves within 2 minutes" },
-    { "id": "t-dispatch", "from": "flagged", "to": "dispatched", "label": "Persists past 2 minutes" },
-    { "id": "t-arrive", "from": "dispatched", "to": "on-site", "label": "Worker arrives, photographs the bot" },
-    { "id": "t-fix", "from": "on-site", "to": "resolved", "label": "Matches a listed condition, fixed in place" },
-    { "id": "t-escalate", "from": "on-site", "to": "escalated", "label": "No listed condition matches" },
-    { "id": "t-ground", "from": "on-site", "to": "grounded", "label": "No part or supplies to hand", "note": "Missing flag or graffiti the worker cannot clear on site." },
-    { "id": "t-escalated-fix", "from": "escalated", "to": "resolved", "label": "Owner's contact resolves it" },
-    { "id": "t-depot", "from": "grounded", "to": "at-depot", "label": "Returned to depot" },
-    { "id": "t-back", "from": "resolved", "to": "in-service", "label": "Task complete, back in service" }
+    {
+      "id": "t-detect",
+      "from": "in-service",
+      "to": "flagged",
+      "label": "Agent detects a watched condition"
+    },
+    {
+      "id": "t-selfheal",
+      "from": "flagged",
+      "to": "in-service",
+      "label": "Self-resolves within 2 minutes"
+    },
+    {
+      "id": "t-dispatch",
+      "from": "flagged",
+      "to": "dispatched",
+      "label": "Persists past 2 minutes"
+    },
+    {
+      "id": "t-arrive",
+      "from": "dispatched",
+      "to": "on-site",
+      "label": "Worker arrives, photographs the bot"
+    },
+    {
+      "id": "t-fix",
+      "from": "on-site",
+      "to": "resolved",
+      "label": "Matches a listed condition, fixed in place"
+    },
+    {
+      "id": "t-escalate",
+      "from": "on-site",
+      "to": "escalated",
+      "label": "No listed condition matches"
+    },
+    {
+      "id": "t-ground",
+      "from": "on-site",
+      "to": "grounded",
+      "label": "No part or supplies to hand",
+      "note": "Missing flag or graffiti the worker cannot clear on site."
+    },
+    {
+      "id": "t-escalated-fix",
+      "from": "escalated",
+      "to": "resolved",
+      "label": "Owner's contact resolves it"
+    },
+    {
+      "id": "t-depot",
+      "from": "grounded",
+      "to": "at-depot",
+      "label": "Returned to depot"
+    },
+    {
+      "id": "t-back",
+      "from": "resolved",
+      "to": "in-service",
+      "label": "Task complete, back in service"
+    }
   ]
 }

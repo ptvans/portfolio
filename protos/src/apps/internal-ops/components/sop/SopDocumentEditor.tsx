@@ -162,7 +162,7 @@ export function SopDocumentEditor({
       {readOnly && (
         <div className="flex shrink-0 items-center gap-2 px-5 pt-2 text-xs text-slate-500">
           <Lock className="h-3.5 w-3.5 text-slate-400" strokeWidth={2} />
-          Read-only. This is the document the run executed; edit the SOP from its version.
+          Read-only. This is the document the run executed; edit the Automation from its version.
         </div>
       )}
 

@@ -36,7 +36,7 @@ export function AlertRuleDetail() {
   const shown = view === "active" ? active : history;
 
   const crumbs = [
-    { label: "SOPs", to: "/internal-ops/sops/list" },
+    { label: "Automations", to: "/internal-ops/sops/list" },
     ...(brand ? [{ label: brand.name, to: `/internal-ops/sops/brands/${brand.id}` }] : []),
   ];
 
@@ -44,7 +44,7 @@ export function AlertRuleDetail() {
     return (
       <div className="mx-auto max-w-4xl">
         <Breadcrumbs items={crumbs} />
-        <EmptyState icon={ListChecks} title="Alert SOP not found" description={`No Alert SOP with id "${ruleId}".`} />
+        <EmptyState icon={ListChecks} title="Alert Automation not found" description={`No Alert Automation with id "${ruleId}".`} />
       </div>
     );
   }
@@ -97,7 +97,7 @@ export function AlertRuleDetail() {
 
       {rule.status === "draft" && (
         <p className="mb-4 rounded-lg border border-dashed border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-600">
-          This Alert SOP is a draft. Its rule won't run or raise messages until it's activated.
+          This Alert Automation is a draft. Its rule won't run or raise messages until it's activated.
         </p>
       )}
       {rule.status === "inactive" && (

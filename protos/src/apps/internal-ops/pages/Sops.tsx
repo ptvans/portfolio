@@ -56,14 +56,14 @@ export function Sops() {
 
       <div className="mb-4 flex items-center justify-between gap-4">
         <div className="w-full max-w-3xl">
-          <SearchInput value={query} onChange={(v) => setParam("q", v || null)} placeholder="Search for SOP name, brand, or details" />
+          <SearchInput value={query} onChange={(v) => setParam("q", v || null)} placeholder="Search for Automation name, brand, or details" />
         </div>
         <label className="relative inline-flex shrink-0 items-center rounded-lg border border-slate-300 bg-white text-base font-medium text-slate-800 shadow-sm">
           <span className="pl-3.5">Sort</span>
           <select
             value={sort}
             onChange={(e) => setParam("sort", e.target.value === "name" ? null : e.target.value)}
-            aria-label="Sort SOPs by"
+            aria-label="Sort Automations by"
             className="appearance-none bg-transparent py-2 pl-2 pr-8 text-base text-slate-800 outline-none"
           >
             {SOP_SORTS.map((s) => (
@@ -77,7 +77,7 @@ export function Sops() {
       </div>
 
       {matchedSops.length + matchedRules.length === 0 ? (
-        <EmptyState icon={Workflow} title={query ? `No SOPs match "${query}"` : "No SOPs yet"} />
+        <EmptyState icon={Workflow} title={query ? `No Automations match "${query}"` : "No Automations yet"} />
       ) : (
         <SopTable sops={matchedSops} alerts={matchedRules} sort={sort} />
       )}

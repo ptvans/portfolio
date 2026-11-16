@@ -36,7 +36,7 @@ export function ProposalsCard({ entry }: { entry: Extract<StellaEntry, { kind: "
             <MessageTypeBadge type="sop" size={20} />
             <p className="min-w-0 flex-1 text-base font-semibold text-slate-900">{sop.name}</p>
             <span className="shrink-0 text-xs text-slate-400">
-              SOP {i + 1} of {entry.sops.length}
+              Automation {i + 1} of {entry.sops.length}
             </span>
           </div>
           <ProposalBody sop={sop} />

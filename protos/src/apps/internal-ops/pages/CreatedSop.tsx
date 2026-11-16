@@ -12,7 +12,7 @@ import { MessageTypeBadge } from "../components/messages/messageUi";
 import { SopDraftStatus } from "../components/stella/SopDraftCard";
 import { useStella } from "../context/StellaContext";
 
-const CRUMBS = [{ label: "SOPs", to: "/internal-ops/sops/list" }];
+const CRUMBS = [{ label: "Automations", to: "/internal-ops/sops/list" }];
 
 export function CreatedSop() {
   const { draftId } = useParams<{ draftId: string }>();
@@ -25,8 +25,8 @@ export function CreatedSop() {
         <Breadcrumbs items={CRUMBS} />
         <EmptyState
           icon={ListChecks}
-          title="SOP not found"
-          description="SOPs written in a Stella chat last until the page reloads. Run the chat again to write it."
+          title="Automation not found"
+          description="Automations written in a Stella chat last until the page reloads. Run the chat again to write it."
         />
       </div>
     );

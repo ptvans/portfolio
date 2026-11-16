@@ -227,7 +227,7 @@ export function Messages() {
     },
     {
       id: "rule",
-      title: "Alert SOPs",
+      title: "Alert Automations",
       limit: 5,
       collapsed: true,
       rows: values("rule")
@@ -239,7 +239,7 @@ export function Messages() {
     },
     {
       id: "sop",
-      title: "Standard SOPs",
+      title: "Standard Automations",
       collapsed: true,
       rows: values("sop")
         .sort(byCount("sop"))
@@ -337,8 +337,8 @@ export function Messages() {
           <h1 className="text-xl text-slate-600">Messages</h1>
           <Link
             to="/internal-ops/sops/list"
-            title="Manage Alert SOPs"
-            aria-label="Manage Alert SOPs"
+            title="Manage Alert Automations"
+            aria-label="Manage Alert Automations"
             className="rounded-md p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
           >
             <Settings className="h-4 w-4" strokeWidth={1.75} />

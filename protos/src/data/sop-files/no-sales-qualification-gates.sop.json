@@ -4,7 +4,10 @@
   "name": "NO Sales: Qualification Gates & Handoff",
   "status": "draft",
   "version": 1,
-  "scope": { "brandId": null, "customer": "Internal" },
+  "scope": {
+    "brandId": null,
+    "customer": "Internal"
+  },
   "team": "Sales",
   "sopType": "external",
   "owner": "NO Sales team",
@@ -28,12 +31,19 @@
       "trigger": "You have deemed the prospect qualified.",
       "work": "Prompt Claude to run the lead conversion to account and opportunity, and move the opportunity to Meeting Scheduled. The qualification decision is yours; the conversion is automated. Verify the record yourself before moving on.",
       "actor": "agent",
-      "actors": ["stella", "brick_operator"],
+      "actors": [
+        "stella",
+        "brick_operator"
+      ],
       "where": "Salesforce",
       "verification": "human",
       "autonomy": 3,
       "doneWhen": "The opportunity exists with the correct owner and the stage is Meeting Scheduled.",
-      "next": [{ "to": "confirm-contact" }]
+      "next": [
+        {
+          "to": "confirm-contact"
+        }
+      ]
     },
     {
       "id": "confirm-contact",
@@ -44,8 +54,14 @@
       "work": "Verify the primary contact is the right person to run the gates with, usually the business owner or someone who can sign. It is a judgement call. Introducing a sales rep instead of the decision-maker has caused downstream delays and forced the whole gate cycle to repeat with the real owner, so check before the package goes to Ops.",
       "verification": "human",
       "next": [
-        { "to": "package", "label": "Right person confirmed" },
-        { "to": "get-right-contact", "label": "Wrong person" }
+        {
+          "to": "package",
+          "label": "Right person confirmed"
+        },
+        {
+          "to": "get-right-contact",
+          "label": "Wrong person"
+        }
       ]
     },
     {
@@ -54,7 +70,11 @@
       "owner": "Opportunity-owning rep",
       "trigger": "The primary contact turns out not to be the decision-maker.",
       "work": "Pause the gates, get the right contact on a call, and restart the contact check with them.",
-      "next": [{ "to": "confirm-contact" }]
+      "next": [
+        {
+          "to": "confirm-contact"
+        }
+      ]
     },
     {
       "id": "package",
@@ -63,7 +83,11 @@
       "trigger": "The right contact is confirmed.",
       "work": "Assemble one package: call notes, the Salesforce record link, the fit assessment, the Sales Ranking, and the opportunity context covering client demand, market and primitives needed.",
       "doneWhen": "The package is ready to send to the correct Ops owner in one message.",
-      "next": [{ "to": "route-ops" }]
+      "next": [
+        {
+          "to": "route-ops"
+        }
+      ]
     },
     {
       "id": "route-ops",
@@ -74,9 +98,18 @@
       "work": "Pick the Ops reviewer by vertical: Event Ops goes to Yesenia or Joe, and Robotics, DPO or AV goes to Bryan or Michael B. The wrong Ops owner has happened before and new reps get this wrong most often, so when in doubt ask rather than guess.",
       "verification": "human",
       "next": [
-        { "to": "send-intro", "label": "Event Ops" },
-        { "to": "facility-visit", "label": "Robotics, DPO or AV" },
-        { "to": "ask-tj", "label": "No clear vertical match" }
+        {
+          "to": "send-intro",
+          "label": "Event Ops"
+        },
+        {
+          "to": "facility-visit",
+          "label": "Robotics, DPO or AV"
+        },
+        {
+          "to": "ask-tj",
+          "label": "No clear vertical match"
+        }
       ]
     },
     {
@@ -86,8 +119,14 @@
       "owner": "TJ",
       "trigger": "The prospect does not map cleanly to a vertical.",
       "work": "Ask TJ which Ops owner should review, and send nothing until he answers.",
-      "rules": ["Never guess the Ops owner; a misroute repeats the gate cycle."],
-      "next": [{ "to": "route-ops" }]
+      "rules": [
+        "Never guess the Ops owner; a misroute repeats the gate cycle."
+      ],
+      "next": [
+        {
+          "to": "route-ops"
+        }
+      ]
     },
     {
       "id": "facility-visit",
@@ -96,7 +135,11 @@
       "trigger": "The prospect is an AV or Robotics vertical.",
       "work": "AV and Robotics prospects need a facility visit before the Ops ranking. Schedule it, brief the visitor, and capture the visit notes in Salesforce.",
       "where": "On site, notes in Salesforce",
-      "next": [{ "to": "send-intro" }]
+      "next": [
+        {
+          "to": "send-intro"
+        }
+      ]
     },
     {
       "id": "send-intro",
@@ -105,7 +148,11 @@
       "trigger": "The Ops reviewer is identified.",
       "work": "Send the intro manually by email with the prospect and the Ops owner on the thread, including the Ops owner's booking link so the prospect schedules the call themselves. Chase if they have not booked within a few days.",
       "where": "Email",
-      "next": [{ "to": "ops-gate" }]
+      "next": [
+        {
+          "to": "ops-gate"
+        }
+      ]
     },
     {
       "id": "ops-gate",
@@ -114,10 +161,17 @@
       "trigger": "The prospect has booked time with the Ops owner.",
       "work": "Ops hosts the call, then logs notes and the Operations Ranking via Granola. An automation moves the opportunity stage and posts the Granola notes to Salesforce.",
       "actor": "automation",
-      "actors": ["brick_operator", "automation"],
+      "actors": [
+        "brick_operator",
+        "automation"
+      ],
       "where": "Granola, Salesforce",
       "autonomy": 3,
-      "next": [{ "to": "ops-check" }]
+      "next": [
+        {
+          "to": "ops-check"
+        }
+      ]
     },
     {
       "id": "ops-check",
@@ -129,8 +183,14 @@
       "when": "Chase if no ranking appears within the week after the call",
       "verification": "human",
       "next": [
-        { "to": "tom-gate", "label": "Ranking and notes posted" },
-        { "to": "chase-ops", "label": "Stalled or nothing posted" }
+        {
+          "to": "tom-gate",
+          "label": "Ranking and notes posted"
+        },
+        {
+          "to": "chase-ops",
+          "label": "Stalled or nothing posted"
+        }
       ]
     },
     {
@@ -140,8 +200,14 @@
       "owner": "Ops reviewer",
       "trigger": "The Ops review has sat without movement.",
       "work": "Ping the reviewer directly. Never let a review sit silently; stalled reviews have killed prospects before. If it is still stuck, take it to the weekly sync. The NO evaluator call sweep shows when calls actually happened.",
-      "rules": ["Never let a review sit silently."],
-      "next": [{ "to": "ops-check" }]
+      "rules": [
+        "Never let a review sit silently."
+      ],
+      "next": [
+        {
+          "to": "ops-check"
+        }
+      ]
     },
     {
       "id": "tom-gate",
@@ -150,10 +216,17 @@
       "trigger": "Ops has given the green light.",
       "work": "Get Tom's call scheduled. Tom hosts it, then logs notes and Tom's Ranking via Granola. The same automation moves the opportunity stage and posts the notes to Salesforce.",
       "actor": "automation",
-      "actors": ["brick_operator", "automation"],
+      "actors": [
+        "brick_operator",
+        "automation"
+      ],
       "where": "Granola, Salesforce",
       "autonomy": 3,
-      "next": [{ "to": "tom-check" }]
+      "next": [
+        {
+          "to": "tom-check"
+        }
+      ]
     },
     {
       "id": "tom-check",
@@ -164,8 +237,14 @@
       "work": "Check Tom's Ranking and notes appear on the Salesforce record and the stage has advanced. If nothing posts, flag the automation before assuming Tom skipped it.",
       "verification": "human",
       "next": [
-        { "to": "rankings", "label": "Ranking and notes posted" },
-        { "to": "chase-tom", "label": "Stalled or nothing posted" }
+        {
+          "to": "rankings",
+          "label": "Ranking and notes posted"
+        },
+        {
+          "to": "chase-tom",
+          "label": "Stalled or nothing posted"
+        }
       ]
     },
     {
@@ -175,7 +254,11 @@
       "owner": "Tom",
       "trigger": "Tom's review has sat without movement.",
       "work": "Ping Tom directly, and escalate to the weekly sync if it is still stuck.",
-      "next": [{ "to": "tom-check" }]
+      "next": [
+        {
+          "to": "tom-check"
+        }
+      ]
     },
     {
       "id": "rankings",
@@ -186,8 +269,14 @@
       "work": "Salesforce calculates an aggregate score on the account, the average of the NO Sales, Ops and Tom rankings. Agreement clears the funnel; disagreement goes to the weekly sync.",
       "verification": "human",
       "next": [
-        { "to": "kickoff", "label": "Aligned: funnel clear" },
-        { "to": "weekly-sync", "label": "Rankings conflict" }
+        {
+          "to": "kickoff",
+          "label": "Aligned: funnel clear"
+        },
+        {
+          "to": "weekly-sync",
+          "label": "Rankings conflict"
+        }
       ]
     },
     {
@@ -197,10 +286,18 @@
       "owner": "NO Sales team",
       "trigger": "The three rankings disagree.",
       "work": "Bring the conflict to the weekly in-person sync and decide together: advance, hold or kill. This is never a one-person or one-team call. Log the decision in Salesforce with the reason.",
-      "rules": ["Ranking conflicts are never resolved by one person or one team."],
+      "rules": [
+        "Ranking conflicts are never resolved by one person or one team."
+      ],
       "next": [
-        { "to": "kickoff", "label": "Advance" },
-        { "to": "done", "label": "Hold or kill, logged" }
+        {
+          "to": "kickoff",
+          "label": "Advance"
+        },
+        {
+          "to": "done",
+          "label": "Hold or kill, logged"
+        }
       ]
     },
     {
@@ -210,15 +307,23 @@
       "trigger": "The prospect has cleared the full funnel.",
       "work": "Ops reaches out to the operator and coordinates onboarding and training. NO Sales confirms it happened rather than assuming. Triggering this automatically when the funnel clears is flagged as a future automation.",
       "doneWhen": "Onboarding kickoff is scheduled and Ops has confirmed ownership of the relationship.",
-      "next": [{ "to": "coverage-matrix" }]
+      "next": [
+        {
+          "to": "coverage-matrix"
+        }
+      ]
     },
     {
       "id": "coverage-matrix",
       "title": "Update the coverage matrix",
       "owner": "NO Sales team",
       "trigger": "Onboarding is kicked off.",
-      "work": "Future state. The coverage matrix does not exist yet. When live it will update itself: a launched operator's primitives move from Gap to Covered in that metro. Until then there is no action in this SOP.",
-      "next": [{ "to": "done" }]
+      "work": "Future state. The coverage matrix does not exist yet. When live it will update itself: a launched operator's primitives move from Gap to Covered in that metro. Until then there is no action in this Automation.",
+      "next": [
+        {
+          "to": "done"
+        }
+      ]
     }
   ]
 }

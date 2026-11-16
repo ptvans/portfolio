@@ -44,7 +44,7 @@ export function RaisedChip({ count }: { count: number }) {
   return (
     <span
       className="inline-flex items-center gap-1 rounded-md border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-xs font-medium text-amber-800"
-      title={`Raised ${count} times by its SOP`}
+      title={`Raised ${count} times by its Automation`}
     >
       <History className="h-3 w-3" strokeWidth={2.25} aria-hidden />
       Raised {count}×
@@ -68,7 +68,7 @@ export function RaisedHistoryCard({ message }: { message: InboxMessage }) {
         className="flex w-full items-center gap-2 text-left text-sm font-semibold text-slate-800"
       >
         <History className="h-4 w-4 shrink-0 text-amber-600" strokeWidth={2} aria-hidden />
-        Raised {message.raised.length} times by its SOP
+        Raised {message.raised.length} times by its Automation
         <span className="ml-auto text-xs font-normal text-slate-500">latest {messageWhen(latest.at)}</span>
         <ChevronDown className={`h-4 w-4 shrink-0 text-slate-400 transition-transform ${open ? "rotate-180" : ""}`} strokeWidth={2} aria-hidden />
       </button>
@@ -107,7 +107,7 @@ export function RaisedHistory({ message }: { message: InboxMessage }) {
       >
         <History className="h-3.5 w-3.5 shrink-0 text-amber-600" strokeWidth={2} aria-hidden />
         <span>
-          Raised {message.raised.length} times by its SOP, latest {messageWhen(latest.at)}. One message, updated each run.
+          Raised {message.raised.length} times by its Automation, latest {messageWhen(latest.at)}. One message, updated each run.
         </span>
         <ChevronDown className={`h-3.5 w-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} strokeWidth={2} aria-hidden />
       </button>
@@ -141,7 +141,7 @@ export function SnoozeButton({ message }: { message: InboxMessage }) {
       type="button"
       onClick={() => (on ? unsnooze(message.id) : snooze(message.id))}
       aria-pressed={on}
-      title={on ? "Resolved: its SOP keeps checking and brings it back if the condition recurs. Click to bring it back now." : "Mark this resolved; its SOP keeps checking and brings it back if the condition recurs"}
+      title={on ? "Resolved: its Automation keeps checking and brings it back if the condition recurs. Click to bring it back now." : "Mark this resolved; its Automation keeps checking and brings it back if the condition recurs"}
       className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-md border px-3 py-1.5 text-sm font-medium shadow-sm transition-colors ${
         on
           ? "border-violet-200 bg-violet-50 text-violet-700 hover:bg-violet-100"
@@ -163,7 +163,7 @@ export function SnoozeNote({ messageId }: { messageId: string }) {
     <p className="flex gap-2 text-sm text-slate-500">
       <BellOff className="mt-0.5 h-3.5 w-3.5 shrink-0 text-violet-600" strokeWidth={2} aria-hidden />
       <span>
-        <span className="font-medium text-slate-700">Resolved by {snooze.by}.</span> The SOP keeps checking on its
+        <span className="font-medium text-slate-700">Resolved by {snooze.by}.</span> The Automation keeps checking on its
         schedule and brings this back as Action Required if the condition recurs.
       </span>
     </p>

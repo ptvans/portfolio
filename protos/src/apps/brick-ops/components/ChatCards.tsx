@@ -48,7 +48,7 @@ export function SuggestionCard({ onReview }: { onReview: () => void }) {
         <div className="min-w-0 flex-1">
           <p className="mb-1 text-sm font-semibold text-[#6ea8ff]">{agentName} learned an automation</p>
           <h3 className="text-md font-semibold leading-snug text-white">
-            Hold Coco deployments when bot counts don't match
+            Hold Robot deployments when bot counts don't match
           </h3>
         </div>
         <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#5b4fe6] to-[#3D38B8]">
@@ -56,7 +56,7 @@ export function SuggestionCard({ onReview }: { onReview: () => void }) {
         </span>
       </div>
       <p className="mt-2 text-base leading-snug text-white/55">
-        Review the SOP before it runs. Nothing changes until you turn it on.
+        Review the Automation before it runs. Nothing changes until you turn it on.
       </p>
 
       <div className={`${WELL} mt-4`}>
@@ -71,7 +71,7 @@ export function SuggestionCard({ onReview }: { onReview: () => void }) {
             <span className="block">
               <span className="block truncate">{LEARNED_SOP.name}</span>
               <span className="block text-sm text-white/50">
-                Draft SOP · {LEARNED_SOP.steps.length} steps
+                Draft Automation · {LEARNED_SOP.steps.length} steps
               </span>
             </span>
           }
@@ -85,11 +85,11 @@ export function SuggestionCard({ onReview }: { onReview: () => void }) {
             Not now
           </PillButton>
           <PillButton primary onClick={onReview}>
-            Review SOP
+            Review Automation
           </PillButton>
         </div>
       )}
-      {suggestion === "enabled" && <Resolved label="Turned on" note="Runs on every Coco deployment" />}
+      {suggestion === "enabled" && <Resolved label="Turned on" note="Runs on every Robot deployment" />}
       {suggestion === "dismissed" && (
         <div className="mt-4 flex items-center justify-between gap-3 px-1">
           <span className="text-sm text-white/50">Not now · Draft kept</span>

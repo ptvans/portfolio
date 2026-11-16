@@ -476,7 +476,7 @@ export function StellaProvider({ children }: { children: ReactNode }) {
             () =>
               append(target, {
                 kind: "agent",
-                text: "This task is finished. Start a new chat for the next one, or open the SOP from the card above.",
+                text: "This task is finished. Start a new chat for the next one, or open the Automation from the card above.",
               }),
             600,
           ),

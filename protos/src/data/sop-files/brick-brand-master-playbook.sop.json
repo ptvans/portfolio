@@ -4,13 +4,16 @@
   "name": "Brick x Brand Master Playbook",
   "status": "active",
   "version": 1,
-  "scope": { "brandId": null, "customer": "Internal" },
+  "scope": {
+    "brandId": null,
+    "customer": "Internal"
+  },
   "team": "Cross-team",
   "sopType": "external",
   "owner": "Operations",
   "trigger": "A deal is closed and a new brand engagement begins (contract signed).",
   "purpose": "New client onboarding and first project launch, from the Sales handoff through kickoff, Slack, portal setup and training, then expansion and ongoing account maintenance. This is a template duplicated for each new client; the master stays blank.",
-  "doneWhen": "The brand has a finalized SOW, a Master Brand SOP, a Slack channel, a provisioned and trained portal, and an approved quote, and is ready to submit its first work order.",
+  "doneWhen": "The brand has a finalized SOW, a Master Brand Automation, a Slack channel, a provisioned and trained portal, and an approved quote, and is ready to submit its first work order.",
   "tags": [],
   "source": {
     "system": "notion",
@@ -27,7 +30,11 @@
       "work": "Within 24 hours of deal close: schedule a 30-minute internal handoff call with the AM (and Ops if needed); share brand background, scope, key contacts and any commitments made in the sales process; transfer ownership of the relationship in Salesforce; share the draft Project-Level SOW (about 80% complete).",
       "where": "Handoff call, Salesforce",
       "when": "Within 24 hours of close",
-      "next": [{ "to": "sow" }]
+      "next": [
+        {
+          "to": "sow"
+        }
+      ]
     },
     {
       "id": "sow",
@@ -35,28 +42,42 @@
       "owner": "Sales drafts, Ops finalizes",
       "trigger": "The handoff is complete and the draft SOW is shared.",
       "work": "Must-haves: scope of work, timeline and milestones, pricing and payment terms, named contacts on both sides, change-order language, approval signatures. Ownership of SOW creation for new customers is still an open item; current assumption is Sales drafts and Ops finalizes.",
-      "next": [{ "to": "master-sop" }]
+      "next": [
+        {
+          "to": "master-sop"
+        }
+      ]
     },
     {
       "id": "master-sop",
-      "title": "Phase 1.3: AM initiates the Master Brand SOP",
+      "title": "Phase 1.3: AM initiates the Master Brand Automation",
       "owner": "Account Manager",
       "trigger": "The SOW is being finalized; must be done before the kickoff call.",
-      "work": "Start the Master Brand SOP with these sections: Brand Overview, Key Contacts and Escalation Path, Communication Preferences, Scope Summary, Known Constraints, Active Projects, Revision Log.",
+      "work": "Start the Master Brand Automation with these sections: Brand Overview, Key Contacts and Escalation Path, Communication Preferences, Scope Summary, Known Constraints, Active Projects, Revision Log.",
       "when": "Before the kickoff call",
-      "next": [{ "to": "pre-kickoff" }]
+      "next": [
+        {
+          "to": "pre-kickoff"
+        }
+      ]
     },
     {
       "id": "pre-kickoff",
       "kind": "decision",
       "title": "Phase 2.1: Pre-kickoff checklist complete?",
       "owner": "Account Manager",
-      "trigger": "SOW finalized, Master Brand SOP started, portal setup initiated.",
-      "work": "Check: Master Brand SOP drafted and shared internally; SOW finalized and signed; brand portal setup initiated by Engineering; POC contacts confirmed or flagged TBD; AM reviewed deal notes; Ops confirmed scope matches what was sold.",
+      "trigger": "SOW finalized, Master Brand Automation started, portal setup initiated.",
+      "work": "Check: Master Brand Automation drafted and shared internally; SOW finalized and signed; brand portal setup initiated by Engineering; POC contacts confirmed or flagged TBD; AM reviewed deal notes; Ops confirmed scope matches what was sold.",
       "verification": "human",
       "next": [
-        { "to": "kickoff", "label": "All checked" },
-        { "to": "sow", "label": "Gaps" }
+        {
+          "to": "kickoff",
+          "label": "All checked"
+        },
+        {
+          "to": "sow",
+          "label": "Gaps"
+        }
       ]
     },
     {
@@ -64,18 +85,26 @@
       "title": "Phase 2.2: Run the kickoff call",
       "owner": "Account Manager",
       "trigger": "Pre-kickoff checklist complete.",
-      "work": "45 to 60 minutes; AM leads, Sales optional, Brand POC(s) attend. Agenda: introductions, relationship overview, how we work together, open items, next steps. Within 24 hours after: send the follow-up email, update the Master Brand SOP, log notes in Salesforce, confirm the portal training date.",
+      "work": "45 to 60 minutes; AM leads, Sales optional, Brand POC(s) attend. Agenda: introductions, relationship overview, how we work together, open items, next steps. Within 24 hours after: send the follow-up email, update the Master Brand Automation, log notes in Salesforce, confirm the portal training date.",
       "when": "45–60 min; follow-up within 24 hours",
-      "next": [{ "to": "slack" }]
+      "next": [
+        {
+          "to": "slack"
+        }
+      ]
     },
     {
       "id": "slack",
       "title": "Phase 3: Set up the Slack channel",
       "owner": "Account Manager",
       "trigger": "Immediately after the kickoff call.",
-      "work": "Create #brick-[brandname], post a pinned message with channel norms, invite brand contacts and internal Brick team members. Single vs two-channel structure is still to be confirmed. See the Slack workspace SOP for the Enterprise Grid mechanics.",
+      "work": "Create #brick-[brandname], post a pinned message with channel norms, invite brand contacts and internal Brick team members. Single vs two-channel structure is still to be confirmed. See the Slack workspace Automation for the Enterprise Grid mechanics.",
       "where": "Slack",
-      "next": [{ "to": "portal-provision" }]
+      "next": [
+        {
+          "to": "portal-provision"
+        }
+      ]
     },
     {
       "id": "portal-provision",
@@ -84,16 +113,24 @@
       "trigger": "Kickoff is done and the brand's scope is known.",
       "work": "Create the brand environment, configure work order types and custom fields, set up brand contact access, QA before training, notify the AM when ready. In-progress setup is acceptable before kickoff; full setup is required before training.",
       "where": "Portal",
-      "next": [{ "to": "portal-config" }]
+      "next": [
+        {
+          "to": "portal-config"
+        }
+      ]
     },
     {
       "id": "portal-config",
       "title": "Phase 4.2: AM configures brand-specific items",
       "owner": "Account Manager",
       "trigger": "Engineering reports the portal is ready.",
-      "work": "Create the brand profile, NO profile(s), and initial Work Orders per the SOW scope. Confirm the setup matches the Master Brand SOP.",
+      "work": "Create the brand profile, NO profile(s), and initial Work Orders per the SOW scope. Confirm the setup matches the Master Brand Automation.",
       "where": "Portal",
-      "next": [{ "to": "training" }]
+      "next": [
+        {
+          "to": "training"
+        }
+      ]
     },
     {
       "id": "training",
@@ -102,7 +139,11 @@
       "trigger": "Portal configuration is complete.",
       "work": "45 to 60 minutes: portal overview, Work Orders, communication and notifications, live Q&A, next steps. Afterwards send the follow-up email, log completion, and confirm the brand is ready to submit its first work order.",
       "when": "45–60 min",
-      "next": [{ "to": "commercials" }]
+      "next": [
+        {
+          "to": "commercials"
+        }
+      ]
     },
     {
       "id": "commercials",
@@ -110,7 +151,11 @@
       "owner": "Account Manager",
       "trigger": "Onboarding steps are complete; before any work begins.",
       "work": "A quote must be generated and approved before work begins on any new project (for new brands, before kickoff). Confirm financing terms if applicable and reflect them in the SOW and Salesforce. Decide whether brand-specific training materials are needed; AM drafts, Ops reviews.",
-      "next": [{ "to": "maintain" }]
+      "next": [
+        {
+          "to": "maintain"
+        }
+      ]
     },
     {
       "id": "maintain",
@@ -121,8 +166,14 @@
       "where": "Salesforce",
       "when": "Monthly",
       "next": [
-        { "to": "done", "label": "Steady" },
-        { "to": "expansion-type", "label": "Brand scales to a new event, market or project" }
+        {
+          "to": "done",
+          "label": "Steady"
+        },
+        {
+          "to": "expansion-type",
+          "label": "Brand scales to a new event, market or project"
+        }
       ]
     },
     {
@@ -133,9 +184,18 @@
       "trigger": "The brand scales to a new event, market or project.",
       "work": "Flag which of the three expansion types this is. The path is the same for all three, but who leads is not: a repeat or add-on event (same scope, new date or location) has minimal Sales involvement and the AM leads; a new market or vertical means Sales leads the sell and the AM executes; a pilot moving to full launch is co-led by Sales and the AM.",
       "next": [
-        { "to": "expansion-quote", "label": "Repeat / add-on event" },
-        { "to": "expansion-quote", "label": "New market / vertical" },
-        { "to": "expansion-quote", "label": "Pilot to full launch" }
+        {
+          "to": "expansion-quote",
+          "label": "Repeat / add-on event"
+        },
+        {
+          "to": "expansion-quote",
+          "label": "New market / vertical"
+        },
+        {
+          "to": "expansion-quote",
+          "label": "Pilot to full launch"
+        }
       ]
     },
     {
@@ -144,15 +204,23 @@
       "owner": "Account Manager (Sales for new markets)",
       "trigger": "The expansion type is known.",
       "work": "Generate an updated quote, approved before any work begins. Draft and sign a new Project-Level SOW before kickoff; a lightweight amendment may suffice for near-identical repeat events, confirm with Ops.",
-      "next": [{ "to": "realign" }]
+      "next": [
+        {
+          "to": "realign"
+        }
+      ]
     },
     {
       "id": "realign",
-      "title": "Phase 6.4–6.5: SOP re-alignment and portal re-training",
+      "title": "Phase 6.4–6.5: Automation re-alignment and portal re-training",
       "owner": "Account Manager",
       "trigger": "The expansion SOW is signed.",
-      "work": "Review the Master Brand SOP with the brand (contacts, comms norms, scope changes) and update the revision log. Schedule a portal refresher only if the expansion involves new portal features or work order types.",
-      "next": [{ "to": "maintain" }]
+      "work": "Review the Master Brand Automation with the brand (contacts, comms norms, scope changes) and update the revision log. Schedule a portal refresher only if the expansion involves new portal features or work order types.",
+      "next": [
+        {
+          "to": "maintain"
+        }
+      ]
     }
   ]
 }

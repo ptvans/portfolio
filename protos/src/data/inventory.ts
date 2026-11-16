@@ -43,12 +43,12 @@ export const inventoryItems: InventoryItem[] = [
   { id: "inv-hg-2", brandId: "brand-husqvarna", warehouseId: "wh-kingsway-greenville", sku: "HG-DISPLAY", name: "Product Display Pallet", quantity: 5, status: "in_stock", reorderThreshold: 2 },
 
   // Coco — bots are individually-tracked assets; batteries are fungible.
-  { id: "inv-coco-bot-1", brandId: "brand-coco", warehouseId: "wh-quicksilver-chicago", sku: "COCO-BOT", name: "Coco Delivery Bot", quantity: 1, status: "active", reorderThreshold: 0, unitId: "CB-2041", operator: "QuickSilver solutions" },
-  { id: "inv-coco-bot-2", brandId: "brand-coco", warehouseId: "wh-quicksilver-chicago", sku: "COCO-BOT", name: "Coco Delivery Bot", quantity: 1, status: "battery_failure", reorderThreshold: 0, unitId: "CB-2077", operator: "QuickSilver solutions" },
-  { id: "inv-coco-bot-3", brandId: "brand-coco", warehouseId: "wh-quicksilver-chicago", sku: "COCO-BOT", name: "Coco Delivery Bot", quantity: 1, status: "decommissioned", reorderThreshold: 0, unitId: "CB-2098", operator: "QuickSilver solutions" },
-  { id: "inv-coco-bot-4", brandId: "brand-coco", warehouseId: "wh-quicksilver-chicago", sku: "COCO-BOT", name: "Coco Delivery Bot", quantity: 1, status: "active", reorderThreshold: 0, unitId: "CB-2103", operator: "QuickSilver solutions" },
-  { id: "inv-coco-bot-5", brandId: "brand-coco", warehouseId: "wh-quicksilver-chicago", sku: "COCO-BOT", name: "Coco Delivery Bot", quantity: 1, status: "stored", reorderThreshold: 0, unitId: "CB-2110", operator: "QuickSilver solutions" },
-  { id: "inv-coco-bot-6", brandId: "brand-coco", warehouseId: "wh-quicksilver-chicago", sku: "COCO-BOT", name: "Coco Delivery Bot", quantity: 1, status: "active", reorderThreshold: 0, unitId: "CB-2115", operator: "QuickSilver solutions" },
+  { id: "inv-coco-bot-1", brandId: "brand-coco", warehouseId: "wh-quicksilver-chicago", sku: "COCO-BOT", name: "Robot Delivery Bot", quantity: 1, status: "active", reorderThreshold: 0, unitId: "CB-2041", operator: "QuickSilver solutions" },
+  { id: "inv-coco-bot-2", brandId: "brand-coco", warehouseId: "wh-quicksilver-chicago", sku: "COCO-BOT", name: "Robot Delivery Bot", quantity: 1, status: "battery_failure", reorderThreshold: 0, unitId: "CB-2077", operator: "QuickSilver solutions" },
+  { id: "inv-coco-bot-3", brandId: "brand-coco", warehouseId: "wh-quicksilver-chicago", sku: "COCO-BOT", name: "Robot Delivery Bot", quantity: 1, status: "decommissioned", reorderThreshold: 0, unitId: "CB-2098", operator: "QuickSilver solutions" },
+  { id: "inv-coco-bot-4", brandId: "brand-coco", warehouseId: "wh-quicksilver-chicago", sku: "COCO-BOT", name: "Robot Delivery Bot", quantity: 1, status: "active", reorderThreshold: 0, unitId: "CB-2103", operator: "QuickSilver solutions" },
+  { id: "inv-coco-bot-5", brandId: "brand-coco", warehouseId: "wh-quicksilver-chicago", sku: "COCO-BOT", name: "Robot Delivery Bot", quantity: 1, status: "stored", reorderThreshold: 0, unitId: "CB-2110", operator: "QuickSilver solutions" },
+  { id: "inv-coco-bot-6", brandId: "brand-coco", warehouseId: "wh-quicksilver-chicago", sku: "COCO-BOT", name: "Robot Delivery Bot", quantity: 1, status: "active", reorderThreshold: 0, unitId: "CB-2115", operator: "QuickSilver solutions" },
   { id: "inv-coco-batt-1", brandId: "brand-coco", warehouseId: "wh-quicksilver-chicago", sku: "COCO-BATT-10", name: "1.0 kWh Battery", quantity: 24, status: "in_stock", reorderThreshold: 12 },
   { id: "inv-coco-batt-2", brandId: "brand-coco", warehouseId: "wh-quicksilver-chicago", sku: "COCO-BATT-05", name: "0.5 kWh Battery", quantity: 9, status: "low_stock", reorderThreshold: 12 },
 

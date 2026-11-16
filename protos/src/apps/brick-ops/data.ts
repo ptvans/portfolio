@@ -67,19 +67,19 @@ export interface LearnedRun {
 
 export const LEARNED_SOP = {
   id: "sop-draft-coco-bot-count-hold",
-  name: "Coco Bot-Count Mismatch Hold",
-  brand: "Coco",
-  pattern: "held Coco daily deployments for bot-count reconciliation",
+  name: "Robot-Count Mismatch Hold",
+  brand: "Robot",
+  pattern: "held Robot daily deployments for bot-count reconciliation",
   timesSeen: 7,
   since: "Oct 6",
   saves: "~40 min a week",
-  trigger: "A Coco daily deployment work order is ready to finalize.",
+  trigger: "A Robot daily deployment work order is ready to finalize.",
   steps: [
     "Read the deployment log: bots deployed and bots undeployed for the day.",
     "Compare both counts with the per-bot charge line on the work order.",
     "If they agree, finalize the work order as usual.",
     "If they don't, hold it unfinalized with a note stating the gap.",
-    "Ask Coco's ops contact to confirm the count, and bring the work order back when they answer.",
+    "Ask Robot's ops contact to confirm the count, and bring the work order back when they answer.",
   ],
   learnedFrom: [
     { when: "Oct 24", what: "Los Angeles: held, 12 out and 10 back" },
@@ -94,4 +94,4 @@ export const LEARNED_SOP = {
 
 // What the agent says when the user types something the demo has no script for.
 export const OFF_SCRIPT_REPLY =
-  "I can't run that from the phone yet. Here I can act on what Needs Your Attention and walk you through the SOP I drafted; anything bigger is easier on the web.";
+  "I can't run that from the phone yet. Here I can act on what Needs Your Attention and walk you through the Automation I drafted; anything bigger is easier on the web.";

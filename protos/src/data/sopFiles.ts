@@ -103,9 +103,9 @@ export function validateSopFile(file: SopFile): string[] {
     }
   }
   if (file.start && !ids.has(file.start)) problems.push(`start "${file.start}" is not a step`);
-  if (!file.owner?.trim()) problems.push("SOP has no owner");
-  if (!file.trigger?.trim()) problems.push("SOP has no trigger");
-  if (!file.doneWhen?.trim()) problems.push("SOP has no doneWhen");
+  if (!file.owner?.trim()) problems.push("Automation has no owner");
+  if (!file.trigger?.trim()) problems.push("Automation has no trigger");
+  if (!file.doneWhen?.trim()) problems.push("Automation has no doneWhen");
   if (!/^sop-[a-z0-9-]+$/.test(file.id)) problems.push(`id "${file.id}" must look like sop-kebab-case`);
   return problems;
 }
@@ -131,7 +131,7 @@ export function compileSopFile(file: SopFile): Sop {
       actors: ["automation"],
       hardConstraints: [],
       learnedRules: [],
-      successCriteria: "A run of this SOP begins.",
+      successCriteria: "A run of this Automation begins.",
       verification: "none",
       where: "—",
       when: "On trigger",
@@ -199,7 +199,7 @@ export function compileSopFile(file: SopFile): Sop {
   }
 
   const blocks: SopDocBlock[] = [
-    { id: `${file.id}/b-intro`, heading: "Why this SOP exists", body: file.purpose, nodeId: null },
+    { id: `${file.id}/b-intro`, heading: "Why this Automation exists", body: file.purpose, nodeId: null },
     { id: `${file.id}/b-trigger`, heading: "Starts when", body: file.trigger, nodeId: TRIGGER_ID },
     ...file.steps.map<SopDocBlock>((step) => ({
       id: `${file.id}/b-${step.id}`,
@@ -234,7 +234,7 @@ export function compileSopFile(file: SopFile): Sop {
         version: file.version,
         publishedAt,
         publishedBy: file.owner,
-        note: file.source ? `Imported from the Notion SOP Hub (v${file.version}).` : "Authored in the repo.",
+        note: file.source ? `Imported from the Notion Automation Hub (v${file.version}).` : "Authored in the repo.",
       },
     ],
     nodes,

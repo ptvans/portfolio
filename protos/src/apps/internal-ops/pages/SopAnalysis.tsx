@@ -159,9 +159,9 @@ export function SopAnalysis() {
       <div className="flex h-screen flex-col bg-slate-50">
         <SopTopBar />
         <div className="p-8">
-          <EmptyState icon={Workflow} title="SOP not found" description={`No SOP with id "${id}".`} />
+          <EmptyState icon={Workflow} title="Automation not found" description={`No Automation with id "${id}".`} />
           <Link to="/internal-ops/sops/list" className="mt-4 inline-block text-sm font-medium text-brand-600 hover:underline">
-            Back to SOPs
+            Back to Automations
           </Link>
         </div>
       </div>
@@ -194,7 +194,7 @@ export function SopAnalysis() {
             <div>
               <nav className="flex items-center gap-1.5 text-sm text-slate-400">
                 <Link to="/internal-ops/sops/list" className="hover:text-slate-600">
-                  SOPs
+                  Automations
                 </Link>
                 <span>/</span>
                 {brand && (
@@ -214,7 +214,7 @@ export function SopAnalysis() {
               <p className="mt-1 text-sm text-slate-500">
                 {runs.length === 0
                   ? "No runs yet, so there is nothing to aggregate."
-                  : `Every run of this SOP, ${formatDateTimeShort(runs.at(-1)?.startedAt ?? null)} to ${formatDateTimeShort(runs[0]?.startedAt ?? null)}.`}
+                  : `Every run of this Automation, ${formatDateTimeShort(runs.at(-1)?.startedAt ?? null)} to ${formatDateTimeShort(runs[0]?.startedAt ?? null)}.`}
               </p>
             </div>
             <button
@@ -232,7 +232,7 @@ export function SopAnalysis() {
               <EmptyState
                 icon={Workflow}
                 title="Nothing to analyse yet"
-                description="This SOP has never run. The definition view is where to keep authoring it."
+                description="This Automation has never run. The definition view is where to keep authoring it."
                 action={
                   <Link
                     to={`/internal-ops/sops/${sop.id}/versions/${sop.version}`}
@@ -260,7 +260,7 @@ export function SopAnalysis() {
                       icon={Timer}
                       tone="slate"
                       title="Costs the most time"
-                      body={`"${slowest.node.title}" runs a median ${formatRuntime(slowest.medianSeconds ?? 0)}, ${Math.round(((slowest.totalSeconds / Math.max(1, durations.reduce((a, b) => a + b, 0))) * 100))}% of all time spent in this SOP.`}
+                      body={`"${slowest.node.title}" runs a median ${formatRuntime(slowest.medianSeconds ?? 0)}, ${Math.round(((slowest.totalSeconds / Math.max(1, durations.reduce((a, b) => a + b, 0))) * 100))}% of all time spent in this Automation.`}
                     />
                   )}
                   {noisiest && noisiest.issues > 0 && (
@@ -341,7 +341,7 @@ export function SopAnalysis() {
               {decisions.length > 0 && (
                 <Section title="Which way the decisions go" count={decisions.length}>
                   <p className="-mt-2 mb-3 text-xs text-slate-500">
-                    A path counts as taken when the step it leads to also ran. This SOP loops per work order, so a single run can
+                    A path counts as taken when the step it leads to also ran. This Automation loops per work order, so a single run can
                     take both paths out of the same decision — these are run counts, not a split.
                   </p>
                   <div className="grid gap-3 md:grid-cols-2">
@@ -444,7 +444,7 @@ export function SopAnalysis() {
                 </p>
                 {gaps.length === 0 ? (
                   <p className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500 shadow-sm">
-                    Every action in this SOP maps to a tool that exists.
+                    Every action in this Automation maps to a tool that exists.
                   </p>
                 ) : (
                   <ul className="space-y-2">

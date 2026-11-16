@@ -175,7 +175,7 @@ export const assetTypes: AssetType[] = [
   {
     id: "at-coco-bot",
     brandId: "brand-coco",
-    name: "Coco Delivery Bot",
+    name: "Robot Delivery Bot",
     kind: "robot",
     chargeLimitPct: 100,
     supplyKit: COCO_KIT,

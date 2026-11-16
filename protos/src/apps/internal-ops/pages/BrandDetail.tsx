@@ -28,7 +28,7 @@ export function BrandDetail() {
 
   const newSop = () => {
     if (!brand) return;
-    const sopId = createDraft(brand.id, `${brand.name} New SOP`);
+    const sopId = createDraft(brand.id, `${brand.name} New Automation`);
     navigate(`/internal-ops/sops/${sopId}/versions/1`);
   };
 
@@ -99,21 +99,21 @@ export function BrandDetail() {
           Stella reads and runs (see docs/prd-sop-platform.html). */}
       <section className="mb-8">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-slate-900">SOPs ({brandSops.length})</h2>
+          <h2 className="text-sm font-semibold text-slate-900">Automations ({brandSops.length})</h2>
           <button
             type="button"
             onClick={newSop}
             className="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-brand-700"
           >
             <Plus className="h-3.5 w-3.5" strokeWidth={2} />
-            New SOP
+            New Automation
           </button>
         </div>
         {brandSops.length === 0 ? (
           <EmptyState
             icon={Workflow}
-            title="No SOPs yet"
-            description="Describe a process to Stella and it compiles into an executable SOP scoped to this brand."
+            title="No Automations yet"
+            description="Describe a process to Stella and it compiles into an executable Automation scoped to this brand."
           />
         ) : (
           <SopTable sops={brandSops} />

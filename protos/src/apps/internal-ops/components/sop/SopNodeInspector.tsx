@@ -296,7 +296,7 @@ function NodeLinks({
   onSelect: (id: string) => void;
 }) {
   if (nodes.length === 0) {
-    return <span className="text-sm text-slate-400">{direction === "in" ? "None. This is where the SOP starts." : "None. This is where the SOP ends."}</span>;
+    return <span className="text-sm text-slate-400">{direction === "in" ? "None. This is where the Automation starts." : "None. This is where the Automation ends."}</span>;
   }
   return (
     <div className="flex flex-col items-stretch gap-1">

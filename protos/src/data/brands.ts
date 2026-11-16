@@ -135,7 +135,7 @@ export const brands: Brand[] = [
   {
     // Archetype 3 — Fleet Daily Cycle (per-asset robots, daily deploy/undeploy).
     id: "brand-coco",
-    name: "Coco",
+    name: "Robot",
     logoInitials: "CO",
     color: "#e068b4",
     description: "Sidewalk delivery robots — daily deploy/undeploy, battery swaps, rescues, and repair routing.",

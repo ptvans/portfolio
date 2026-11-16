@@ -17,7 +17,7 @@ export function SopDraftCard({ draft, onOpen }: { draft: SopDraft; onOpen: (sect
       <header className="flex items-center gap-2 border-b border-slate-100 px-3 py-2">
         <MessageTypeBadge type="sop" size={18} />
         <p className="min-w-0 flex-1 text-sm font-semibold leading-snug text-slate-800">
-          <span className="font-normal text-slate-500">SOP:</span> {draft.name}{" "}
+          <span className="font-normal text-slate-500">Automation:</span> {draft.name}{" "}
           <Link
             to={`/internal-ops/sops/created/${draft.id}`}
             className="whitespace-nowrap text-xs font-medium text-brand-600 hover:text-brand-700 hover:underline"
@@ -91,8 +91,8 @@ function Toggle({ onClick, label }: { onClick: () => void; label: string }) {
     <button
       type="button"
       onClick={onClick}
-      aria-label={`Open ${label} in the SOP viewer`}
-      title="Open in the SOP viewer"
+      aria-label={`Open ${label} in the Automation viewer`}
+      title="Open in the Automation viewer"
       className="shrink-0 rounded p-0.5 text-slate-400 hover:bg-slate-200/70 hover:text-slate-600"
     >
       <ChevronDown className="h-3.5 w-3.5" strokeWidth={2} />

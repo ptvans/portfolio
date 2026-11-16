@@ -260,11 +260,11 @@ export const WORK_GROUPS: WorkGroup[] = [
   {
     id: "wg-coco",
     kind: "More thought needed on",
-    subject: "Coco zero-dollar days and bot counts",
+    subject: "Robot zero-dollar days and bot counts",
     brandId: "brand-coco",
     palette: 5,
     typedReply:
-      "Noted. Three of these are a one-press decision on their cards; the San Jose October 22 day and the Chicago holiday rate need a word from you or from Coco before I can bill them.",
+      "Noted. Three of these are a one-press decision on their cards; the San Jose October 22 day and the Chicago holiday rate need a word from you or from Robot before I can bill them.",
     items: [
       {
         messageId: "note:note-coco-jc-oct22-zero",
@@ -286,9 +286,9 @@ export const WORK_GROUPS: WorkGroup[] = [
           },
           {
             label: "Hold for Reconciliation",
-            description: "Hold the work order until Coco confirms the bot count",
+            description: "Hold the work order until Robot confirms the bot count",
             status: "Holding the work order",
-            reply: "Held. I've asked Coco's ops contact to confirm the Jersey City count for October 22; the work order stays unfinalized until they do.",
+            reply: "Held. I've asked Robot's ops contact to confirm the Jersey City count for October 22; the work order stays unfinalized until they do.",
           },
         ],
         refresh: stillOpen("Still $0.00 in per-bot charges against 14 bots."),
@@ -334,18 +334,18 @@ export const WORK_GROUPS: WorkGroup[] = [
         actions: [
           {
             label: "Hold for reconciliation",
-            description: "Hold the work order until Coco confirms whether 17 or 20 bots went out",
+            description: "Hold the work order until Robot confirms whether 17 or 20 bots went out",
             status: "Holding the work order",
-            reply: "Held. The San Jose October 4 work order stays open until Coco confirms whether 17 or 20 bots went out.",
+            reply: "Held. The San Jose October 4 work order stays open until Robot confirms whether 17 or 20 bots went out.",
           },
           {
             label: "Finalize as billed",
             description: "Finalize at 20 bots as billed",
             status: "Finalizing at 20 bots",
-            reply: "Finalized at 20 bots as billed. I've left a note on the work order that the log shows 17, in case Coco queries the invoice.",
+            reply: "Finalized at 20 bots as billed. I've left a note on the work order that the log shows 17, in case Robot queries the invoice.",
           },
         ],
-        refresh: cleared("Coco confirmed 20 bots on the October 4 log at 9:40 AM today."),
+        refresh: cleared("Robot confirmed 20 bots on the October 4 log at 9:40 AM today."),
       },
       {
         messageId: "note:note-coco-sj-oct22-nocharges",
@@ -364,7 +364,7 @@ export const WORK_GROUPS: WorkGroup[] = [
       {
         messageId: "note:note-coco-chi-oct21-holiday",
         title: "Billing treatment before finalizing?",
-        ask: "Chicago's October 21 deployment ran on a holiday schedule, and the Coco contract doesn't say whether holiday days bill at the standard rate.",
+        ask: "Chicago's October 21 deployment ran on a holiday schedule, and the Robot contract doesn't say whether holiday days bill at the standard rate.",
         sections: [],
         record: { label: "Chicago daily deployment - October 21" },
         actions: [],
@@ -384,9 +384,9 @@ export const WORK_GROUPS: WorkGroup[] = [
         actions: [
           {
             label: "Hold for reconciliation",
-            description: "Hold the work order until Coco confirms whether 9 or 12 bots went out",
+            description: "Hold the work order until Robot confirms whether 9 or 12 bots went out",
             status: "Holding the work order",
-            reply: "Held. The Los Angeles October 24 work order stays open until Coco confirms whether 9 or 12 bots went out.",
+            reply: "Held. The Los Angeles October 24 work order stays open until Robot confirms whether 9 or 12 bots went out.",
           },
           {
             label: "Finalize as billed",
@@ -417,9 +417,9 @@ export const WORK_GROUPS: WorkGroup[] = [
           },
           {
             label: "Hold for Reconciliation",
-            description: "Hold the work order until Coco confirms the day was billable",
+            description: "Hold the work order until Robot confirms the day was billable",
             status: "Holding the work order",
-            reply: "Held. The Miami October 25 work order stays open until Coco confirms the day was billable.",
+            reply: "Held. The Miami October 25 work order stays open until Robot confirms the day was billable.",
           },
         ],
         refresh: stillOpen("Still no per-bot charge line."),

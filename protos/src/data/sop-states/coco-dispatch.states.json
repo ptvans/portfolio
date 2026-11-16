@@ -2,8 +2,8 @@
   "id": "states-coco-dispatch",
   "sopId": "sop-coco-dispatch",
   "name": "Robot states: a dispatch shift",
-  "subject": "A Coco food delivery robot (FDR) across one dispatch shift",
-  "description": "Where a robot can be during a dispatch shift and what moves it. Only one state earns Usable Supply Hours, which is what Coco pays for: parked at a merchant. Every other state is either on the way there or bleeding USH, which is why the dispatch loop exists. Covers both market types: deploy/undeploy markets start and end the night inside the MRO, leave-out markets on the street.",
+  "subject": "A Robot food delivery robot (FDR) across one dispatch shift",
+  "description": "Where a robot can be during a dispatch shift and what moves it. Only one state earns Usable Supply Hours, which is what Robot pays for: parked at a merchant. Every other state is either on the way there or bleeding USH, which is why the dispatch loop exists. Covers both market types: deploy/undeploy markets start and end the night inside the MRO, leave-out markets on the street.",
   "start": "at-mro",
   "states": [
     {
@@ -12,7 +12,12 @@
       "kind": "resting",
       "description": "Deploy/undeploy markets. The city requires every robot indoors overnight, so the fleet sits in the service centre until the deployment window opens.",
       "rule": "A robot left outside overnight is a compliance problem, not just lost USH",
-      "steps": [{ "sopId": "sop-coco-dispatch", "stepId": "undeploy" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "undeploy"
+        }
+      ]
     },
     {
       "id": "overnight-street",
@@ -20,14 +25,24 @@
       "kind": "resting",
       "description": "Leave-out markets. The robot spends the night at a rally point or an overnight merchant rather than a building, so there is no morning deployment out of an MRO.",
       "rule": "Miami caps overnight merchants at 5 robots each",
-      "steps": [{ "sopId": "sop-coco-dispatch", "stepId": "health-scan" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "health-scan"
+        }
+      ]
     },
     {
       "id": "ready-to-deploy",
       "label": "Ready to deploy",
       "kind": "active",
       "description": "Healthy and cleared for a trip, but sitting at an MRO or in a van rather than in the field. It is not accepting orders yet, so it earns nothing here.",
-      "steps": [{ "sopId": "sop-coco-dispatch", "stepId": "health-check" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "health-check"
+        }
+      ]
     },
     {
       "id": "deploying",
@@ -35,15 +50,25 @@
       "kind": "active",
       "description": "Driving out of the MRO to its assigned merchant. Mission Control rejects the trip outright if the robot is not healthy.",
       "rule": "Never more than the market cap of robots sent from one MRO at once",
-      "steps": [{ "sopId": "sop-coco-dispatch", "stepId": "deploy-robots" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "deploy-robots"
+        }
+      ]
     },
     {
       "id": "parked",
       "label": "Parked at a merchant",
       "kind": "active",
       "description": "Healthy, at the right restaurant, accepting orders. The only state that earns Usable Supply Hours, and the state every other one is trying to get back to.",
-      "rule": "Coco's weekly USH target is 90% or better",
-      "steps": [{ "sopId": "sop-coco-dispatch", "stepId": "redeploy" }]
+      "rule": "Robot's weekly USH target is 90% or better",
+      "steps": [
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "redeploy"
+        }
+      ]
     },
     {
       "id": "on-delivery",
@@ -51,7 +76,12 @@
       "kind": "active",
       "description": "Task status reads Scheduled with an empty bot. The robot is mid-order and must not be touched: interrupting it kills the order and the USH with it.",
       "rule": "Never dispatch against a robot whose task is Scheduled",
-      "steps": [{ "sopId": "sop-coco-dispatch", "stepId": "triage" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "triage"
+        }
+      ]
     },
     {
       "id": "low-battery",
@@ -59,7 +89,12 @@
       "kind": "exception",
       "description": "Under the 35% cutoff, or among the ten lowest above it. Still able to work, but on the clock. Low battery generates no task on its own, so if dispatch does not build the list nobody swaps it.",
       "rule": "Swap ahead of time; the fleet depletes at the same rate, so if one is low they all are",
-      "steps": [{ "sopId": "sop-coco-dispatch", "stepId": "low-battery-list" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "low-battery-list"
+        }
+      ]
     },
     {
       "id": "unhealthy",
@@ -67,7 +102,12 @@
       "kind": "exception",
       "description": "Cannot be sent on a trip but is not grounded. Battery below 20% puts a robot here. A reboot from MRO sometimes clears it; otherwise it needs a field visit.",
       "rule": "Never assume a robot below 20% can make a trip",
-      "steps": [{ "sopId": "sop-coco-dispatch", "stepId": "reboot-recheck" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "reboot-recheck"
+        }
+      ]
     },
     {
       "id": "needs-field-task",
@@ -75,8 +115,14 @@
       "kind": "exception",
       "description": "A task is attached and waiting: battery swap, food removal, put up flag, return to parking lot, clean camera, unstuck, or unflip. Pending is the only state dispatch actions.",
       "steps": [
-        { "sopId": "sop-coco-dispatch", "stepId": "triage" },
-        { "sopId": "sop-coco-dispatch", "stepId": "dispatch-operator" }
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "triage"
+        },
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "dispatch-operator"
+        }
       ]
     },
     {
@@ -85,7 +131,12 @@
       "kind": "exception",
       "description": "An operator is at the robot working the Portal task. If they are already there, the battery gets swapped too even when it is above the threshold, because nobody goes back to the same robot twice.",
       "rule": "Never send an operator back to the same robot twice",
-      "steps": [{ "sopId": "sop-coco-dispatch", "stepId": "dispatch-operator" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "dispatch-operator"
+        }
+      ]
     },
     {
       "id": "grounded",
@@ -93,22 +144,37 @@
       "kind": "exception",
       "description": "All trips blocked and a repair ticket opened automatically. Different from unhealthy: a grounded robot goes nowhere until the ticket resolves and someone changes its state.",
       "rule": "Never change a robot's state while it is on a trip",
-      "steps": [{ "sopId": "sop-coco-dispatch", "stepId": "unground" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "unground"
+        }
+      ]
     },
     {
       "id": "awaiting-engineer",
       "label": "Awaiting fleet quality engineer",
       "kind": "exception",
-      "description": "A modem failure, or another grounding type flagged for review. It goes to Coco's fleet quality engineer through the ticket system before anyone acts. This rule and the no-state-change-mid-trip rule both exist because of the train incident.",
+      "description": "A modem failure, or another grounding type flagged for review. It goes to Robot's fleet quality engineer through the ticket system before anyone acts. This rule and the no-state-change-mid-trip rule both exist because of the train incident.",
       "rule": "Never act on a modem-failure grounding without engineer sign-off",
-      "steps": [{ "sopId": "sop-coco-dispatch", "stepId": "stay-grounded" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "stay-grounded"
+        }
+      ]
     },
     {
       "id": "awaiting-pickup",
       "label": "Awaiting van pickup",
       "kind": "exception",
       "description": "Grounded mid-trip or stalled outside the market's zones, so it cannot get itself home. Not every operator has a van, so these are collected through the shift and swept up on the next van shift.",
-      "steps": [{ "sopId": "sop-coco-dispatch", "stepId": "collect-pickups" }]
+      "steps": [
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "collect-pickups"
+        }
+      ]
     },
     {
       "id": "returning",
@@ -117,40 +183,192 @@
       "description": "Heading to its overnight destination: a rally point, an overnight merchant, or straight into the MRO. Watched manually in Mission Control, which never auto-refreshes.",
       "rule": "One rally point at a time",
       "steps": [
-        { "sopId": "sop-coco-dispatch", "stepId": "undeploy" },
-        { "sopId": "sop-coco-dispatch", "stepId": "monitor-returns" }
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "undeploy"
+        },
+        {
+          "sopId": "sop-coco-dispatch",
+          "stepId": "monitor-returns"
+        }
       ]
     }
   ],
   "transitions": [
-    { "id": "t-mro-ready", "from": "at-mro", "to": "ready-to-deploy", "label": "Passes the health check" },
-    { "id": "t-mro-unhealthy", "from": "at-mro", "to": "unhealthy", "label": "Fails the health check" },
-    { "id": "t-street-parked", "from": "overnight-street", "to": "parked", "label": "Morning health scan passes" },
-    { "id": "t-street-unhealthy", "from": "overnight-street", "to": "unhealthy", "label": "Morning health scan fails" },
-    { "id": "t-deploy", "from": "ready-to-deploy", "to": "deploying", "label": "Deploy trip sent from the MRO" },
-    { "id": "t-arrive", "from": "deploying", "to": "parked", "label": "Arrives and parks at its merchant" },
-    { "id": "t-ground-route", "from": "deploying", "to": "grounded", "label": "Grounds mid-trip" },
-    { "id": "t-order", "from": "parked", "to": "on-delivery", "label": "Takes an order" },
-    { "id": "t-delivered", "from": "on-delivery", "to": "parked", "label": "Delivery completes" },
-    { "id": "t-empty-bot", "from": "on-delivery", "to": "needs-field-task", "label": "Delivery fails; empty-bot task fires once it stops", "note": "It stops in place if the failure was robot-side, and returns to its origin merchant if it was customer-side." },
-    { "id": "t-drain", "from": "parked", "to": "low-battery", "label": "Drops under the 35% cutoff" },
-    { "id": "t-task-fires", "from": "parked", "to": "needs-field-task", "label": "A task fires: flag, unflip, clean camera, unstuck" },
-    { "id": "t-listed", "from": "low-battery", "to": "needs-field-task", "label": "Added to the action list for a swap" },
-    { "id": "t-critical", "from": "low-battery", "to": "unhealthy", "label": "Drops under 20% before anyone swaps it" },
-    { "id": "t-reboot", "from": "unhealthy", "to": "ready-to-deploy", "label": "Reboot from MRO clears it" },
-    { "id": "t-needs-visit", "from": "unhealthy", "to": "needs-field-task", "label": "Reboot does not clear it" },
-    { "id": "t-dispatched", "from": "needs-field-task", "to": "operator-on-site", "label": "Operator dispatched and arrives" },
-    { "id": "t-piloted", "from": "needs-field-task", "to": "parked", "label": "Piloted out via DriveU, task cleared" },
-    { "id": "t-task-done", "from": "operator-on-site", "to": "parked", "label": "Task done, back to taking orders" },
-    { "id": "t-damage", "from": "operator-on-site", "to": "grounded", "label": "Damage found on site" },
-    { "id": "t-engineer", "from": "grounded", "to": "awaiting-engineer", "label": "Modem failure or a type flagged for review" },
-    { "id": "t-needs-van", "from": "grounded", "to": "awaiting-pickup", "label": "Grounded mid-trip, needs a van" },
-    { "id": "t-signed-off", "from": "awaiting-engineer", "to": "ready-to-deploy", "label": "Engineer signs off and the ticket closes" },
-    { "id": "t-ungrounded", "from": "grounded", "to": "ready-to-deploy", "label": "Repair ticket resolved, state changed" },
-    { "id": "t-swept", "from": "awaiting-pickup", "to": "at-mro", "label": "Collected on the next van sweep" },
-    { "id": "t-undeploy", "from": "parked", "to": "returning", "label": "Undeploy time, trip started" },
-    { "id": "t-home-mro", "from": "returning", "to": "at-mro", "label": "Reaches the MRO, or is vanned in from a rally point" },
-    { "id": "t-home-street", "from": "returning", "to": "overnight-street", "label": "Reaches its rally point or overnight merchant" },
-    { "id": "t-stalled", "from": "returning", "to": "awaiting-pickup", "label": "Stalls, stops short or misses its destination" }
+    {
+      "id": "t-mro-ready",
+      "from": "at-mro",
+      "to": "ready-to-deploy",
+      "label": "Passes the health check"
+    },
+    {
+      "id": "t-mro-unhealthy",
+      "from": "at-mro",
+      "to": "unhealthy",
+      "label": "Fails the health check"
+    },
+    {
+      "id": "t-street-parked",
+      "from": "overnight-street",
+      "to": "parked",
+      "label": "Morning health scan passes"
+    },
+    {
+      "id": "t-street-unhealthy",
+      "from": "overnight-street",
+      "to": "unhealthy",
+      "label": "Morning health scan fails"
+    },
+    {
+      "id": "t-deploy",
+      "from": "ready-to-deploy",
+      "to": "deploying",
+      "label": "Deploy trip sent from the MRO"
+    },
+    {
+      "id": "t-arrive",
+      "from": "deploying",
+      "to": "parked",
+      "label": "Arrives and parks at its merchant"
+    },
+    {
+      "id": "t-ground-route",
+      "from": "deploying",
+      "to": "grounded",
+      "label": "Grounds mid-trip"
+    },
+    {
+      "id": "t-order",
+      "from": "parked",
+      "to": "on-delivery",
+      "label": "Takes an order"
+    },
+    {
+      "id": "t-delivered",
+      "from": "on-delivery",
+      "to": "parked",
+      "label": "Delivery completes"
+    },
+    {
+      "id": "t-empty-bot",
+      "from": "on-delivery",
+      "to": "needs-field-task",
+      "label": "Delivery fails; empty-bot task fires once it stops",
+      "note": "It stops in place if the failure was robot-side, and returns to its origin merchant if it was customer-side."
+    },
+    {
+      "id": "t-drain",
+      "from": "parked",
+      "to": "low-battery",
+      "label": "Drops under the 35% cutoff"
+    },
+    {
+      "id": "t-task-fires",
+      "from": "parked",
+      "to": "needs-field-task",
+      "label": "A task fires: flag, unflip, clean camera, unstuck"
+    },
+    {
+      "id": "t-listed",
+      "from": "low-battery",
+      "to": "needs-field-task",
+      "label": "Added to the action list for a swap"
+    },
+    {
+      "id": "t-critical",
+      "from": "low-battery",
+      "to": "unhealthy",
+      "label": "Drops under 20% before anyone swaps it"
+    },
+    {
+      "id": "t-reboot",
+      "from": "unhealthy",
+      "to": "ready-to-deploy",
+      "label": "Reboot from MRO clears it"
+    },
+    {
+      "id": "t-needs-visit",
+      "from": "unhealthy",
+      "to": "needs-field-task",
+      "label": "Reboot does not clear it"
+    },
+    {
+      "id": "t-dispatched",
+      "from": "needs-field-task",
+      "to": "operator-on-site",
+      "label": "Operator dispatched and arrives"
+    },
+    {
+      "id": "t-piloted",
+      "from": "needs-field-task",
+      "to": "parked",
+      "label": "Piloted out via DriveU, task cleared"
+    },
+    {
+      "id": "t-task-done",
+      "from": "operator-on-site",
+      "to": "parked",
+      "label": "Task done, back to taking orders"
+    },
+    {
+      "id": "t-damage",
+      "from": "operator-on-site",
+      "to": "grounded",
+      "label": "Damage found on site"
+    },
+    {
+      "id": "t-engineer",
+      "from": "grounded",
+      "to": "awaiting-engineer",
+      "label": "Modem failure or a type flagged for review"
+    },
+    {
+      "id": "t-needs-van",
+      "from": "grounded",
+      "to": "awaiting-pickup",
+      "label": "Grounded mid-trip, needs a van"
+    },
+    {
+      "id": "t-signed-off",
+      "from": "awaiting-engineer",
+      "to": "ready-to-deploy",
+      "label": "Engineer signs off and the ticket closes"
+    },
+    {
+      "id": "t-ungrounded",
+      "from": "grounded",
+      "to": "ready-to-deploy",
+      "label": "Repair ticket resolved, state changed"
+    },
+    {
+      "id": "t-swept",
+      "from": "awaiting-pickup",
+      "to": "at-mro",
+      "label": "Collected on the next van sweep"
+    },
+    {
+      "id": "t-undeploy",
+      "from": "parked",
+      "to": "returning",
+      "label": "Undeploy time, trip started"
+    },
+    {
+      "id": "t-home-mro",
+      "from": "returning",
+      "to": "at-mro",
+      "label": "Reaches the MRO, or is vanned in from a rally point"
+    },
+    {
+      "id": "t-home-street",
+      "from": "returning",
+      "to": "overnight-street",
+      "label": "Reaches its rally point or overnight merchant"
+    },
+    {
+      "id": "t-stalled",
+      "from": "returning",
+      "to": "awaiting-pickup",
+      "label": "Stalls, stops short or misses its destination"
+    }
   ]
 }

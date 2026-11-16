@@ -6,7 +6,7 @@ import { CircleHelp } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoMark from "../../../../assets/logo-mark.svg";
 
-const USER_EMAIL = "thom@brickdynamics.com";
+const USER_EMAIL = "thom@getthom.com";
 
 export function SopTopBar() {
   return (

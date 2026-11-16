@@ -192,7 +192,7 @@ export function StellaComposer({
                     <button
                       type="button"
                       onClick={onDetachSopRef}
-                      aria-label="Remove the SOP section"
+                      aria-label="Remove the Automation section"
                       className="shrink-0 rounded p-0.5 text-brand-500 hover:bg-brand-100 hover:text-brand-700"
                     >
                       <X className="h-3.5 w-3.5" strokeWidth={2} />

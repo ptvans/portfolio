@@ -86,7 +86,7 @@ function initialEntries(): Entry[] {
     {
       id: nextId(),
       kind: "stella",
-      text: `Morning, Thom. You've ${LEARNED_SOP.pattern} by hand ${LEARNED_SOP.timesSeen} times since ${LEARNED_SOP.since}, so I wrote it up as an SOP.`,
+      text: `Morning, Thom. You've ${LEARNED_SOP.pattern} by hand ${LEARNED_SOP.timesSeen} times since ${LEARNED_SOP.since}, so I wrote it up as an Automation.`,
     },
     { id: nextId(), kind: "suggestion" },
     { id: nextId(), kind: "stella", text: "And here's the top thing that needs you." },
@@ -229,8 +229,8 @@ export function BrickOpsProvider({ children }: { children: ReactNode }) {
     setSuggestion("enabled");
     push({ id: nextId(), kind: "user", text: `Turn on ${LEARNED_SOP.name}` });
     work(
-      "Publishing the SOP",
-      `It's on. The next Coco deployment whose bot counts and charges disagree, I'll hold and ask Coco to confirm. You'll get a note here each time, so you can tell me if I got one wrong.`,
+      "Publishing the Automation",
+      `It's on. The next Robot deployment whose bot counts and charges disagree, I'll hold and ask Robot to confirm. You'll get a note here each time, so you can tell me if I got one wrong.`,
     );
   };
 

@@ -9,7 +9,7 @@ import { NavLink } from "react-router-dom";
 export type AutomationsTab = "sops" | "goals";
 
 export const AUTOMATIONS_TABS: { key: AutomationsTab; label: string; to: string }[] = [
-  { key: "sops", label: "SOPs", to: "/internal-ops/sops/list" },
+  { key: "sops", label: "Automations", to: "/internal-ops/sops/list" },
   { key: "goals", label: "Goals", to: "/internal-ops/goals" },
 ];
 

@@ -36,7 +36,7 @@ export function SopSheet({ open, onClose }: { open: boolean; onClose: () => void
           <div className="min-w-0 flex-1">
             <h2 className="text-md font-semibold leading-snug text-white">{LEARNED_SOP.name}</h2>
             <p className="text-sm text-white/50">
-              Draft SOP · {LEARNED_SOP.brand} · Written by {agentName}
+              Draft Automation · {LEARNED_SOP.brand} · Written by {agentName}
             </p>
           </div>
           <button
@@ -89,7 +89,7 @@ export function SopSheet({ open, onClose }: { open: boolean; onClose: () => void
           {suggestion === "enabled" ? (
             <div className="flex items-center justify-center gap-2 py-3 text-base font-medium text-white">
               <Check className="h-5 w-5 text-[#30d158]" strokeWidth={3} />
-              On for every Coco daily deployment
+              On for every Robot daily deployment
             </div>
           ) : (
             <div className="flex gap-3">

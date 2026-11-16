@@ -32,7 +32,7 @@ const PROTOTYPES = [
   {
     area: 'enterprise',
     label: 'Enterprise views',
-    caption: 'Ops console: SOP graph inspector',
+    caption: 'Ops console: automation graph inspector',
     href: './protos/#/internal-ops/sops/sop-coco-dispatch/versions/3?view=graph',
     image: './images/protos/coco-graph.jpg',
     alt: 'Internal ops web app showing an SOP workflow graph with a node inspector panel',

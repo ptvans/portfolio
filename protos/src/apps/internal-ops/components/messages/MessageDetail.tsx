@@ -168,7 +168,7 @@ function AlertBody({ message }: { message: InboxMessage }) {
           <ActionsCard
             options={[
               { label: "Dismiss", description: "Dismiss the alert — it moves to Archived" },
-              { label: "View SOP", description: `Open the Alert SOP that raised it${rule ? `: ${rule.name}` : ""}` },
+              { label: "View Automation", description: `Open the Alert Automation that raised it${rule ? `: ${rule.name}` : ""}` },
             ]}
             chosen={null}
             onChoose={(i) => (i === 0 ? archive([message.id]) : rule && navigate(`/internal-ops/alerts/${rule.id}`))}

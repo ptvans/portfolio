@@ -333,7 +333,7 @@ function ArtifactCard({ entry }: { entry: Extract<StellaEntry, { kind: "artifact
           to={`/internal-ops/sops/${entry.sopId}/versions/${version}`}
           icon={FileText}
           title="Definition"
-          body="The SOP as written, with the tool calls beside each section"
+          body="The Automation as written, with the tool calls beside each section"
         />
         <ViewLink
           to={latest ? `/internal-ops/sops/${entry.sopId}/runs/${latest.id}` : `/internal-ops/sops/${entry.sopId}`}

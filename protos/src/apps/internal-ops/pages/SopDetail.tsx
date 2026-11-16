@@ -38,7 +38,7 @@ function tabFrom(param: string | null): Tab {
   return param === "instructions" || param === "definition" || param === "versions" ? "instructions" : "activity";
 }
 
-const CRUMBS = [{ label: "SOPs", to: "/internal-ops/sops/list" }];
+const CRUMBS = [{ label: "Automations", to: "/internal-ops/sops/list" }];
 
 export function SopDetail() {
   const { id } = useParams<{ id: string }>();
@@ -50,7 +50,7 @@ export function SopDetail() {
       <div className="h-full overflow-y-auto">
         <div className="mx-auto max-w-5xl px-4 py-4 md:px-6">
           <Breadcrumbs items={CRUMBS} />
-          <EmptyState icon={Workflow} title="SOP not found" description={`No SOP with id "${id}".`} />
+          <EmptyState icon={Workflow} title="Automation not found" description={`No Automation with id "${id}".`} />
         </div>
       </div>
     );
@@ -110,7 +110,7 @@ function SopPage({ sop }: { sop: Sop }) {
           at,
           type: "check",
           subject: { label: "Run started" },
-          summary: "Started by you from the SOP page. Entries appear here as the run works through the instructions.",
+          summary: "Started by you from the Automation page. Entries appear here as the run works through the instructions.",
         },
       ],
     });
@@ -210,7 +210,7 @@ function SopPage({ sop }: { sop: Sop }) {
                   {runs[0] && <MenuLink to={`/internal-ops/sops/${sop.id}/runs/${runs[0].id}`}>Open latest run</MenuLink>}
                   {sop.source && (
                     <a href={sop.source.url} target="_blank" rel="noreferrer" role="menuitem" className={MENU_ROW}>
-                      Open in the Notion SOP Hub
+                      Open in the Notion Automation Hub
                     </a>
                   )}
                 </>
@@ -219,7 +219,7 @@ function SopPage({ sop }: { sop: Sop }) {
           </div>
         </header>
 
-        <div role="tablist" aria-label="SOP sections" className="mb-4 flex gap-6 border-b border-slate-200 min-[1200px]:hidden">
+        <div role="tablist" aria-label="Automation sections" className="mb-4 flex gap-6 border-b border-slate-200 min-[1200px]:hidden">
           {TABS.map((t) => (
             <button
               key={t.key}

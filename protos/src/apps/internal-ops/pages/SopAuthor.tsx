@@ -222,9 +222,9 @@ export function SopAuthor() {
       <div className="flex h-screen flex-col bg-slate-50">
         <SopTopBar />
         <div className="p-8">
-          <EmptyState icon={Workflow} title="SOP not found" description={`No SOP with id "${id}".`} />
+          <EmptyState icon={Workflow} title="Automation not found" description={`No Automation with id "${id}".`} />
           <Link to="/internal-ops/sops/list" className="mt-4 inline-block text-sm font-medium text-brand-600 hover:underline">
-            Back to SOPs
+            Back to Automations
           </Link>
         </div>
       </div>
@@ -292,7 +292,7 @@ export function SopAuthor() {
             <div>
               <nav className="flex items-center gap-1.5 text-sm text-slate-400">
                 <Link to="/internal-ops/sops/list" className="hover:text-slate-600">
-                  SOPs
+                  Automations
                 </Link>
                 <span>/</span>
                 {brand && (
@@ -314,7 +314,7 @@ export function SopAuthor() {
               </nav>
               <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1">
                 <h1 className="text-lg font-semibold text-slate-900">
-                  SOP {sop.name}
+                  Automation {sop.name}
                   <span className="ml-2 text-sm font-normal text-slate-400">v{viewVersion}</span>
                 </h1>
                 {sopRun ? (
@@ -630,7 +630,7 @@ function VersionPicker({
   return (
     <div className="relative">
       <select
-        aria-label="SOP version"
+        aria-label="Automation version"
         value={current}
         onChange={(e) => onPick(Number(e.target.value))}
         className="appearance-none rounded-lg border border-slate-300 bg-white py-1 pl-3 pr-8 text-xs font-medium text-slate-700 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
@@ -654,7 +654,7 @@ function ScopeToggle({ scope, onPick }: { scope: "whole" | "focus"; onPick: (s: 
     <div className="inline-flex overflow-hidden rounded-lg border border-slate-300 bg-white text-xs font-medium shadow-sm">
       {(
         [
-          ["whole", "Whole flow", "Every step in the SOP"],
+          ["whole", "Whole flow", "Every step in the Automation"],
           ["focus", "Focus", "The selected step and its immediate neighbours"],
         ] as const
       ).map(([value, label, title]) => (

@@ -96,7 +96,7 @@ export function SopStateInspector({
               </p>
               <div className="mt-1 flex flex-col gap-1">
                 {outgoing.length === 0 ? (
-                  <span className="text-sm text-slate-400">None. The subject stops here, or the SOP does not say what happens next.</span>
+                  <span className="text-sm text-slate-400">None. The subject stops here, or the Automation does not say what happens next.</span>
                 ) : (
                   outgoing.map((t) => (
                     <TransitionRow key={t.id} label={t.label} note={t.note} peer={byId.get(t.to)?.label ?? t.to} lead="to" onSelect={() => onSelectState(t.to)} />
@@ -121,7 +121,7 @@ export function SopStateInspector({
               })}
             </ul>
           ) : (
-            <p className="text-sm text-slate-400">No SOP step is tied to this state.</p>
+            <p className="text-sm text-slate-400">No Automation step is tied to this state.</p>
           )}
         </Section>
       </div>
