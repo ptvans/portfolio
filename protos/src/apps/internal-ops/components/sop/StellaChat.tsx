@@ -6,9 +6,10 @@
 // block after a short "Reworking" pause, and a bare message gets a canned
 // answer grounded in the sample run history.
 
-import { PanelLeftClose, SendHorizontal, X } from "lucide-react";
+import { PanelLeftClose, Pencil } from "lucide-react";
+import { StellaComposer } from "../stella/StellaComposer";
 import { StellaIcon } from "../stella/StellaIcon";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Sop, SopDocBlock, SopVersion } from "../../../../types/domain";
 import { formatElapsedMs } from "./sopFormat";
 
@@ -69,19 +70,13 @@ export function StellaChat({
   onCollapse?: () => void;
 }) {
   const [log, setLog] = useState<Entry[]>(() => [{ type: "assistant", text: openingMessage(sop, version) }]);
-  const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
   const [, setNow] = useState(Date.now());
   const genericTurns = useRef(0);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
-
-  useEffect(() => {
-    if (focusSignal > 0) inputRef.current?.focus();
-  }, [focusSignal]);
 
   // Tick while a status is running so its elapsed time counts up.
   useEffect(() => {
@@ -95,9 +90,8 @@ export function StellaChat({
     if (el) el.scrollTop = el.scrollHeight;
   }, [log]);
 
-  const send = (e?: FormEvent) => {
-    e?.preventDefault();
-    const text = draft.trim();
+  const send = (raw: string) => {
+    const text = raw.trim();
     if (!text || busy) return;
     const block = attachedBlock;
     const statusId = `s-${Date.now()}`;
@@ -106,7 +100,6 @@ export function StellaChat({
       { type: "user", text, blockHeading: block?.heading },
       { type: "status", id: statusId, label: "Reworking", startedAt: Date.now(), endedAt: null },
     ]);
-    setDraft("");
     setBusy(true);
     onDetachBlock();
 
@@ -131,7 +124,7 @@ export function StellaChat({
     <div className="flex h-full min-h-0 flex-col bg-white">
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <StellaIcon size={18} thinking={busy} />
-        <h2 className="text-sm font-semibold text-slate-800">Stella (AI)</h2>
+        <h2 className="text-sm font-semibold text-slate-800">Stella</h2>
         {onCollapse && (
           <button
             type="button"
@@ -145,75 +138,69 @@ export function StellaChat({
         )}
       </div>
 
-      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-4 pb-3">
+      {/* Messages and composer match the Stella home chat (StellaTranscript /
+          StellaComposer): user bubbles on the right, Stella's replies beside
+          her orb in plain text, and the same composer box. */}
+      <div ref={scrollRef} className="thin-scrollbar min-h-0 flex-1 overflow-y-auto px-4 pb-4">
         {/* Push the conversation to the bottom of the column like a chat. */}
-        <div className="flex min-h-full flex-col justify-end gap-3">
+        <div className="flex min-h-full flex-col justify-end gap-5">
           {log.map((entry, i) => {
             if (entry.type === "user") {
               return (
-                <div key={i} className="ml-8 rounded-2xl bg-brand-50 px-4 py-3 text-sm leading-relaxed text-slate-800">
+                <div key={i} className="ml-8 self-end rounded-2xl bg-brand-50 px-4 py-3 text-md leading-relaxed text-slate-800">
                   {entry.blockHeading && (
-                    <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-brand-600">
-                      Modify · {entry.blockHeading}
-                    </p>
+                    <div className="mb-2 border-l-2 border-brand-300 pl-2.5 text-xs">
+                      <p className="flex items-center gap-1.5 font-medium text-brand-700">
+                        <Pencil className="h-3 w-3 shrink-0" strokeWidth={2.25} aria-hidden />
+                        {sop.name} › {entry.blockHeading}
+                      </p>
+                    </div>
                   )}
-                  <p className="whitespace-pre-wrap">{entry.text}</p>
+                  <p className="whitespace-pre-wrap break-words">{entry.text}</p>
                 </div>
               );
             }
             if (entry.type === "status") {
               const end = entry.endedAt ?? Date.now();
               return (
-                <div key={i} className="pl-1">
-                  <p className={`text-sm italic ${entry.endedAt ? "text-slate-400" : "text-brand-600"}`}>{entry.label}</p>
-                  <p className="text-[11px] text-slate-400">{formatElapsedMs(end - entry.startedAt)}</p>
+                <div key={i} className="flex items-center gap-2 pl-[32px]">
+                  <p className={`text-base italic ${entry.endedAt ? "text-slate-400" : "text-brand-600"}`}>{entry.label}</p>
+                  <p className="text-xs tabular-nums text-slate-400">{formatElapsedMs(end - entry.startedAt)}</p>
                 </div>
               );
             }
             return (
-              <p key={i} className="pl-1 text-sm leading-relaxed text-brand-700">
-                {entry.text}
-              </p>
+              <div key={i} className="flex items-start gap-3">
+                <StellaIcon size={20} className="mt-[3px]" />
+                <p className="min-w-0 flex-1 text-md leading-relaxed text-slate-700">{entry.text}</p>
+              </div>
             );
           })}
         </div>
       </div>
 
-      <form onSubmit={send} className="shrink-0 border-t border-slate-100 p-3">
-        {attachedBlock && (
-          <div className="mb-2 flex items-center gap-2 rounded-lg border border-brand-200 bg-brand-50 px-3 py-1.5 text-xs text-brand-700">
-            <span className="font-medium">Modifying:</span>
-            <span className="truncate">{attachedBlock.heading}</span>
-            <button type="button" onClick={onDetachBlock} className="ml-auto rounded p-0.5 hover:bg-brand-100" aria-label="Detach block">
-              <X className="h-3.5 w-3.5" strokeWidth={2} />
-            </button>
-          </div>
-        )}
-        <div className="relative">
-          <textarea
-            ref={inputRef}
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                send();
-              }
-            }}
-            rows={3}
-            placeholder={attachedBlock ? `How should "${attachedBlock.heading}" change?` : "Ask Stella to change the Automation…"}
-            className="w-full resize-none rounded-xl border border-slate-200 bg-white px-3 py-2.5 pr-11 text-sm text-slate-800 placeholder:text-slate-400 focus:border-brand-400 focus:outline-none focus:ring-1 focus:ring-brand-400"
-          />
-          <button
-            type="submit"
-            disabled={!draft.trim() || busy}
-            aria-label="Send"
-            className="absolute bottom-2.5 right-2.5 rounded-lg bg-brand-600 p-1.5 text-white transition-colors hover:bg-brand-700 disabled:opacity-40"
-          >
-            <SendHorizontal className="h-4 w-4" strokeWidth={2} />
-          </button>
-        </div>
-      </form>
+      <div className="shrink-0 px-3 pb-3">
+        <StellaComposer
+          compact
+          onSend={send}
+          disabled={busy}
+          placeholder="Ask Stella to change the Automation…"
+          sopRef={
+            attachedBlock
+              ? {
+                  draftId: sop.id,
+                  draftName: sop.name,
+                  section: "raw",
+                  paragraph: null,
+                  label: attachedBlock.heading,
+                  excerpt: attachedBlock.body,
+                }
+              : null
+          }
+          onDetachSopRef={onDetachBlock}
+          focusSignal={focusSignal}
+        />
+      </div>
     </div>
   );
 }

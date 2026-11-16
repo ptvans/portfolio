@@ -34,6 +34,8 @@ export function StellaComposer({
   autoFocus = false,
   compact = false,
   // One line, with the controls beside it: the chat under a My Work group.
+  // Bumped by the caller to focus the box (e.g. Modify with prompt).
+  focusSignal = 0,
   slim = false,
 }: {
   onSend: (text: string) => void;
@@ -49,6 +51,7 @@ export function StellaComposer({
   onDetachSopRef?: () => void;
   autoFocus?: boolean;
   compact?: boolean;
+  focusSignal?: number;
   slim?: boolean;
 }) {
   const [draft, setDraft] = useState("");
@@ -63,6 +66,10 @@ export function StellaComposer({
   useEffect(() => {
     if (sopRef) inputRef.current?.focus();
   }, [sopRef]);
+
+  useEffect(() => {
+    if (focusSignal > 0) inputRef.current?.focus();
+  }, [focusSignal]);
 
   const submit = (e?: FormEvent) => {
     e?.preventDefault();

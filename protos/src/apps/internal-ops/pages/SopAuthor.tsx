@@ -719,7 +719,7 @@ function StellaTray({ onExpand, attached }: { onExpand: () => void; attached: bo
       type="button"
       onClick={onExpand}
       aria-label="Expand Stella"
-      title="Expand Stella (AI)"
+      title="Expand Stella"
       className="group flex h-full w-full flex-col items-center gap-3 px-2 py-3 text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-600"
     >
       <PanelLeftOpen className="h-4 w-4" strokeWidth={2} />
