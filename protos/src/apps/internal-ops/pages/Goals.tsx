@@ -37,7 +37,7 @@ const GOAL_SORTS: { key: GoalSort; label: string }[] = [
 ];
 
 function scopeName(goal: Goal): string {
-  return goal.brandId ? (getBrand(goal.brandId)?.name ?? "Brick-wide") : "Brick-wide";
+  return goal.brandId ? (getBrand(goal.brandId)?.name ?? "Build-wide") : "Build-wide";
 }
 
 export function Goals() {

@@ -575,7 +575,7 @@ export const alerts: Alert[] = [
     ruleId: "rule-st-review",
     brandId: "brand-stackmoves",
     name: "Order 0293745 delivery awaiting review for 26h",
-    description: "Marked complete by the driver Oct 27, 11:17 AM. Not yet reviewed by Brick City.",
+    description: "Marked complete by the driver Oct 27, 11:17 AM. Not yet reviewed by Build City.",
     reasoning: "Task marked complete 26 hours ago; review status is still Needs Review.",
     severity: "medium",
     status: "active",

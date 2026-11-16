@@ -4,7 +4,10 @@
   "name": "Freight Quote Requests",
   "status": "active",
   "version": 1,
-  "scope": { "brandId": null, "customer": "Internal" },
+  "scope": {
+    "brandId": null,
+    "customer": "Internal"
+  },
   "team": "AM",
   "sopType": "external",
   "owner": "Toni Callahan",
@@ -13,7 +16,10 @@
   "purpose": "Getting quotes from both vendors and reviewing them with Shannon before anything goes to the client keeps pricing consistent and catches problems before they reach the account. Scope: any AM requesting LTL or dedicated freight quotes for a client shipment.",
   "doneWhen": "Both vendors have responded, Shannon and the AM have agreed on which option to present, and a recommendation is ready for the client.",
   "timeToRun": "15 minutes to send requests, plus vendor response time",
-  "tags": ["Freight & Shipping", "Quoting"],
+  "tags": [
+    "Freight & Shipping",
+    "Quoting"
+  ],
   "source": {
     "system": "notion",
     "url": "https://app.notion.com/p/3db71cfae62e814eb23dcded4e4dd8c2",
@@ -28,7 +34,11 @@
       "trigger": "A client shipment needs a quote; you have pickup and delivery addresses and the requested pickup window.",
       "work": "Look up the project's code in Portal. It goes in the subject line of both quote request emails.",
       "where": "Portal",
-      "next": [{ "to": "dims-known" }]
+      "next": [
+        {
+          "to": "dims-known"
+        }
+      ]
     },
     {
       "id": "dims-known",
@@ -38,8 +48,14 @@
       "trigger": "You have the item manifest.",
       "work": "If the client gave real dimensions and weight, or the items are already palletized, proceed. If manifest details are incomplete or unclear, ask the client for real dimensions and weight before falling back to an estimate.",
       "next": [
-        { "to": "send-requests", "label": "Yes" },
-        { "to": "estimate", "label": "No" }
+        {
+          "to": "send-requests",
+          "label": "Yes"
+        },
+        {
+          "to": "estimate",
+          "label": "No"
+        }
       ]
     },
     {
@@ -49,19 +65,30 @@
       "trigger": "Dimensions and weight are unknown and the items are not palletized.",
       "work": "Paste the item manifest into Claude and ask for an educated guess on total pallets and weight.",
       "actor": "agent",
-      "actors": ["brick_operator", "stella"],
+      "actors": [
+        "brick_operator",
+        "stella"
+      ],
       "where": "Claude",
-      "next": [{ "to": "send-requests" }]
+      "next": [
+        {
+          "to": "send-requests"
+        }
+      ]
     },
     {
       "id": "send-requests",
       "title": "Send the same request to both vendors, CC Shannon",
       "owner": "Account Manager",
       "trigger": "Project code and shipment details are ready.",
-      "work": "Email Unishippers (Alex O'Reilly) and Flock Freight (Tucker Morris) with the identical request, CC Shannon. Subject: Brick Dynamics [Client: {Client}] | Project Code = {Code} | New Quote Request | {Origin} to {Destination}. Ask for LTL and Dedicated quotes; include addresses, dates and windows, the manifest with dimensions or pallet count and total weight, whether palletized (ask for driver assist if not), and an Item / Qty Confirmed table.",
+      "work": "Email Unishippers (Alex O'Reilly) and Flock Freight (Tucker Morris) with the identical request, CC Shannon. Subject: Build Dynamics [Client: {Client}] | Project Code = {Code} | New Quote Request | {Origin} to {Destination}. Ask for LTL and Dedicated quotes; include addresses, dates and windows, the manifest with dimensions or pallet count and total weight, whether palletized (ask for driver assist if not), and an Item / Qty Confirmed table.",
       "where": "Email",
       "when": "About 15 minutes",
-      "next": [{ "to": "responses" }]
+      "next": [
+        {
+          "to": "responses"
+        }
+      ]
     },
     {
       "id": "responses",
@@ -70,10 +97,19 @@
       "owner": "Account Manager",
       "trigger": "Requests are out.",
       "work": "Wait for both quotes. If a vendor hasn't responded, follow up directly and loop in Shannon if it is holding up the timeline.",
-      "actors": ["external", "brick_operator"],
+      "actors": [
+        "external",
+        "brick_operator"
+      ],
       "next": [
-        { "to": "review", "label": "Both in" },
-        { "to": "follow-up", "label": "One missing" }
+        {
+          "to": "review",
+          "label": "Both in"
+        },
+        {
+          "to": "follow-up",
+          "label": "One missing"
+        }
       ]
     },
     {
@@ -82,7 +118,11 @@
       "owner": "Account Manager",
       "trigger": "A vendor has not responded.",
       "work": "Follow up directly with the vendor contact; loop in Shannon if the delay threatens the client's timeline.",
-      "next": [{ "to": "responses" }]
+      "next": [
+        {
+          "to": "responses"
+        }
+      ]
     },
     {
       "id": "review",
@@ -90,7 +130,11 @@
       "owner": "Shannon",
       "trigger": "Both vendors have responded.",
       "work": "Huddle with Shannon to compare LTL and dedicated pricing from both vendors and agree on what to present.",
-      "next": [{ "to": "present-decision" }]
+      "next": [
+        {
+          "to": "present-decision"
+        }
+      ]
     },
     {
       "id": "present-decision",
@@ -101,8 +145,14 @@
       "work": "Check both: compared both vendors' LTL and dedicated pricing; picked the option that fits the client's timeline. If unsure who else to loop in, the owner has not yet filled that in.",
       "verification": "human",
       "next": [
-        { "to": "present", "label": "All yes" },
-        { "to": "send-requests", "label": "Any no: back to vendors" }
+        {
+          "to": "present",
+          "label": "All yes"
+        },
+        {
+          "to": "send-requests",
+          "label": "Any no: back to vendors"
+        }
       ]
     },
     {
@@ -111,7 +161,11 @@
       "owner": "Account Manager",
       "trigger": "Shannon and the AM agree on the option.",
       "work": "Present the agreed recommendation and pricing to the client.",
-      "next": [{ "to": "done" }]
+      "next": [
+        {
+          "to": "done"
+        }
+      ]
     }
   ]
 }

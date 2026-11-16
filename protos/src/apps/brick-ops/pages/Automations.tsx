@@ -73,7 +73,7 @@ function SopList({ sops }: { sops: Sop[] }) {
       {sops.map((s) => (
         <li key={s.id} className="px-4 py-3.5">
           <p className="text-base leading-snug">{s.name}</p>
-          <p className="mt-0.5 text-sm text-white/45">{s.brandId ? (getBrand(s.brandId)?.name ?? "Brand") : "Brick-wide"}</p>
+          <p className="mt-0.5 text-sm text-white/45">{s.brandId ? (getBrand(s.brandId)?.name ?? "Brand") : "Build-wide"}</p>
           <p className="mt-1 line-clamp-2 text-sm leading-snug text-white/55">{s.trigger}</p>
         </li>
       ))}

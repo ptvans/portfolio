@@ -116,12 +116,12 @@ export const WORK_GROUPS: WorkGroup[] = [
       },
       {
         messageId: "note:note-access-autolane-brick",
-        title: "Waiting on Brick access",
-        ask: "I need Brick access to the Autolane Austin shift charges for October 19–20 before I can finalize them.",
+        title: "Waiting on Build access",
+        ask: "I need Build access to the Autolane Austin shift charges for October 19–20 before I can finalize them.",
         sections: [
           {
             heading: "What's Blocked",
-            body: "The shift charges live on Brick records I don't have permission to read. Until someone grants it, the two days can't be checked or billed.",
+            body: "The shift charges live on Build records I don't have permission to read. Until someone grants it, the two days can't be checked or billed.",
           },
         ],
         record: { label: "Autolane Austin Oct 19-20 shift charges", detail: "Shift charges can't be read without it" },
@@ -632,7 +632,7 @@ export const WORK_GROUPS: WorkGroup[] = [
       {
         messageId: "alert:alert-st-1",
         title: "Order 0293745 delivery awaiting review for 26h",
-        ask: "The driver marked order 0293745's delivery complete on Oct 27 and Brick City hasn't reviewed it.",
+        ask: "The driver marked order 0293745's delivery complete on Oct 27 and Build City hasn't reviewed it.",
         sections: [],
         actions: [
           {
@@ -657,7 +657,7 @@ export const WORK_GROUPS: WorkGroup[] = [
             reply: "Marked order 0293746's pickup as reviewed.",
           },
         ],
-        refresh: cleared("Reviewed by Brick City at 9:15 AM today."),
+        refresh: cleared("Reviewed by Build City at 9:15 AM today."),
       },
       {
         messageId: "alert:alert-st-3",
@@ -666,7 +666,7 @@ export const WORK_GROUPS: WorkGroup[] = [
         sections: [
           {
             heading: "Two Ways to Settle It",
-            body: "Replace the top from the Brick City stock, or credit the customer. Either needs the driver's delivery photos checked first to see whether the crack was there at handover.",
+            body: "Replace the top from the Build City stock, or credit the customer. Either needs the driver's delivery photos checked first to see whether the crack was there at handover.",
           },
         ],
         actions: [],

@@ -82,7 +82,7 @@ const FILTER_FIELDS: FilterField[] = [
   { key: "region", label: "Region", type: "select", options: REGION_OPTIONS },
   { key: "reference", label: "Reference Code", type: "text", valuePlaceholder: "PROJ-…" },
   { key: "brandContact", label: "Brand Contact", type: "select", options: BRAND_CONTACT_OPTIONS },
-  { key: "brickContact", label: "Brick Contact", type: "select", options: BRICK_CONTACT_OPTIONS },
+  { key: "brickContact", label: "Build Contact", type: "select", options: BRICK_CONTACT_OPTIONS },
   { key: "startFrom", label: "Start from Date", type: "date" },
   { key: "startTo", label: "Start to Date", type: "date" },
   { key: "endFrom", label: "End from Date", type: "date" },

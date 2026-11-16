@@ -175,6 +175,10 @@ function SopPage({ sop }: { sop: Sop }) {
                 {canStop ? "Stop runs" : "Resume runs"}
               </button>
             )}
+            <Link to={`/internal-ops/sops/${sop.id}/versions/${sop.version}?view=graph`} className={BTN}>
+              <Workflow className="h-4 w-4" strokeWidth={2} aria-hidden />
+              View graph
+            </Link>
             <Link to={`/internal-ops/sops/${sop.id}/versions/${sop.version}`} className={BTN_PRIMARY}>
               <Pencil className="h-4 w-4" strokeWidth={2} aria-hidden />
               Edit

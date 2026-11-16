@@ -172,7 +172,7 @@
       "title": "Check how the brand's rates are set up",
       "owner": "Account manager",
       "trigger": "Open tasks have been chased, or there were none.",
-      "work": "Open the brand's page in Portal and check whether they are on Brick's default work order kinds, custom kinds, or a rate sheet. The greyed-out list under New Kind tells you the brand is on default kinds; that is a hint, not proof that every charge is right. This check goes away for a brand once they move to the rate sheet.",
+      "work": "Open the brand's page in Portal and check whether they are on Build's default work order kinds, custom kinds, or a rate sheet. The greyed-out list under New Kind tells you the brand is on default kinds; that is a hint, not proof that every charge is right. This check goes away for a brand once they move to the rate sheet.",
       "where": "Portal",
       "actions": [
         {
@@ -258,7 +258,7 @@
           "kind": "read",
           "status": "missing",
           "args": "operator_id, task_id",
-          "gap": "Operator trackers live in each operator's own spreadsheet. Nothing Brick-side can read them, so a person opens the tracker today."
+          "gap": "Operator trackers live in each operator's own spreadsheet. Nothing Build-side can read them, so a person opens the tracker today."
         }
       ],
       "next": [
@@ -330,7 +330,7 @@
           "kind": "read",
           "status": "missing",
           "args": "query",
-          "gap": "Granola is not wired into Brick. The document asks for it, so the step is written as if it were; today a person reads the notes."
+          "gap": "Granola is not wired into Build. The document asks for it, so the step is written as if it were; today a person reads the notes."
         },
         {
           "tool": "stella.summarize_evidence",

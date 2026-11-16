@@ -328,7 +328,7 @@ const createSopTask: StellaTask = {
             text:
               `Every section of the document now carries the calls it will make — they sit in the gutter beside the prose they were read out of, so you can check my reading against your words.\n\n${missing.length} of the ${actions.length} have no tool behind them:\n\n${missing
                 .map((a) => `• \`${a.tool}\` — ${a.gap}`)
-                .join("\n")}\n\nI've left all four in the document marked missing rather than dropping the steps. Each one is a real gap in what Brick can do, and the aggregate analysis view collects them so they can be worked rather than rediscovered every sweep.`,
+                .join("\n")}\n\nI've left all four in the document marked missing rather than dropping the steps. Each one is a real gap in what Build can do, and the aggregate analysis view collects them so they can be worked rather than rediscovered every sweep.`,
           },
         },
       ],
@@ -346,7 +346,7 @@ const createSopTask: StellaTask = {
             kind: "tool",
             tool: "brick.sops.publish",
             args: `id=${SOP_ID}, status=draft`,
-            result: `v1 published · ${steps.length} steps · scoped Brick-wide`,
+            result: `v1 published · ${steps.length} steps · scoped Build-wide`,
             ok: true,
           },
         },
@@ -364,7 +364,7 @@ const createSopTask: StellaTask = {
             kind: "artifact",
             sopId: SOP_ID,
             title: sop?.name ?? "Work Order Finalization: Project-Based Customers",
-            summary: `${steps.length} steps · ${decisions.length} decisions · ${actions.length} tool calls · ${missing.length} needing a tool Brick does not have`,
+            summary: `${steps.length} steps · ${decisions.length} decisions · ${actions.length} tool calls · ${missing.length} needing a tool Build does not have`,
             status: "Draft",
           },
         },

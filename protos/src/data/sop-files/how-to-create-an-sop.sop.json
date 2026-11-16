@@ -13,7 +13,7 @@
   "owner": "Sam Kernan-Schloss",
   "escalationContact": "Sam Kernan-Schloss",
   "trigger": "You just did (or are about to do) a process nobody else knows how to run, or someone asked you \"how do I do X\" for the second time.",
-  "purpose": "Processes that live in one person's head break when that person is out. This is how every Automation at Brick gets made: narrate the real process to Claude with the sop-creator skill installed. Nobody fills out a template by hand.",
+  "purpose": "Processes that live in one person's head break when that person is out. This is how every Automation at Build gets made: narrate the real process to Claude with the sop-creator skill installed. Nobody fills out a template by hand.",
   "doneWhen": "The Automation is live in the Automation Hub with your name at the top, and the link is in the relevant Slack channel if others run the process.",
   "timeToRun": "10 to 15 minutes",
   "tags": [],

@@ -291,7 +291,7 @@ export function StellaComposer({
 function LockedBrand({ brandId }: { brandId: string | null }) {
   const brand = brandId ? getBrand(brandId) : undefined;
   return (
-    <span className="inline-flex items-center gap-1.5 text-sm font-medium" title={brand ? `Scoped to ${brand.name}` : "Brick-wide"}>
+    <span className="inline-flex items-center gap-1.5 text-sm font-medium" title={brand ? `Scoped to ${brand.name}` : "Build-wide"}>
       <span className="inline-flex items-center gap-1.5 rounded-md bg-slate-100 px-2 py-1 text-slate-600">
         <span className="h-2.5 w-2.5 shrink-0 rounded-[3px]" style={{ background: brand?.color ?? "#e2e8f0" }} aria-hidden />
         {brand?.name ?? "All brands"}

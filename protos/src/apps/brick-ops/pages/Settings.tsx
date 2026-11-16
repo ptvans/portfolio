@@ -75,7 +75,7 @@ export function Settings() {
             className="mt-2 h-[52px] w-full rounded-[18px] border border-white/15 bg-[#0d0d0f] px-4 text-lg text-white focus:border-[#6ea8ff] focus:outline-none"
           />
           <p className="mt-2 text-sm leading-snug text-white/45">
-            What you call your agent across Brick Ops. Picking an avatar sets its name; change it any time.
+            What you call your agent across Build Ops. Picking an avatar sets its name; change it any time.
           </p>
           <div className="mt-4 flex">
             <PillButton primary disabled={!changed} onClick={save}>

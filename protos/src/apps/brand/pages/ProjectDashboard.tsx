@@ -107,7 +107,7 @@ export function ProjectDashboard({
           <p className="mt-1.5 text-sm text-slate-700">{project.description}</p>
           <div className="mt-5 flex flex-wrap" style={{ columnGap: "4rem", rowGap: "1rem" }}>
             <Field value={dateRange(project.startDate, project.endDate)} label="Dates" />
-            <Field value={project.brickContact} label="Brick Contact" />
+            <Field value={project.brickContact} label="Build Contact" />
             <Field value="n/a" label="AnotherVariable" />
           </div>
         </div>

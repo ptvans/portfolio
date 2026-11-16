@@ -1,16 +1,19 @@
 {
   "$schema": "../../../docs/sop-file.schema.json",
   "id": "sop-brick-brand-slack-workspace",
-  "name": "Setting Up a Brick x Brand Slack Workspace",
+  "name": "Setting Up a Build x Brand Slack Workspace",
   "status": "active",
   "version": 1,
-  "scope": { "brandId": null, "customer": "Internal" },
+  "scope": {
+    "brandId": null,
+    "customer": "Internal"
+  },
   "team": "Cross-team",
   "sopType": "internal",
   "owner": "Toni Callahan",
   "escalationContact": "Sam Kernan-Schloss (Slack admin)",
-  "trigger": "An Account Manager needs a new Slack workspace for a Brick x Brand client relationship.",
-  "purpose": "Creates a Brick x Brand client Slack workspace nested inside Brick Dynamics' Enterprise Grid. Two things go wrong otherwise: a workspace created from personal Slack is standalone and invisible to the org directory, and external contacts invited to the default general channel do not work. This is the correct process, start to finish.",
+  "trigger": "An Account Manager needs a new Slack workspace for a Build x Brand client relationship.",
+  "purpose": "Creates a Build x Brand client Slack workspace nested inside Build Dynamics' Enterprise Grid. Two things go wrong otherwise: a workspace created from personal Slack is standalone and invisible to the org directory, and external contacts invited to the default general channel do not work. This is the correct process, start to finish.",
   "doneWhen": "The workspace shows up nested at brickdynamics.enterprise.slack.com and external contacts were invited to the brick-[brandname] channel, not general.",
   "timeToRun": "About 5 minutes to submit, plus admin approval wait",
   "tags": [],
@@ -29,8 +32,14 @@
       "work": "Go to brickdynamics.enterprise.slack.com, scroll to the bottom to \"Can't find your workspace? … ask your admins to create a new workspace\", click it and submit a request under the brand's name. Never use Slack's general Create a New Workspace option from personal Slack.",
       "where": "brickdynamics.enterprise.slack.com",
       "when": "About 5 minutes",
-      "rules": ["Never create the workspace from personal Slack's Create a New Workspace option."],
-      "next": [{ "to": "approve" }]
+      "rules": [
+        "Never create the workspace from personal Slack's Create a New Workspace option."
+      ],
+      "next": [
+        {
+          "to": "approve"
+        }
+      ]
     },
     {
       "id": "approve",
@@ -42,7 +51,11 @@
       "where": "Slack admin console",
       "when": "As requests come in",
       "doneWhen": "The workspace is visible in the org's Workspace Directory.",
-      "next": [{ "to": "channel" }]
+      "next": [
+        {
+          "to": "channel"
+        }
+      ]
     },
     {
       "id": "channel",
@@ -51,8 +64,14 @@
       "trigger": "The approved workspace is visible with its default general channel.",
       "work": "Inside the new workspace create a new channel named brick-[brandname], for example brick-bridgeway. Do not rename general.",
       "where": "Slack",
-      "rules": ["Do not rename general to brick-[brand]; create a dedicated channel."],
-      "next": [{ "to": "invite" }]
+      "rules": [
+        "Do not rename general to brick-[brand]; create a dedicated channel."
+      ],
+      "next": [
+        {
+          "to": "invite"
+        }
+      ]
     },
     {
       "id": "invite",
@@ -61,7 +80,11 @@
       "trigger": "The brick-[brandname] channel exists.",
       "work": "Invite the external client contacts to the brick-[brandname] channel specifically, not to general.",
       "where": "Slack",
-      "next": [{ "to": "verify" }]
+      "next": [
+        {
+          "to": "verify"
+        }
+      ]
     },
     {
       "id": "verify",
@@ -72,8 +95,14 @@
       "work": "Check two things: the workspace shows up nested at brickdynamics.enterprise.slack.com rather than in your personal My Workspaces list, and external contacts were invited to brick-[brandname], not general.",
       "verification": "human",
       "next": [
-        { "to": "done", "label": "All yes" },
-        { "to": "confirm-sam", "label": "Any no" }
+        {
+          "to": "done",
+          "label": "All yes"
+        },
+        {
+          "to": "confirm-sam",
+          "label": "Any no"
+        }
       ]
     },
     {
@@ -84,7 +113,12 @@
       "trigger": "Either check failed, or a standalone workspace was created by mistake.",
       "work": "Don't invite anyone yet. If a standalone workspace was created with little activity, delete it and redo the steps. If people are already active in it, ask Sam about migrating the workspace into the org, which preserves members. If unsure whether the request went through, check with Sam directly.",
       "where": "Slack DM",
-      "next": [{ "to": "request", "label": "Redo" }]
+      "next": [
+        {
+          "to": "request",
+          "label": "Redo"
+        }
+      ]
     }
   ]
 }

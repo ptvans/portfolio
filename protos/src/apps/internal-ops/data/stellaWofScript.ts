@@ -60,7 +60,7 @@ const chase: SopProposal = {
 const finalize: SopProposal = {
   name: FINALIZE,
   summary:
-    "Runs on a schedule and routes to a person unfinalized work orders with a recorded finalization proposal awaiting a Brick operator's approval and current-gate recheck; a Brick operator acts.",
+    "Runs on a schedule and routes to a person unfinalized work orders with a recorded finalization proposal awaiting a Build operator's approval and current-gate recheck; a Build operator acts.",
   note: "Irreversible, so a person confirms each one.",
   steps: ["Step 9: Finalize each work order that is fully complete"],
 };
@@ -92,12 +92,12 @@ const CHASE_ANSWERS = `Answers for ${CHASE} (Automation 2 of 3):`;
 const sweepFirst = card("q-sweep-1", SWEEP_HEADING, SWEEP_ANSWERS, [
   q({
     key: "owner.finalization-sweep",
-    text: "Which named Brick teammate is accountable for the finalization sweep?",
+    text: "Which named Build teammate is accountable for the finalization sweep?",
     quote: "[TBD - no permanent owner assigned yet]",
     consequence: "The sweep cannot have a human owner.",
     options: [
       { label: "Brand account owner", value: "The named account owner (AM) for each Brand" },
-      { label: "Brick operator", value: "A named Brick operator" },
+      { label: "Build operator", value: "A named Build operator" },
     ],
   }),
   q({
@@ -151,8 +151,8 @@ const sweepSecond = card("q-sweep-2", SWEEP_HEADING, SWEEP_ANSWERS, [
   q({
     key: "pricing-record.finalization-sweep",
     text: "Should the charge check use each task kind's charge configs instead of the page's default/custom/brand-rate-sheet classification?",
-    quote: "Open the brand's page in portal and check whether they are on Brick's default work order kinds, custom kinds, or a rate sheet.",
-    consequence: "That classification is not a Brick field and brand rate sheets have no read tool.",
+    quote: "Open the brand's page in portal and check whether they are on Build's default work order kinds, custom kinds, or a rate sheet.",
+    consequence: "That classification is not a Build field and brand rate sheets have no read tool.",
     options: [
       { label: "Read task-kind charge configs and actual charges.", value: "Read task-kind charge configs and actual charges." },
       { label: "Brand variable", value: "Ask for each Brand's rate setup as a brand variable." },
@@ -178,7 +178,7 @@ const sweepSecond = card("q-sweep-2", SWEEP_HEADING, SWEEP_ANSWERS, [
     key: "scope.finalization-sweep",
     text: "Should project-based selection mean work orders with projectId set?",
     quote: "Project-based customers.",
-    consequence: "Brick has no separate project-based-customer field.",
+    consequence: "Build has no separate project-based-customer field.",
     options: [
       { label: "Select work orders whose projectId is not null.", value: "Select work orders whose projectId is not null." },
       { label: "Different record condition", value: "Select project-based work orders by a different record condition." },
@@ -247,12 +247,12 @@ const chaseFirst = card("q-chase-1", CHASE_HEADING, CHASE_ANSWERS, [
 const chaseSecond = card("q-chase-2", CHASE_HEADING, CHASE_ANSWERS, [
   q({
     key: "owner.overdue-task-chase",
-    text: `Which named Brick teammate is accountable for ${CHASE}?`,
+    text: `Which named Build teammate is accountable for ${CHASE}?`,
     quote: "[TBD - no permanent owner assigned yet]",
     consequence: "The chase has no accountable human owner.",
     options: [
       { label: AM, value: "The Brand's named account owner (AM)." },
-      { label: "Brick operator", value: "A named Brick operator." },
+      { label: "Build operator", value: "A named Build operator." },
     ],
     suggested: 0,
   }),
@@ -263,7 +263,7 @@ const chaseSecond = card("q-chase-2", CHASE_HEADING, CHASE_ANSWERS, [
     consequence: "The no-reply path cannot finish.",
     options: [
       { label: AM, value: "Send it to the Brand's account owner (AM)." },
-      { label: "Brick operator", value: "Send it to a named Brick operator." },
+      { label: "Build operator", value: "Send it to a named Build operator." },
     ],
     suggested: 0,
   }),
@@ -295,18 +295,18 @@ const finalizeQuestions = card(
   [
     q({
       key: "authority.finalize-approved-work-order",
-      text: "Which Brick teammate may approve and click Finalize after re-verifying the work order?",
+      text: "Which Build teammate may approve and click Finalize after re-verifying the work order?",
       quote: "Finalize each one that clears the checklist below.",
       consequence: "The irreversible action has no identified human authority.",
       options: [
         { label: AM, value: "The Brand's named account owner (AM)." },
-        { label: "Brick operator", value: "A named Brick operator." },
+        { label: "Build operator", value: "A named Build operator." },
       ],
       suggested: 0,
     }),
     q({
       key: "recovery.finalize-approved-work-order",
-      text: "If Finalize locks an incorrect charge, should the Brick teammate send the work-order link and error to the account owner (AM) for a credit memo?",
+      text: "If Finalize locks an incorrect charge, should the Build teammate send the work-order link and error to the account owner (AM) for a credit memo?",
       quote: "[TBD - confirm the correction path]",
       consequence: "The irreversible-error path is incomplete.",
       options: [
@@ -318,7 +318,7 @@ const finalizeQuestions = card(
     q({
       key: "cadence.finalize-approved-work-order",
       text: `How often should “${FINALIZE}” run?`,
-      consequence: "Sets how often the engine runs this Automation; Brick sets the run time (16:00 UTC). Nothing on the page states it.",
+      consequence: "Sets how often the engine runs this Automation; Build sets the run time (16:00 UTC). Nothing on the page states it.",
       options: [
         { label: "Weekdays", value: "weekdays" },
         { label: "Daily", value: "daily" },
@@ -331,7 +331,7 @@ const finalizeQuestions = card(
     sop: {
       ...finalize,
       summary:
-        "Runs on a schedule and routes to a person unfinalized work orders proposed as clean by the project finalization sweep and routed for a Brick teammate's approval; a Brick operator acts.",
+        "Runs on a schedule and routes to a person unfinalized work orders proposed as clean by the project finalization sweep and routed for a Build teammate's approval; a Build operator acts.",
       steps: ["Step 9: Re-verify and finalize an approved work order"],
     },
   },
@@ -414,7 +414,7 @@ export const wofTask: StellaTask = {
   chipPrompt: STELLA_WOF_PROMPT,
   route: /\bcreate (an? )?sops? from\b/i,
   progress: [
-    { label: "Read the page", detail: "Check it against Brick data and split it into Automations" },
+    { label: "Read the page", detail: "Check it against Build data and split it into Automations" },
     { label: "Automation 1, first questions", detail: SWEEP },
     { label: "Automation 1, more questions", detail: SWEEP },
     { label: "Automation 2, first questions", detail: CHASE },
@@ -436,10 +436,10 @@ export const wofTask: StellaTask = {
           after: 1600,
           entry: {
             kind: "agent",
-            text: "I’m switching to the Automation builder now; it will read the page, check it against Brick data, and ask a few questions.",
+            text: "I’m switching to the Automation builder now; it will read the page, check it against Build data, and ask a few questions.",
           },
         },
-        { after: 2000, status: "Reading the page and checking it against Brick data", holds: 2600 },
+        { after: 2000, status: "Reading the page and checking it against Build data", holds: 2600 },
         {
           after: 2600,
           entry: {
@@ -455,7 +455,7 @@ export const wofTask: StellaTask = {
           entry: {
             kind: "tool",
             tool: "brickos.work_orders.sample",
-            args: "finalized=false, scope=Brick-wide",
+            args: "finalized=false, scope=Build-wide",
             result: "Kinds: event ops, storage, kitting, shipping and receiving, will call, ad hoc · charge configs per task kind",
             ok: true,
           },
@@ -493,7 +493,7 @@ export const wofTask: StellaTask = {
             kind: "agent",
             heading: "Not in any Automation",
             text:
-              "• Dropped step 1 (Open the brand on the finalization page): portal navigation adds no check; Stella reads work order records directly.\n• Step 4 (Check how the brand's rates are set up) is a brand variable, not a step: the page identifies rate setup as a brand variable; its default/custom/rate-sheet classification is not a reliable Brick field.",
+              "• Dropped step 1 (Open the brand on the finalization page): portal navigation adds no check; Stella reads work order records directly.\n• Step 4 (Check how the brand's rates are set up) is a brand variable, not a step: the page identifies rate setup as a brand variable; its default/custom/rate-sheet classification is not a reliable Build field.",
           },
         },
         {
@@ -502,7 +502,7 @@ export const wofTask: StellaTask = {
             kind: "agent",
             heading: "What the data showed",
             text:
-              "• “NEVER finalize a work order that still has an in-progress or overdue task. Finalization cannot be undone, so that task's charge is gone.” (step 2): could not be checked; not recorded in the fixture.\n• “Every task is complete. Nothing in progress, nothing overdue.” (step 9): could not be checked; not recorded in the fixture.\n• “Finalize each one that clears the checklist below.” (step 9): could not be checked; not recorded in the fixture.\n• The proposed default/custom/brand-rate-sheet test cannot determine pricing: Brick pricing uses charge configs per task kind and their versions; the available rate sheets are for NOs.\n• The event-ops band does not cover the work order kinds present in the Brick-wide sample.\n• The reviewer's Acknowledgement example makes an unconditional completed-task charge rule unsafe.\n\nOutside Brick, left out: the network operator's own tracker (steps 6, 7). Stella has no connection to it, so the Automation runs on Brick records and connected apps and says so.",
+              "• “NEVER finalize a work order that still has an in-progress or overdue task. Finalization cannot be undone, so that task's charge is gone.” (step 2): could not be checked; not recorded in the fixture.\n• “Every task is complete. Nothing in progress, nothing overdue.” (step 9): could not be checked; not recorded in the fixture.\n• “Finalize each one that clears the checklist below.” (step 9): could not be checked; not recorded in the fixture.\n• The proposed default/custom/brand-rate-sheet test cannot determine pricing: Build pricing uses charge configs per task kind and their versions; the available rate sheets are for NOs.\n• The event-ops band does not cover the work order kinds present in the Build-wide sample.\n• The reviewer's Acknowledgement example makes an unconditional completed-task charge rule unsafe.\n\nOutside Build, left out: the network operator's own tracker (steps 6, 7). Stella has no connection to it, so the Automation runs on Build records and connected apps and says so.",
           },
         },
         {
@@ -729,7 +729,7 @@ export const wofTask: StellaTask = {
         id: "draft-finalize-approved-work-order",
         name: FINALIZE,
         status: status("finalize-approved-work-order", finalizeDone),
-        attributes: attributes("finalize-approved-work-order", "Brick operator, confirms each"),
+        attributes: attributes("finalize-approved-work-order", "Build operator, confirms each"),
         raw: [pageStep("finalize")],
         compiled: finalizeDone
           ? [

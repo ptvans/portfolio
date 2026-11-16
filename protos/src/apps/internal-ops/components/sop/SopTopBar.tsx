@@ -13,7 +13,7 @@ export function SopTopBar() {
     <header className="flex h-10 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-4">
       <Link to="/internal-ops" className="flex items-center gap-2">
         <img src={logoMark} alt="" className="h-5 w-5" />
-        <span className="text-sm font-bold tracking-wide text-brand-900">BRICK</span>
+        <span className="text-sm font-bold tracking-wide text-brand-900">BUILD</span>
       </Link>
       <div className="flex items-center gap-3 text-xs text-slate-600">
         <CircleHelp className="h-4 w-4 text-slate-400" strokeWidth={2} />

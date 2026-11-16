@@ -1,7 +1,7 @@
 {
   "$schema": "../../../docs/sop-file.schema.json",
   "id": "sop-brick-brand-master-playbook",
-  "name": "Brick x Brand Master Playbook",
+  "name": "Build x Brand Master Playbook",
   "status": "active",
   "version": 1,
   "scope": {
@@ -98,7 +98,7 @@
       "title": "Phase 3: Set up the Slack channel",
       "owner": "Account Manager",
       "trigger": "Immediately after the kickoff call.",
-      "work": "Create #brick-[brandname], post a pinned message with channel norms, invite brand contacts and internal Brick team members. Single vs two-channel structure is still to be confirmed. See the Slack workspace Automation for the Enterprise Grid mechanics.",
+      "work": "Create #brick-[brandname], post a pinned message with channel norms, invite brand contacts and internal Build team members. Single vs two-channel structure is still to be confirmed. See the Slack workspace Automation for the Enterprise Grid mechanics.",
       "where": "Slack",
       "next": [
         {

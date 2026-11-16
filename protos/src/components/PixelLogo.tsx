@@ -22,7 +22,7 @@ const SQUARES = GRID.flatMap((row, r) => [...row].map((cell, c) => ({ r, c, lit:
 
 export function PixelLogo({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 360 360" className={`pixel-logo ${className ?? ""}`} role="img" aria-label="Brick" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 360 360" className={`pixel-logo ${className ?? ""}`} role="img" aria-label="Build" xmlns="http://www.w3.org/2000/svg">
       <rect width="360" height="360" rx="80" fill="#3D38B8" />
       {SQUARES.map(({ r, c, lit }) => (
         <rect

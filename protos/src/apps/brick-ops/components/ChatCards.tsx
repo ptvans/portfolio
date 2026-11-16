@@ -15,7 +15,7 @@ export function BrandMark({ brandId, size = 48 }: { brandId: string | null; size
   const brand = brandId ? getBrand(brandId) : undefined;
   const style = { width: size, height: size };
   if (!brand) {
-    return <img src="./logo.svg" alt="Brick" style={style} className="shrink-0 rounded-full" />;
+    return <img src="./logo.svg" alt="Build" style={style} className="shrink-0 rounded-full" />;
   }
   return (
     <span

@@ -11,8 +11,8 @@
   "team": "Cross-team",
   "sopType": "internal",
   "owner": "Leadership (unassigned in Automation Hub)",
-  "trigger": "Any Brick Dynamics employee identifies a potential issue they want to report anonymously.",
-  "purpose": "A company-wide channel that lets anyone at Brick Dynamics report a concern anonymously, with confidential handling. The source page is a reference link, not a step-by-step process; the receiving side is not documented.",
+  "trigger": "Any Build Dynamics employee identifies a potential issue they want to report anonymously.",
+  "purpose": "A company-wide channel that lets anyone at Build Dynamics report a concern anonymously, with confidential handling. The source page is a reference link, not a step-by-step process; the receiving side is not documented.",
   "doneWhen": "The concern has been submitted through the form and received for confidential handling.",
   "tags": [],
   "source": {

@@ -350,13 +350,13 @@ export function AlertRuleEditor() {
               value={testInput}
               onChange={(e) => setTestInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && runTest()}
-              placeholder="Paste a portal URL or Brick id"
+              placeholder="Paste a portal URL or Build id"
               disabled={!processed}
               className={`${selectClass} w-full disabled:bg-slate-50`}
             />
             {testInvalid && (
               <p className="mt-1 text-xs text-red-600">
-                Enter a Brick work order id (like {exampleIds[0] ?? "wo-cw-1"}) or a portal URL. External ids aren't supported yet.
+                Enter a Build work order id (like {exampleIds[0] ?? "wo-cw-1"}) or a portal URL. External ids aren't supported yet.
               </p>
             )}
             {testTarget && (

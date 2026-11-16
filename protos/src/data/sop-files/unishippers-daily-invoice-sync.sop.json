@@ -4,7 +4,10 @@
   "name": "Daily Invoice Sync: Unishippers Cost Logging",
   "status": "active",
   "version": 1,
-  "scope": { "brandId": null, "customer": "Internal" },
+  "scope": {
+    "brandId": null,
+    "customer": "Internal"
+  },
   "team": "Finance",
   "sopType": "internal",
   "owner": "Sam Kernan-Schloss",
@@ -12,7 +15,9 @@
   "trigger": "New Unishippers freight or parcel invoice PDFs land in the Drive drop folder (checked daily).",
   "purpose": "Get every Unishippers freight and parcel invoice off the Drive drop folder and into BrickOS as a cost on the right customer, same business day, no missed bills, no double entry. Replaces the manual download-eyeball-type workflow with an automated daily sync into a Notion tracker.",
   "doneWhen": "Every row in the Invoice Tracker for the day is Logged in BrickOS against the right customer, with Customer Invoiced checked.",
-  "tags": ["Finance & Invoicing"],
+  "tags": [
+    "Finance & Invoicing"
+  ],
   "source": {
     "system": "notion",
     "url": "https://app.notion.com/p/3db71cfae62e81c7a0dad782e683a430",
@@ -31,7 +36,11 @@
       "when": "Daily",
       "verification": "automated",
       "autonomy": 4,
-      "next": [{ "to": "parse" }]
+      "next": [
+        {
+          "to": "parse"
+        }
+      ]
     },
     {
       "id": "parse",
@@ -41,10 +50,16 @@
       "work": "Each PDF becomes one Notion row per shipment (movement) plus separate rows for adjustments such as late fees or accessorial corrections. Rows are deduped by Drive File ID so the same invoice never ingests twice. Rows land pre-filled with Ship Date, Invoice Date, Invoice #, PRO/BOL #, Origin, Destination, Reference #, Amount and a Drive link.",
       "actor": "automation",
       "where": "Invoice Tracker (Notion)",
-      "rules": ["Dedupe by Drive File ID."],
+      "rules": [
+        "Dedupe by Drive File ID."
+      ],
       "verification": "automated",
       "autonomy": 4,
-      "next": [{ "to": "guess-customer" }]
+      "next": [
+        {
+          "to": "guess-customer"
+        }
+      ]
     },
     {
       "id": "guess-customer",
@@ -52,12 +67,18 @@
       "title": "Can the bot identify the customer?",
       "owner": "Sam Kernan-Schloss",
       "trigger": "A row was created.",
-      "work": "The bot guesses Customer in priority order: the Reference # field (e.g. EngageMD trunk → EngageMD), a BRICK DYNAMICS /<BRAND> tag on Shipper or Receiver, then a standalone brand name on Shipper or Receiver.",
+      "work": "The bot guesses Customer in priority order: the Reference # field (e.g. EngageMD trunk → EngageMD), a BUILD DYNAMICS /<BRAND> tag on Shipper or Receiver, then a standalone brand name on Shipper or Receiver.",
       "actor": "automation",
       "autonomy": 3,
       "next": [
-        { "to": "slack-summary", "label": "Confident → Status New" },
-        { "to": "needs-customer", "label": "Not confident" }
+        {
+          "to": "slack-summary",
+          "label": "Confident → Status New"
+        },
+        {
+          "to": "needs-customer",
+          "label": "Not confident"
+        }
       ]
     },
     {
@@ -68,7 +89,11 @@
       "work": "The row lands with Status = Needs Customer (orange) and a Notes hint listing Reference, Shipper and Receiver. If movement totals plus adjustments differ from the header Amount Due by more than $0.01, the discrepancy is flagged in the daily Slack post for the Ops Lead to reconcile.",
       "actor": "automation",
       "autonomy": 4,
-      "next": [{ "to": "slack-summary" }]
+      "next": [
+        {
+          "to": "slack-summary"
+        }
+      ]
     },
     {
       "id": "slack-summary",
@@ -79,7 +104,11 @@
       "actor": "automation",
       "where": "Slack #ops-int-team",
       "autonomy": 4,
-      "next": [{ "to": "am-triage" }]
+      "next": [
+        {
+          "to": "am-triage"
+        }
+      ]
     },
     {
       "id": "am-triage",
@@ -89,7 +118,11 @@
       "work": "Open the Invoice Tracker and filter to Status = New or Status = Needs Customer. Work every row assigned to your brand portfolio. Target: tracker clean by end of day the invoice posts.",
       "where": "Invoice Tracker (Notion)",
       "when": "Every morning, clean by EOD",
-      "next": [{ "to": "verify-row" }]
+      "next": [
+        {
+          "to": "verify-row"
+        }
+      ]
     },
     {
       "id": "verify-row",
@@ -97,11 +130,17 @@
       "title": "Does the PDF match, and can you identify the brand?",
       "owner": "Account Managers",
       "trigger": "A row in your portfolio needs work.",
-      "work": "Open the embedded PDF and verify it matches the parsed data. For a multi-customer invoice keep one row per movement and assign each independently. If the invoice should not have been billed to Brick at all, set Status = Disputed and tag @Sam instead of logging.",
+      "work": "Open the embedded PDF and verify it matches the parsed data. For a multi-customer invoice keep one row per movement and assign each independently. If the invoice should not have been billed to Build at all, set Status = Disputed and tag @Sam instead of logging.",
       "verification": "human",
       "next": [
-        { "to": "log-cost", "label": "Yes" },
-        { "to": "tag-sam", "label": "Can't ID the brand" }
+        {
+          "to": "log-cost",
+          "label": "Yes"
+        },
+        {
+          "to": "tag-sam",
+          "label": "Can't ID the brand"
+        }
       ]
     },
     {
@@ -112,7 +151,11 @@
       "trigger": "The brand cannot be identified from the PDF, or a Reference # pattern is consistently mis-mapping.",
       "work": "Tag @Sam on the row. Sam identifies the customer or fixes the mapping, then the AM continues.",
       "where": "Invoice Tracker comments",
-      "next": [{ "to": "log-cost" }]
+      "next": [
+        {
+          "to": "log-cost"
+        }
+      ]
     },
     {
       "id": "log-cost",
@@ -121,9 +164,15 @@
       "trigger": "The row is verified and the customer known.",
       "work": "Set Customer if needed, set Account Manager = yourself, log the cost against the customer in BrickOS and check Customer Invoiced. Adjustment rows are handled the same way. If disputing an amount, still set Status to Logged in BrickOS (Unishippers gets paid first) and open a row in the Dispute Tracker referencing the invoice #; escalate quote mismatches to Finance.",
       "where": "BrickOS",
-      "rules": ["Never log the same invoice twice; a re-issued invoice under a new PDF goes to the Ops Lead."],
+      "rules": [
+        "Never log the same invoice twice; a re-issued invoice under a new PDF goes to the Ops Lead."
+      ],
       "verification": "human",
-      "next": [{ "to": "done" }]
+      "next": [
+        {
+          "to": "done"
+        }
+      ]
     }
   ]
 }

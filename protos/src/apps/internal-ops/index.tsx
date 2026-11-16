@@ -65,7 +65,7 @@ function InternalOpsShell() {
   }
   return (
     <AppShell
-      personaLabel="Brick Internal Ops"
+      personaLabel="Build Internal Ops"
       personaSubtitle="Superuser"
       accent="brand"
       navItems={internalOpsNavItems}

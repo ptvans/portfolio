@@ -30,7 +30,7 @@ export function NetworkOperators() {
     <div>
       <PageHeader
         title="Network Operators"
-        description="Every local partner executing jobs on the Brick network."
+        description="Every local partner executing jobs on the Build network."
       />
 
       {rows.length === 0 ? (

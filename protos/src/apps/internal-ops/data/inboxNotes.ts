@@ -359,7 +359,7 @@ export const inboxNotes: InboxNote[] = [
   {
     id: "note-access-autolane-brick",
     type: "sop",
-    title: "No Brick access to Autolane Austin's October 19–20 shift charges",
+    title: "No Build access to Autolane Austin's October 19–20 shift charges",
     body: "The shift charges are on records Stella can't read, so the two days can't be checked or billed.",
     from: "Stella",
     ask: "Take action on",

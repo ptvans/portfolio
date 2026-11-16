@@ -24,7 +24,7 @@ export function Brands() {
 
   return (
     <div>
-      <PageHeader title="Brands" description="Every brand running jobs on the Brick network." />
+      <PageHeader title="Brands" description="Every brand running jobs on the Build network." />
 
       {rows.length === 0 ? (
         <EmptyState icon={Boxes} title="No brands yet" />

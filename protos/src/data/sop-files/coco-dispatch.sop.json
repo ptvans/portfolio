@@ -13,7 +13,7 @@
   "owner": "Bryan Hanley",
   "escalationContact": "Dispatch lead",
   "trigger": "The deployment window opens for the market. The shift has three phases: deployment in the morning, field operations all day, undeployment at night.",
-  "purpose": "Robot pays for Usable Supply Hours, the time robots are parked at a merchant and able to take orders. A robot at 15% battery, holding food, stuck, or parked at the wrong merchant earns zero USH. Dispatch is the loop that keeps the fleet healthy and parked where it can take orders. A bad dispatcher does not just miss tasks, they burn USH by deploying to the wrong restaurant or pulling a robot off an active delivery. Scope: Robot, all markets, Brick dispatch team.",
+  "purpose": "Robot pays for Usable Supply Hours, the time robots are parked at a merchant and able to take orders. A robot at 15% battery, holding food, stuck, or parked at the wrong merchant earns zero USH. Dispatch is the loop that keeps the fleet healthy and parked where it can take orders. A bad dispatcher does not just miss tasks, they burn USH by deploying to the wrong restaurant or pulling a robot off an active delivery. Scope: Robot, all markets, Build dispatch team.",
   "doneWhen": "Undeployment is complete for the market, the field task queue is at zero or every open task has a documented reason, and the handoff is posted in Slack.",
   "timeToRun": "One shift. No fixed window for Robot; shift length and handoff time are TBD.",
   "tags": [
@@ -49,7 +49,7 @@
       "title": "Which kind of market is this?",
       "owner": "Dispatch lead",
       "trigger": "The standing instructions have been read.",
-      "work": "The city sets this, not Robot or Brick, and it does not change without a permit change. A deploy/undeploy market requires every robot indoors overnight, so robots deploy out of the MRO each morning: Chicago and Hoboken. A leave-out market has robots living on the street overnight at rally points or overnight merchants, with no morning deployment: Miami, Jersey City, Washington DC and San Jose. The distinction changes almost every step that follows.",
+      "work": "The city sets this, not Robot or Build, and it does not change without a permit change. A deploy/undeploy market requires every robot indoors overnight, so robots deploy out of the MRO each morning: Chicago and Hoboken. A leave-out market has robots living on the street overnight at rally points or overnight merchants, with no morning deployment: Miami, Jersey City, Washington DC and San Jose. The distinction changes almost every step that follows.",
       "rules": [
         "Know which kind of market you are running before you touch anything."
       ],

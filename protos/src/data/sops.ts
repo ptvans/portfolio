@@ -32,7 +32,7 @@ export const SOP_AUTONOMY_LABELS: Record<1 | 2 | 3 | 4, string> = {
 
 export const SOP_ACTOR_LABELS: Record<SopNode["actors"][number], string> = {
   stella: "Stella",
-  brick_operator: "Brick operator",
+  brick_operator: "Build operator",
   sop_owner: "Automation owner",
   verifier_agent: "Verifier agent",
   network_operator: "Network operator",
@@ -163,7 +163,7 @@ const alNodes: SopNode[] = authored([
     work: "Draft one work order per site per day, named like \"Cherrywood - Fri 8/28\". Each supervisor on each shift is one Supervise Vehicle task with that shift's start time and length. Non-standard dinner shifts get a note saying which shift they are. Every work order lists one Tesla Model Y. Use the Austin region timezone. Flag: notes contradicting the grid, a site appearing or disappearing, supervisor counts or times shifting mid-week, anything the notes call out.",
     ownerName: OWNER,
     actors: ["stella"],
-    hardConstraints: ["Drafts are proposals; nothing is created in Brick at this step."],
+    hardConstraints: ["Drafts are proposals; nothing is created in Build at this step."],
     learnedRules: [
       "Name work orders \"<Site> - <Ddd M/D>\".",
       "Non-standard dinner shifts carry a note naming the shift.",
@@ -184,10 +184,10 @@ const alNodes: SopNode[] = authored([
     kind: "decision",
     title: "Review and approve the plan",
     summary: "Approval is the gate. The owner approves, changes or rejects.",
-    work: "Nothing gets created in Brick without an approved plan. The owner reviews the work orders, the totals and every flag, then approves, changes or rejects.",
+    work: "Nothing gets created in Build without an approved plan. The owner reviews the work orders, the totals and every flag, then approves, changes or rejects.",
     ownerName: OWNER,
     actors: ["sop_owner"],
-    hardConstraints: ["Nothing is created in Brick without an approved plan."],
+    hardConstraints: ["Nothing is created in Build without an approved plan."],
     learnedRules: [],
     successCriteria: "The plan carries an explicit approve, change or reject decision with the owner's name and time.",
     verification: "human",
@@ -209,7 +209,7 @@ const alNodes: SopNode[] = authored([
     actors: ["stella"],
     hardConstraints: ["Create only what was approved.", "Never re-create a work order that already saved."],
     learnedRules: [],
-    successCriteria: "Every approved work order and task exists in Brick once, with ids recorded on the run.",
+    successCriteria: "Every approved work order and task exists in Build once, with ids recorded on the run.",
     verification: "automated_plus_spot_check",
     where: "BrickOS",
     when: "Minutes",
@@ -220,7 +220,7 @@ const alNodes: SopNode[] = authored([
   },
   {
     id: "al-8",
-    trigger: "Work orders were created in Brick.",
+    trigger: "Work orders were created in Build.",
     kind: "step",
     title: "Double check what was created",
     summary: "Someone else checks. Report mismatches, never quietly fix them.",
@@ -264,7 +264,7 @@ const alNodes: SopNode[] = authored([
     kind: "escalation",
     title: "Escalate to the Automation owner",
     summary: "Anything unusual, with everything known so far.",
-    work: "Send the owner everything known so far: an unreadable schedule, a new site, a new kind of shift, missing Autolane records in Brick, or work orders that only partly saved. Resolving the escalation offers a one-click Automation change for the owner to approve.",
+    work: "Send the owner everything known so far: an unreadable schedule, a new site, a new kind of shift, missing Autolane records in Build, or work orders that only partly saved. Resolving the escalation offers a one-click Automation change for the owner to approve.",
     ownerName: OWNER,
     actors: ["stella", "sop_owner"],
     hardConstraints: [],
@@ -283,8 +283,8 @@ const alNodes: SopNode[] = authored([
     trigger: "The network operator has been told the week is ready.",
     kind: "completion",
     title: "Week is ready",
-    summary: "Every shift exists in Brick and the network operator knows.",
-    work: "Every shift on the schedule exists in Brick as a Daily Supervision Shifts work order with the right tasks, the records have been checked against the schedule, and the network operator has been told the week is ready.",
+    summary: "Every shift exists in Build and the network operator knows.",
+    work: "Every shift on the schedule exists in Build as a Daily Supervision Shifts work order with the right tasks, the records have been checked against the schedule, and the network operator has been told the week is ready.",
     ownerName: OWNER,
     actors: ["stella"],
     hardConstraints: [],
@@ -323,7 +323,7 @@ const alBlocks: SopDocBlock[] = [
   {
     id: "al-b-intro",
     heading: "Why this Automation exists",
-    body: "Each week Autolane sends a supervision shift schedule. We turn it into work orders in Brick so the network operator can staff them. Stella does the work; a person approves before anything is created.",
+    body: "Each week Autolane sends a supervision shift schedule. We turn it into work orders in Build so the network operator can staff them. Stella does the work; a person approves before anything is created.",
     nodeId: null,
   },
   {
@@ -349,7 +349,7 @@ const alBlocks: SopDocBlock[] = [
   {
     id: "al-b-esc",
     heading: "Anything unusual",
-    body: "Anything unusual goes to the Automation owner with everything known so far: an unreadable schedule, a new site, a new kind of shift, missing Autolane records in Brick, or work orders that only partly saved.",
+    body: "Anything unusual goes to the Automation owner with everything known so far: an unreadable schedule, a new site, a new kind of shift, missing Autolane records in Build, or work orders that only partly saved.",
     nodeId: "al-escalate",
   },
 ];

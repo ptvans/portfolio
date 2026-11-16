@@ -34,7 +34,7 @@ export function Sops() {
   const { matchedSops, matchedRules } = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return { matchedSops: sops, matchedRules: rules };
-    const brandName = (id: string | null) => (id ? (getBrand(id)?.name ?? "") : "Brick-wide");
+    const brandName = (id: string | null) => (id ? (getBrand(id)?.name ?? "") : "Build-wide");
     return {
       matchedSops: sops.filter((s) => `${s.name} ${brandName(s.brandId)} ${s.trigger} ${s.purpose}`.toLowerCase().includes(q)),
       matchedRules: rules.filter((r) => `${r.name} ${brandName(r.brandId)} ${r.schedule ?? ""}`.toLowerCase().includes(q)),

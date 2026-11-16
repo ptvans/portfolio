@@ -73,7 +73,7 @@ export function BrandSelect({
         >
           <Option
             label="All brands"
-            hint="Brick-wide"
+            hint="Build-wide"
             selected={!brandId}
             onPick={() => {
               onChange(null);

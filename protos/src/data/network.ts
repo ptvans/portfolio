@@ -54,7 +54,7 @@ export const networkOperators: NetworkOperator[] = [
     // prod values (`networkoperator_3e7e21cb-…`); NO contact names are not
     // synthesized — see docs/sample-data-generation.md.
     id: "no-brickcity",
-    name: "Brick City Ops LLC",
+    name: "Build City Ops LLC",
     regionId: "region-newark",
     warehouseIds: ["wh-brickcity-jerseycity"],
     fieldOperatorIds: ["fo-bc-1", "fo-bc-2"],
@@ -90,7 +90,7 @@ export const networkOperators: NetworkOperator[] = [
     // Brick runs Autolane's dispatch itself, so it is the live BRNO on the
     // dispatch region. Members are Brick staff and contractors.
     id: "no-brick-dispatch",
-    name: "Brick Dispatch",
+    name: "Build Dispatch",
     regionId: "region-autolane-dispatch",
     warehouseIds: [],
     fieldOperatorIds: ["fo-bd-1", "fo-bd-2", "fo-bd-3"],

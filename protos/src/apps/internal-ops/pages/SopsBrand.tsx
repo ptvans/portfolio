@@ -67,7 +67,7 @@ export function SopsBrand() {
       <div className="mb-6 flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <h1 className="text-xl font-semibold text-slate-900">Automations</h1>
-          {brand ? <BrandChip name={brand.name} color={brand.color} /> : <span className="text-sm font-semibold text-slate-600">Brick-wide</span>}
+          {brand ? <BrandChip name={brand.name} color={brand.color} /> : <span className="text-sm font-semibold text-slate-600">Build-wide</span>}
         </div>
         {brand && (
           <Link
@@ -85,7 +85,7 @@ export function SopsBrand() {
         </h2>
         {processes.length === 0 ? (
           <p className="rounded-md border border-dashed border-slate-200 px-4 py-3 text-sm text-slate-400">
-            {brand ? `${brand.name} has no standard Automations yet.` : "No Brick-wide standard Automations."}
+            {brand ? `${brand.name} has no standard Automations yet.` : "No Build-wide standard Automations."}
           </p>
         ) : (
           <SopTable sops={processes} />
