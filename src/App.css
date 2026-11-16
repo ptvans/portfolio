@@ -32,21 +32,15 @@ body.light {
 a {
   color: inherit;
   text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-decoration-color: rgba(128, 128, 128, 0.5);
+  /* A thin, faint underline tinted from the link's own color; full on hover. */
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(128, 128, 128, 0.3);
+  text-decoration-color: color-mix(in srgb, currentColor 28%, transparent);
   text-underline-offset: 4px;
   transition: text-decoration-color 0.2s ease;
 }
 
 a:hover {
-  text-decoration-color: currentColor;
-}
-
-body.light a {
-  text-decoration-color: rgba(0, 0, 0, 0.3);
-}
-
-body.light a:hover {
   text-decoration-color: currentColor;
 }
 

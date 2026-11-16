@@ -147,17 +147,14 @@ body.light .content-text {
 .content-text .inline-link {
   color: var(--link-text);
   text-decoration: underline;
-  text-decoration-color: rgba(165, 165, 165, 0.4);
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, currentColor 28%, transparent);
   text-underline-offset: 3px;
   transition: text-decoration-color 0.2s ease;
 }
 
 .content-text .inline-link:hover {
   text-decoration-color: currentColor;
-}
-
-body.light .content-text .inline-link {
-  text-decoration-color: rgba(102, 102, 102, 0.4);
 }
 
 .content-list {
