@@ -42,11 +42,12 @@
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgb(162, 162, 162);
+  color: #ffc9a8; /* light peach */
 }
 
+/* Same peach, deep enough to read on white. */
 body.light .hero-subtitle {
-  color: #666;
+  color: #d9885c;
 }
 
 .pitch-section {
