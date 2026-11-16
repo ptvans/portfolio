@@ -22,8 +22,8 @@ function Home({ theme, toggleTheme }) {
         <section className="pitch-section">
           <h2>Product Design has changed.</h2>
           <p>
-            We have been providing rapid-prototyping in code for the past decade. Thanks to coding
-            models like Opus, we can now prototype 20 times faster.
+            I have been providing rapid-prototyping in code for the past decade. Thanks to coding
+            models like Opus and Sol, we can now prototype 20 times faster. ⚡
           </p>
           <p>
             In a few hours, we can generate multiple new product concepts to test with users, based
@@ -34,7 +34,9 @@ function Home({ theme, toggleTheme }) {
 
         <section className="about-section">
           <h2>About</h2>
-          <p>I have experience in automated and AI / ML workflows, enterprise systems, and data visualization.</p>
+          <p>As a product designer and engineer, I have experience building web and mobile apps across many industries. 
+            These experiences are powered by complex workflows, automation, and AI agents that make things simple and easy to digest. 
+            </p>
           <p>
             I have worked on product teams at{' '}
             <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>, <a href="https://www.uber.com" target="_blank" rel="noopener noreferrer">Uber</a>, <a href="https://www.apple.com" target="_blank" rel="noopener noreferrer">Apple</a>, <a href="https://www.netflix.com" target="_blank" rel="noopener noreferrer">Netflix</a> and{' '}

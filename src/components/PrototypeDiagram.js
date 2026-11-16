@@ -31,7 +31,7 @@ const EDGES = [
 const PROTOTYPES = [
   {
     area: 'enterprise',
-    label: 'Enterprise views',
+    label: 'Enterprise Tools',
     caption: 'Ops console: automation graph inspector',
     href: './protos/#/internal-ops/sops/sop-coco-dispatch/versions/3?view=graph',
     image: './images/protos/coco-graph.jpg',
@@ -40,8 +40,8 @@ const PROTOTYPES = [
   },
   {
     area: 'consumer',
-    label: 'Consumer products',
-    caption: 'Mobile app: ops agent chat',
+    label: 'Mobile Apps',
+    caption: 'Mobile app: operator assistant',
     href: './protos/#/brick-ops',
     image: './images/protos/brick-ops.jpg',
     alt: 'Mobile app where an AI agent explains an automation it learned',
