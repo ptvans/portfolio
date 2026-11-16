@@ -710,8 +710,8 @@ function ExecutorLegend() {
   );
 }
 
-// The collapsed Stella column: a narrow tray with the expand control and a
-// vertical label. A dot on the control marks a block waiting to be sent.
+// The collapsed Stella column: a narrow tray with just the expand control.
+// A dot on the control marks a block waiting to be sent.
 function StellaTray({ onExpand, attached }: { onExpand: () => void; attached: boolean }) {
   return (
     <button
@@ -725,7 +725,6 @@ function StellaTray({ onExpand, attached }: { onExpand: () => void; attached: bo
         <PanelLeftOpen className="h-4 w-4" strokeWidth={2} />
         {attached && <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-brand-500 ring-2 ring-white" aria-hidden />}
       </span>
-      <span className="text-[11px] font-semibold tracking-wide text-slate-500 [writing-mode:vertical-rl]">Stella</span>
     </button>
   );
 }
