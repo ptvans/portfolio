@@ -11,6 +11,7 @@ import { StellaComposer } from "../stella/StellaComposer";
 import { StellaIcon } from "../stella/StellaIcon";
 import { useEffect, useRef, useState } from "react";
 import type { Sop, SopDocBlock, SopVersion } from "../../../../types/domain";
+import { STELLA_HISTORY } from "../../data/stellaScript";
 import { formatElapsedMs } from "./sopFormat";
 
 type Entry =
@@ -38,6 +39,15 @@ function openingMessage(sop: Sop, version: SopVersion | undefined): string {
     return `I'm watching "${sop.name}". Version ${sop.version} is live. The current run is stopped at "${failing.title}" with an open escalation. Ask me to change a step, or select a block and choose Modify with prompt.`;
   }
   return `I'm watching "${sop.name}". Version ${sop.version} is ${sop.status}. Ask me to change a step, or select a block and choose Modify with prompt.`;
+}
+
+// The pane is titled like a Stella conversation: the matching chat from the
+// Stella history when there is one (ses-<id> for sop-<id>), otherwise a title
+// for what this chat is about.
+function conversationTitle(sop: Sop, version: SopVersion | undefined): string {
+  const seeded = STELLA_HISTORY.find((s) => s.id === `ses-${sop.id.replace(/^sop-/, "")}`);
+  if (seeded) return seeded.title;
+  return version ? `Edit ${sop.name} v${version.version}` : `${sop.name} run`;
 }
 
 function genericReply(sop: Sop, turn: number): string {
@@ -123,8 +133,9 @@ export function StellaChat({
   return (
     <div className="flex h-full min-h-0 flex-col bg-white">
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
-        <StellaIcon size={18} thinking={busy} />
-        <h2 className="text-sm font-semibold text-slate-800">Stella</h2>
+        <h2 className="min-w-0 truncate text-sm font-medium text-slate-700" title={conversationTitle(sop, version)}>
+          {conversationTitle(sop, version)}
+        </h2>
         {onCollapse && (
           <button
             type="button"

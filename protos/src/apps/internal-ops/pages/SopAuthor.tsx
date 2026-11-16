@@ -28,7 +28,6 @@ import { attachmentFromFile, SopDocumentEditor } from "../components/sop/SopDocu
 import { SopGraph } from "../components/sop/SopGraph";
 import { SopNodeInspector } from "../components/sop/SopNodeInspector";
 import { SopStateInspector } from "../components/sop/SopStateInspector";
-import { StellaIcon } from "../components/stella/StellaIcon";
 import { StellaChat } from "../components/sop/StellaChat";
 import { formatDateTimeShort, formatDuration, RUN_STATUS_LABEL, RUN_STATUS_STYLE, runHealth } from "../components/sop/sopFormat";
 import { useSops } from "../context/SopContext";
@@ -711,8 +710,8 @@ function ExecutorLegend() {
   );
 }
 
-// The collapsed Stella column: a narrow tray with the orb, a vertical label,
-// and the expand control. A dot on the orb marks a block waiting to be sent.
+// The collapsed Stella column: a narrow tray with the expand control and a
+// vertical label. A dot on the control marks a block waiting to be sent.
 function StellaTray({ onExpand, attached }: { onExpand: () => void; attached: boolean }) {
   return (
     <button
@@ -722,12 +721,11 @@ function StellaTray({ onExpand, attached }: { onExpand: () => void; attached: bo
       title="Expand Stella"
       className="group flex h-full w-full flex-col items-center gap-3 px-2 py-3 text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-600"
     >
-      <PanelLeftOpen className="h-4 w-4" strokeWidth={2} />
-      <span className="relative mt-1">
-        <StellaIcon size={18} />
+      <span className="relative">
+        <PanelLeftOpen className="h-4 w-4" strokeWidth={2} />
         {attached && <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-brand-500 ring-2 ring-white" aria-hidden />}
       </span>
-      <span className="text-[11px] font-semibold tracking-wide text-slate-500 [writing-mode:vertical-rl]">Stella (AI)</span>
+      <span className="text-[11px] font-semibold tracking-wide text-slate-500 [writing-mode:vertical-rl]">Stella</span>
     </button>
   );
 }
