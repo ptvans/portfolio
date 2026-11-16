@@ -93,14 +93,15 @@ function PrototypeDiagram() {
         >
           <defs>
             {/* One gradient across the whole cluster, in user space so
-                vertical links still get color; sliding it sideways (with
-                repeat) sweeps the palette through every link. */}
-            <linearGradient id="pd-link-sweep" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="200" y2="120" spreadMethod="repeat">
+                vertical links still get color; sliding it along its own
+                vector (with repeat) sweeps the palette through every link.
+                The vector is ~3x the cluster, so only a few hues show at once. */}
+            <linearGradient id="pd-link-sweep" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="640" y2="384" spreadMethod="repeat">
               {SWEEP.map((color, i) => (
                 <stop key={i} offset={i / (SWEEP.length - 1)} stopColor={color} />
               ))}
               {!reducedMotion && (
-                <animateTransform attributeName="gradientTransform" type="translate" from="0 0" to="200 120" dur="6s" repeatCount="indefinite" />
+                <animateTransform attributeName="gradientTransform" type="translate" from="0 0" to="640 384" dur="16s" repeatCount="indefinite" />
               )}
             </linearGradient>
           </defs>
@@ -116,7 +117,7 @@ function PrototypeDiagram() {
           ))}
           {Object.entries(NODES).map(([name, { x, y }]) => (
             <g key={name}>
-              <circle className={`pd-dot-${name}`} cx={x} cy={y} r="6" />
+              <circle className={`pd-dot-${name}`} cx={x} cy={y} r="7" />
               <text x={x} y={y + 19} textAnchor="middle">
                 {name}
               </text>
@@ -125,9 +126,15 @@ function PrototypeDiagram() {
         </svg>
       </div>
 
+      {/* Both arrows in one column centered on the cluster, fanning out. */}
+      <div className="pd-arrows">
+        {PROTOTYPES.map((p) => (
+          <Arrow key={p.area} area={p.area} />
+        ))}
+      </div>
+
       {PROTOTYPES.map((p) => (
         <React.Fragment key={p.area}>
-          <Arrow area={p.area} />
           <a className={`pd-card pd-card-${p.area}`} href={p.href}>
             <div className="pd-label">{p.label}</div>
             <div className="pd-thumb">

@@ -10,8 +10,8 @@
   display: grid;
   grid-template-columns: minmax(170px, 0.8fr) 64px minmax(0, 1.2fr);
   grid-template-areas:
-    'data a1 enterprise'
-    'data a2 consumer';
+    'data arrows enterprise'
+    'data arrows consumer';
   align-items: center;
   column-gap: 12px;
   row-gap: 24px;
@@ -78,6 +78,8 @@ body.light .pd-cluster .pd-link {
 
 .pd-cluster circle {
   fill: var(--pd-node);
+  stroke: #ffffff;
+  stroke-width: 3px;
 }
 
 /* One pastel per data entity. */
@@ -90,10 +92,9 @@ body.light .pd-cluster .pd-link {
 .pd-cluster .pd-dot-projects { fill: #d8b4fe; }
 .pd-cluster .pd-dot-equipment { fill: #fca5a5; }
 
-/* On white, a faint ring keeps the pale dots from washing out. */
+/* On white the white border disappears, so a faint shadow outlines it. */
 body.light .pd-cluster circle {
-  stroke: rgba(0, 0, 0, 0.18);
-  stroke-width: 1;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.35));
 }
 
 .pd-cluster text {
@@ -123,8 +124,18 @@ body.light .pd-cluster circle {
   stroke-linejoin: round;
 }
 
-.pd-arrow-enterprise { grid-area: a1; }
-.pd-arrow-consumer { grid-area: a2; }
+/* The arrows fan out from the middle of the cluster toward the two
+   screenshots: one column spanning both rows, centered like the cluster. */
+.pd-arrows {
+  grid-area: arrows;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+.pd-arrow-enterprise { transform: rotate(-28deg); }
+.pd-arrow-consumer { transform: rotate(28deg); }
 .pd-card-enterprise { grid-area: enterprise; }
 .pd-card-consumer { grid-area: consumer; }
 
@@ -173,7 +184,7 @@ body.light .pd-cluster circle {
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
       'data data'
-      'a1 a2'
+      'arrows arrows'
       'enterprise consumer';
     row-gap: 16px;
   }
@@ -184,9 +195,15 @@ body.light .pd-cluster circle {
     width: 100%;
   }
 
-  .pd-arrow {
-    transform: rotate(90deg);
+  /* Stacked: the cluster sits above, so the arrows point down and out to
+     the left and right cards. */
+  .pd-arrows {
+    flex-direction: row;
+    justify-content: center;
+    gap: 56px;
   }
+  .pd-arrow-enterprise { transform: rotate(120deg); }
+  .pd-arrow-consumer { transform: rotate(60deg); }
 
   .pd-card {
     align-self: start;
