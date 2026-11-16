@@ -30,7 +30,7 @@ body.light .prototype-diagram {
 
 .pd-label {
   font-family: 'Averia Sans Libre', 'Figtree', sans-serif;
-  font-size: 17px;
+  font-size: 24px;
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.25;
@@ -217,6 +217,6 @@ body.light .pd-thumb {
   }
 
   .pd-card .pd-label {
-    font-size: 12px;
+    font-size: 18px;
   }
 }
