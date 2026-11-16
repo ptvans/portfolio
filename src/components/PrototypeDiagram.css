@@ -25,10 +25,12 @@ body.light .prototype-diagram {
 }
 
 .pd-label {
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  margin-bottom: 10px;
+  font-family: 'Figtree', 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  margin-bottom: 12px;
 }
 
 .pd-data {
@@ -50,6 +52,21 @@ body.light .prototype-diagram {
 
 .pd-cluster circle {
   fill: var(--pd-node);
+}
+
+/* One pastel per data entity. */
+.pd-cluster .pd-dot-vendors { fill: #f9a8d4; }
+.pd-cluster .pd-dot-customers { fill: #fdba74; }
+.pd-cluster .pd-dot-products { fill: #fde68a; }
+.pd-cluster .pd-dot-billing { fill: #86efac; }
+.pd-cluster .pd-dot-compliance { fill: #7dd3fc; }
+.pd-cluster .pd-dot-workflows { fill: #a5b4fc; }
+.pd-cluster .pd-dot-projects { fill: #d8b4fe; }
+
+/* On white, a faint ring keeps the pale dots from washing out. */
+body.light .pd-cluster circle {
+  stroke: rgba(0, 0, 0, 0.18);
+  stroke-width: 1;
 }
 
 .pd-cluster text {

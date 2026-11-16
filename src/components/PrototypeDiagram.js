@@ -80,7 +80,7 @@ function PrototypeDiagram() {
           ))}
           {Object.entries(NODES).map(([name, { x, y }]) => (
             <g key={name}>
-              <circle cx={x} cy={y} r="5" />
+              <circle className={`pd-dot-${name}`} cx={x} cy={y} r="6" />
               <text x={x} y={y + 19} textAnchor="middle">
                 {name}
               </text>
