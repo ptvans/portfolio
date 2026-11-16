@@ -76,7 +76,10 @@ function Home({ theme, toggleTheme }) {
         </section>
 
         <footer className="home-footer">
-          <p>© 2025</p>
+          <div className="footer-brand">
+            <img src="./images/th-logo.png" alt="Thom" className="footer-logo" />
+            <p>© 2026</p>
+          </div>
           <div className="theme-toggle">
             <button
               className={theme === 'light' ? '' : 'inactive'}
