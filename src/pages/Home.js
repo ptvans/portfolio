@@ -20,9 +20,9 @@ function Home({ theme, toggleTheme }) {
         </header>
 
         <section className="pitch-section">
-          <h2>Product Design has changed.</h2>
+          <h2>Product Design is changing rapidly</h2>
           <p>
-            I have been providing rapid-prototyping in code for the past decade. Thanks to coding
+            I have been providing rapid-prototyping in code for the past decade. Thanks to the latest coding
             models like Opus and Sol, we can now prototype 20 times faster. ⚡
           </p>
           <p>
