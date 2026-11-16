@@ -1,0 +1,105 @@
+{
+  "$schema": "../../../docs/sop-file.schema.json",
+  "id": "sop-portal-outage-escalation",
+  "name": "Portal Outage Escalation (911)",
+  "status": "draft",
+  "version": 2,
+  "scope": { "brandId": null, "customer": "Internal" },
+  "team": "Cross-team",
+  "sopType": "external",
+  "owner": "Bryan (Ground Ops)",
+  "escalationContact": "Bryan (Ground Ops)",
+  "trigger": "You notice, or a customer reports, that the Portal is down or broken.",
+  "purpose": "If the Portal is mildly broken for customers, or completely broken for Brick staff, and nobody pages engineering, customers sit in a broken product until morning. This gets an on-call engineer on it immediately. Company-wide, all markets.",
+  "doneWhen": "The issue is resolved, or #general has an outage description and an expected ETA (or an explicit \"no ETA\") on resolution.",
+  "timeToRun": "5 minutes to escalate, then until resolution or handoff",
+  "tags": ["Escalation"],
+  "source": {
+    "system": "notion",
+    "url": "https://app.notion.com/p/3db71cfae62e81209b83e2da474ea4cb",
+    "lastEditedAt": "2026-09-14T18:25:24.841Z",
+    "importedAt": "2026-09-15T21:00:00.000Z"
+  },
+  "steps": [
+    {
+      "id": "is-911",
+      "kind": "decision",
+      "title": "Decide if it's a 911",
+      "owner": "Bryan (Ground Ops) / whoever caught it",
+      "trigger": "You notice, or a customer reports, that the Portal is down or broken.",
+      "work": "Check one thing: are customers hitting a real problem? Super long load times, tickets not updating, error messages, or the site is down. A Portal that functions but is merely slow is not a 911. Never send bugs, tolerable slowness, or anything that can wait until morning to 911@; 911 pages a human engineer.",
+      "rules": ["Never send bugs, tolerable slowness, or anything that can wait until morning to 911@."],
+      "where": "Judgment call",
+      "when": "Immediately",
+      "verification": "human",
+      "next": [
+        { "to": "email-911", "label": "Yes, it's a 911" },
+        { "to": "post-product-eng", "label": "No, just slow" },
+        { "to": "ask-bryan", "label": "Not sure" }
+      ]
+    },
+    {
+      "id": "post-product-eng",
+      "title": "Post it in #product-eng instead",
+      "owner": "Whoever caught it",
+      "trigger": "The Portal is functioning, just slow or mildly buggy.",
+      "work": "Post the problem in #product-eng. You're done; no page goes out.",
+      "where": "Slack #product-eng",
+      "next": [{ "to": "done" }]
+    },
+    {
+      "id": "ask-bryan",
+      "kind": "escalation",
+      "title": "Ask Bryan whether it's a 911",
+      "owner": "Bryan (Ground Ops)",
+      "trigger": "You can't tell whether the problem clears the 911 bar.",
+      "work": "Send Bryan what's broken, what you were doing, and roughly when it started. He makes the call.",
+      "where": "Slack DM",
+      "next": [{ "to": "email-911", "label": "Bryan says page" }]
+    },
+    {
+      "id": "email-911",
+      "title": "Email 911@brickdynamics.com",
+      "owner": "Bryan (Ground Ops) / whoever caught it",
+      "trigger": "The problem cleared the 911 bar.",
+      "work": "Email 911@brickdynamics.com with what's broken, what you were doing, and roughly when it started. Don't worry about formatting it nicely. This calls an on-call engineer for immediate attention.",
+      "where": "Email to 911@brickdynamics.com",
+      "when": "About 5 minutes",
+      "doneWhen": "Email sent.",
+      "next": [{ "to": "stay-on-it" }]
+    },
+    {
+      "id": "stay-on-it",
+      "title": "Stay on it until resolved or handed off",
+      "owner": "Bryan (Ground Ops) / whoever sent the 911",
+      "trigger": "The 911 email is sent.",
+      "work": "Stay in contact with the on-call engineer and get an ETA. If you 911'd something that turns out to be minor, tell the engineer and move it to #product-eng; no harm done. If the on-call engineer never responds, the source page leaves the fallback TBD for the owner to fill in.",
+      "where": "Email / Slack",
+      "doneWhen": "You have an ETA, or the issue is resolved.",
+      "next": [{ "to": "post-general" }]
+    },
+    {
+      "id": "post-general",
+      "kind": "decision",
+      "title": "Does #general need an outage post?",
+      "owner": "Bryan (Ground Ops) / whoever sent the 911",
+      "trigger": "You have an ETA from the on-call engineer, or you're signing off.",
+      "work": "Post in #general with the outage description and the ETA if either is true: the engineer says the fix will take more than 2 hours, or you're signing off before it's resolved and there's no ETA (say so in the post). If the issue resolves quickly, no post is needed.",
+      "where": "Slack #general",
+      "verification": "human",
+      "next": [
+        { "to": "done", "label": "Resolved quickly, no post" },
+        { "to": "write-post", "label": "Over 2 hours, or signing off" }
+      ]
+    },
+    {
+      "id": "write-post",
+      "title": "Post the outage description and ETA in #general",
+      "owner": "Bryan (Ground Ops) / whoever sent the 911",
+      "trigger": "The fix will take over 2 hours, or you're signing off unresolved.",
+      "work": "Post the outage description and the ETA in #general. If there is no ETA and you're signing off, say \"no ETA, signing off\" explicitly.",
+      "where": "Slack #general",
+      "next": [{ "to": "done" }]
+    }
+  ]
+}

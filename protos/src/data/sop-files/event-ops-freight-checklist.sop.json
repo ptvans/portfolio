@@ -1,0 +1,121 @@
+{
+  "$schema": "../../../docs/sop-file.schema.json",
+  "id": "sop-event-ops-freight-checklist",
+  "name": "Event Ops Freight Checklist: Exhibitor Packets & Outbound",
+  "status": "active",
+  "version": 1,
+  "scope": { "brandId": null, "customer": "Internal" },
+  "team": "Ops",
+  "sopType": "external",
+  "owner": "Ops (event freight coordinator)",
+  "trigger": "We receive an exhibitor service manual for an upcoming show.",
+  "purpose": "The repeatable checklist for reading an exhibitor service manual, booking freight in and out of the venue, and getting outbound right. Examples come from Qualipalooza 2026 and the RISE Value Based Care Summit (Omni PGA, Frisco TX, June 28–30, 2026). Dates, addresses and pickup locations change show to show; confirm each field against the specific packet.",
+  "doneWhen": "Inbound freight is booked to the advance warehouse inside the receiving window with required labels, outbound pickup is locked with the carrier, the MHA owner is named, payment authorization is on file, and a no-show fallback is chosen.",
+  "tags": ["Freight & Shipping"],
+  "source": {
+    "system": "notion",
+    "url": "https://app.notion.com/p/3db71cfae62e81a6b2abcc34b407e5c8",
+    "lastEditedAt": "2026-09-14T18:25:33.159Z",
+    "importedAt": "2026-09-15T20:00:00.000Z"
+  },
+  "steps": [
+    {
+      "id": "advance-warehouse",
+      "title": "Check for an advance warehouse",
+      "owner": "Ops (event freight coordinator)",
+      "trigger": "The exhibitor service manual arrives.",
+      "work": "Most packets route everything through an advance warehouse (Qualipalooza: LVE-IT Dallas, Arlington TX). Do not ship direct to the venue; it gets refused or hit with the late special-handling rate.",
+      "rules": ["Never ship direct to the venue when an advance warehouse exists."],
+      "next": [{ "to": "window" }]
+    },
+    {
+      "id": "window",
+      "title": "Note the receiving window",
+      "owner": "Ops (event freight coordinator)",
+      "trigger": "The advance warehouse is identified.",
+      "work": "Record when the warehouse starts taking freight, the standard-rate deadline, and the hard deadline for on-time delivery to show. Miss the standard deadline and we eat the 30% late bump.",
+      "next": [{ "to": "labels" }]
+    },
+    {
+      "id": "labels",
+      "title": "Apply the required warehouse labels to every piece",
+      "owner": "Ops (event freight coordinator)",
+      "trigger": "Freight is being prepared for shipment.",
+      "work": "Many packets include specific warehouse delivery labels we must use: exhibitor name, C/O the warehouse, event name, piece count, booth number. Put them on every piece.",
+      "next": [{ "to": "book-inbound" }]
+    },
+    {
+      "id": "book-inbound",
+      "title": "Book inbound on Unishippers with the tradeshow option",
+      "owner": "Ops (event freight coordinator)",
+      "trigger": "Pieces are labeled and the window is known.",
+      "work": "Select the tradeshow option on Unishippers so it prompts for event name and booth number and the freight is tagged correctly.",
+      "where": "Unishippers",
+      "next": [{ "to": "weight-ticket" }]
+    },
+    {
+      "id": "weight-ticket",
+      "title": "Get a certified weight ticket for every shipment",
+      "owner": "Ops (event freight coordinator)",
+      "trigger": "A shipment is booked.",
+      "work": "Required by these packets. No collect or COD shipments are accepted.",
+      "rules": ["No collect or COD shipments."],
+      "next": [{ "to": "payment-auth" }]
+    },
+    {
+      "id": "payment-auth",
+      "kind": "decision",
+      "title": "Is the payment authorization form on file?",
+      "owner": "Ops (event freight coordinator)",
+      "trigger": "Before anything ships.",
+      "work": "Without a valid card on file the contractor charges the card from the previous show plus a $75 processing fee to fix it later.",
+      "verification": "human",
+      "next": [
+        { "to": "pickup-location", "label": "Yes" },
+        { "to": "file-payment", "label": "No" }
+      ]
+    },
+    {
+      "id": "file-payment",
+      "title": "Submit the payment authorization form",
+      "owner": "Ops (event freight coordinator)",
+      "trigger": "No valid payment authorization is on file.",
+      "work": "Complete and submit the packet's payment authorization form before any freight ships.",
+      "next": [{ "to": "pickup-location" }]
+    },
+    {
+      "id": "pickup-location",
+      "title": "Confirm where outbound pickup happens",
+      "owner": "Ops (event freight coordinator)",
+      "trigger": "Inbound is booked; planning outbound.",
+      "work": "Warehouse or venue? This is the one that bites people. Qualipalooza: outbound pickup is at the venue, not the warehouse; the warehouse is inbound only or a fallback if the carrier no-shows.",
+      "next": [{ "to": "pickup-window" }]
+    },
+    {
+      "id": "pickup-window",
+      "title": "Lock the pickup window with the carrier",
+      "owner": "Ops (event freight coordinator)",
+      "trigger": "The pickup location is confirmed.",
+      "work": "Flag the window in Unishippers so pickup is scheduled inside it (Qualipalooza: carrier checks in with the GC by 3:30 PM, all freight cleared by 5:30 PM on Tue June 30).",
+      "where": "Unishippers",
+      "next": [{ "to": "mha" }]
+    },
+    {
+      "id": "mha",
+      "title": "Name who completes the outbound MHA onsite",
+      "owner": "Named person on the show floor",
+      "trigger": "Outbound pickup is scheduled.",
+      "work": "The advance Unishippers booking does not replace the Material Handling Agreement completed and turned in at the service desk onsite. No paperwork means freight goes back to the warehouse at our expense. Assign this to a named person on the floor and agree when they do it.",
+      "where": "Show service desk",
+      "next": [{ "to": "fallback" }]
+    },
+    {
+      "id": "fallback",
+      "title": "Pick the carrier-no-show fallback on the outbound form",
+      "owner": "Ops (event freight coordinator)",
+      "trigger": "Completing the outbound MHA.",
+      "work": "If we don't choose a fallback, the general contractor auto-reroutes with their show carrier at our expense.",
+      "next": [{ "to": "done" }]
+    }
+  ]
+}

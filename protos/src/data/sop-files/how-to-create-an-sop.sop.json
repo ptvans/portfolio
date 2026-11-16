@@ -1,0 +1,110 @@
+{
+  "$schema": "../../../docs/sop-file.schema.json",
+  "id": "sop-how-to-create-an-sop",
+  "name": "How to Create an SOP",
+  "status": "active",
+  "version": 1,
+  "scope": { "brandId": null, "customer": "Internal" },
+  "team": "Cross-team",
+  "sopType": "internal",
+  "owner": "Sam Kernan-Schloss",
+  "escalationContact": "Sam Kernan-Schloss",
+  "trigger": "You just did (or are about to do) a process nobody else knows how to run, or someone asked you \"how do I do X\" for the second time.",
+  "purpose": "Processes that live in one person's head break when that person is out. This is how every SOP at Brick gets made: narrate the real process to Claude with the sop-creator skill installed. Nobody fills out a template by hand.",
+  "doneWhen": "The SOP is live in the SOP Hub with your name at the top, and the link is in the relevant Slack channel if others run the process.",
+  "timeToRun": "10 to 15 minutes",
+  "tags": [],
+  "source": {
+    "system": "notion",
+    "url": "https://app.notion.com/p/3db71cfae62e81058e8ce5c393a76d13",
+    "lastEditedAt": "2026-09-15T18:45:59.159Z",
+    "importedAt": "2026-09-15T20:00:00.000Z"
+  },
+  "steps": [
+    {
+      "id": "live-or-not",
+      "kind": "decision",
+      "title": "Can you do the process live right now?",
+      "owner": "Process owner",
+      "trigger": "Claude is open with the sop-creator skill installed.",
+      "work": "Narrating live is best because memory idealizes. If you cannot do it live, a voice memo transcript, Slack thread, or a typed rough description works, slightly worse. Otherwise wait until the next time you run the process.",
+      "next": [
+        { "to": "narrate", "label": "Yes" },
+        { "to": "paste", "label": "No, but I have notes" }
+      ]
+    },
+    {
+      "id": "narrate",
+      "title": "Do the process and narrate it to Claude",
+      "owner": "Process owner",
+      "trigger": "You are about to run the process for real.",
+      "work": "Do the process and narrate as you go, like training someone over your shoulder. Include the ugly parts: workarounds, the one brand you handle differently, who you ping when stuck. Those become the Exceptions and escalation sections.",
+      "where": "Claude chat",
+      "next": [{ "to": "ask" }]
+    },
+    {
+      "id": "paste",
+      "title": "Paste your notes or transcript into Claude",
+      "owner": "Process owner",
+      "trigger": "You have a transcript, thread or rough description instead of a live run.",
+      "work": "Paste it into Claude and say \"make this an SOP\".",
+      "where": "Claude chat",
+      "next": [{ "to": "ask" }]
+    },
+    {
+      "id": "ask",
+      "title": "Claude asks up to four short questions",
+      "owner": "Sam Kernan-Schloss",
+      "trigger": "You said \"make this an SOP\".",
+      "work": "Claude asks for what is missing: trigger, failure cases, who to escalate to, owner. If Claude did not pick up that you want an SOP, say \"use the sop-creator skill\" directly.",
+      "actor": "agent",
+      "actors": ["stella"],
+      "where": "Claude chat",
+      "autonomy": 3,
+      "next": [{ "to": "draft" }]
+    },
+    {
+      "id": "draft",
+      "title": "Answer, and Claude shows a draft",
+      "owner": "Process owner",
+      "trigger": "Claude has asked its questions.",
+      "work": "Answer the questions. Claude shows a draft SOP in chat. For processes with real judgment calls (pricing exceptions, comping a customer), tell Claude who owns the decision so the SOP says \"gather these facts and bring to [person]\" rather than pretending the call is mechanical.",
+      "where": "Claude chat",
+      "next": [{ "to": "review" }]
+    },
+    {
+      "id": "review",
+      "kind": "decision",
+      "title": "Do the steps match what you actually did?",
+      "owner": "Process owner",
+      "trigger": "A draft is in chat.",
+      "work": "Read the draft and check the steps against what you did. If it came out bloated, tell Claude \"cut this down, plain language\" before approving. Don't approve slop.",
+      "verification": "human",
+      "next": [
+        { "to": "publish", "label": "Looks good" },
+        { "to": "draft", "label": "Tell it what's wrong" }
+      ]
+    },
+    {
+      "id": "publish",
+      "title": "Say publish; Claude posts it to the SOP Hub",
+      "owner": "Sam Kernan-Schloss",
+      "trigger": "You approved the draft.",
+      "work": "Claude publishes the page to the SOP Hub and gives you the link. If publishing to Notion fails, copy the draft into a new page in the SOP Hub, tag it, and tell Sam the connector broke. Later corrections go through Claude too (\"in the receiving SOP, step 3 is now X\"); it edits the existing page rather than duplicating.",
+      "actor": "agent",
+      "actors": ["stella"],
+      "where": "Notion SOP Hub",
+      "autonomy": 3,
+      "next": [{ "to": "share" }]
+    },
+    {
+      "id": "share",
+      "title": "Share the link",
+      "owner": "Process owner",
+      "trigger": "The SOP is live.",
+      "work": "If other people run this process, drop the link in the relevant Slack channel.",
+      "where": "Slack",
+      "next": [{ "to": "done" }]
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "../../../docs/sop-file.schema.json",
+  "id": "sop-npn360-financial-closeout",
+  "name": "Keep npn360 delivered projects financially closed out",
+  "status": "active",
+  "version": 1,
+  "scope": {
+    "brandId": "brand-npn360",
+    "customer": "npn360"
+  },
+  "team": "Finance",
+  "sopType": "internal",
+  "owner": "Brandon H.",
+  "escalationContact": "Finance lead",
+  "trigger": "Daily, for every npn360 project with delivered work.",
+  "purpose": "Delivered npn360 work only turns into revenue once its work orders are finalized and their brand charges and operator credits land on statements. This SOP finds delivered work that has stalled before closeout and makes sure someone owns getting it over the line.",
+  "doneWhen": "Every completed npn360 work order is finalized, or has a documented blocker and a dated follow-up with an owner.",
+  "tags": [
+    "Finance & Invoicing"
+  ],
+  "steps": [
+    {
+      "id": "find-unfinalized",
+      "title": "Find completed work orders that aren't finalized",
+      "owner": "Stella",
+      "actor": "agent",
+      "trigger": "The daily run starts.",
+      "work": "List every completed npn360 project work order and flag the ones not yet finalized, grouped by project.",
+      "next": [
+        {
+          "to": "check-statements"
+        }
+      ],
+      "autonomy": 3
+    },
+    {
+      "id": "check-statements",
+      "title": "Check charges and credits against statements",
+      "owner": "Stella",
+      "actor": "agent",
+      "trigger": "Unfinalized work orders were found.",
+      "work": "For each unfinalized work order, total the brand charges and operator credits that have not reached a statement.",
+      "next": [
+        {
+          "to": "blocker-documented"
+        }
+      ],
+      "autonomy": 3
+    },
+    {
+      "id": "blocker-documented",
+      "kind": "decision",
+      "title": "Is there a documented blocker or follow-up?",
+      "owner": "Stella",
+      "actor": "agent",
+      "trigger": "Open amounts are totalled.",
+      "work": "Look for a documented closeout blocker or an assigned follow-up on the project and its orders.",
+      "next": [
+        {
+          "to": "propose-follow-up",
+          "label": "Neither"
+        },
+        {
+          "to": "done",
+          "label": "Documented"
+        }
+      ],
+      "autonomy": 3
+    },
+    {
+      "id": "propose-follow-up",
+      "title": "Ask approval to assign a dated follow-up",
+      "owner": "Brandon H.",
+      "actor": "agent",
+      "trigger": "Nothing documents why the project isn't closed out.",
+      "work": "Write up what blocks closeout and ask the SOP owner to approve assigning a dated project follow-up to the project's ops lead. Change no records.",
+      "rules": [
+        "Never finalize a work order or edit charges from this SOP."
+      ],
+      "next": [
+        {
+          "to": "done"
+        }
+      ],
+      "autonomy": 2
+    },
+    {
+      "id": "done",
+      "title": "Record the outcome",
+      "owner": "Stella",
+      "actor": "agent",
+      "trigger": "The project is closed out or has an owner.",
+      "work": "Note on the project what was found and who owns the follow-up.",
+      "autonomy": 3
+    }
+  ]
+}

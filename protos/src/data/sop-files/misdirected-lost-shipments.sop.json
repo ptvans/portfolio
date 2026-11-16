@@ -1,0 +1,186 @@
+{
+  "$schema": "../../../docs/sop-file.schema.json",
+  "id": "sop-misdirected-lost-shipments",
+  "name": "Misdirected & Lost Shipments",
+  "status": "active",
+  "version": 1,
+  "scope": { "brandId": null, "customer": "Internal" },
+  "team": "Cross-team",
+  "sopType": "external",
+  "owner": "Account owner or team lead for the shipment",
+  "escalationContact": "Manager or operations lead",
+  "trigger": "A shipment is delivered to an incorrect address or cannot be recovered in transit.",
+  "purpose": "A consistent, documented process for shipments sent to the wrong address or lost in transit. It fixes accountability, the recovery steps that must be tried first, and how a credit is decided, so client relationships hold and cost lands on whoever caused the error. Applies to anything Brick orders or orders for a client, including vendor-fulfilled orders such as Uline.",
+  "doneWhen": "Every recovery step is documented, fault is assigned, and the resolution is issued and communicated in writing.",
+  "tags": ["Freight & Shipping"],
+  "source": {
+    "system": "notion",
+    "url": "https://app.notion.com/p/3dc71cfae62e817a9149dd0e6bb74a1a",
+    "lastEditedAt": "2026-09-16T15:32:28.417Z",
+    "importedAt": "2026-09-17T00:00:00.000Z"
+  },
+  "steps": [
+    {
+      "id": "determine-fault",
+      "kind": "decision",
+      "title": "Determine who provided the incorrect address",
+      "owner": "Account owner or team lead",
+      "trigger": "A shipment is found at the wrong address or unrecoverable in transit.",
+      "work": "Before any recovery step or credit, identify the source of the error, because that decides where the cost lands. Brick provided it, Brick absorbs the cost. The Network Operator provided or confirmed it, the cost passes back to the NO. The client provided it, the client absorbs it and Brick facilitates the resolution.",
+      "rules": ["Never start recovery or issue a credit before fault is determined."],
+      "verification": "human",
+      "next": [
+        { "to": "correct-in-transit", "label": "Brick, NO or client identified" },
+        { "to": "escalate-fault", "label": "Cannot be determined" }
+      ]
+    },
+    {
+      "id": "escalate-fault",
+      "kind": "escalation",
+      "title": "Escalate undetermined fault to a manager",
+      "owner": "Manager or operations lead",
+      "trigger": "Fault cannot be clearly assigned to Brick, the NO or the client.",
+      "work": "Take the case to a manager for case-by-case resolution before any credit is issued. Recovery still proceeds in parallel.",
+      "next": [{ "to": "correct-in-transit" }]
+    },
+    {
+      "id": "correct-in-transit",
+      "title": "Attempt in-transit correction",
+      "owner": "Account owner or team lead",
+      "trigger": "Fault is assigned or escalated.",
+      "work": "Contact the carrier immediately on discovering the error and try to redirect the package before it is delivered. This is the cheapest recovery and the only one available before delivery.",
+      "when": "Immediately on discovery",
+      "next": [{ "to": "check-local" }]
+    },
+    {
+      "id": "check-local",
+      "title": "Coordinate with the local Network Operator",
+      "owner": "Local Network Operator",
+      "trigger": "The package could not be redirected in transit.",
+      "work": "Have the local team physically check the address on file and any adjacent locations.",
+      "actors": ["network_operator"],
+      "next": [{ "to": "vendor-return" }]
+    },
+    {
+      "id": "vendor-return",
+      "title": "Attempt a vendor return",
+      "owner": "Account owner or team lead",
+      "trigger": "The package has been located after the event.",
+      "work": "Initiate a return to the vendor, for example Uline, for partial cost recovery.",
+      "next": [{ "to": "document" }]
+    },
+    {
+      "id": "document",
+      "title": "Document every recovery attempt",
+      "owner": "Account owner or team lead",
+      "trigger": "Recovery attempts are complete.",
+      "work": "Log who attempted recovery, the date and outcome of each attempt, and the final disposition of the package, in the relevant Work Order or client record in Portal. Skipping steps here can cost Brick unnecessarily.",
+      "where": "Portal",
+      "rules": ["Every recovery step must be documented before any credit is offered."],
+      "next": [{ "to": "recovered" }]
+    },
+    {
+      "id": "recovered",
+      "kind": "decision",
+      "title": "Was the package recovered?",
+      "owner": "Account owner or team lead",
+      "trigger": "Recovery steps are exhausted and documented.",
+      "work": "A recovered package returned to the vendor needs no credit at all. A lost package moves to the resolution framework.",
+      "verification": "human",
+      "next": [
+        { "to": "restock", "label": "Recovered and returned" },
+        { "to": "resolve-by-fault", "label": "Lost" }
+      ]
+    },
+    {
+      "id": "restock",
+      "title": "Restock or reorder, no credit",
+      "owner": "Account owner or team lead",
+      "trigger": "The package was recovered and returned to the vendor.",
+      "work": "No credit is needed regardless of fault. Restock or reorder the items and close the case.",
+      "next": [{ "to": "done" }]
+    },
+    {
+      "id": "resolve-by-fault",
+      "kind": "decision",
+      "title": "Apply the resolution framework",
+      "owner": "Account owner or team lead",
+      "trigger": "The package is lost and recovery is exhausted.",
+      "work": "Route by fault. A credit reflects item cost only unless event execution was demonstrably impacted, in which case goodwill may apply on top. If execution was not impacted, a straight cost credit is the standard resolution and needs no extra escalation.",
+      "verification": "human",
+      "next": [
+        { "to": "approval", "label": "Brick at fault: credit the client" },
+        { "to": "no-recovery", "label": "NO at fault: recover from the NO" },
+        { "to": "client-absorbs", "label": "Client at fault" },
+        { "to": "escalate-goodwill", "label": "Event execution impacted" }
+      ]
+    },
+    {
+      "id": "client-absorbs",
+      "title": "Client absorbs the cost",
+      "owner": "Account owner or team lead",
+      "trigger": "The client provided the incorrect address.",
+      "work": "The client absorbs the cost. Brick facilitates the resolution and documents the outcome in writing.",
+      "next": [{ "to": "done" }]
+    },
+    {
+      "id": "escalate-goodwill",
+      "kind": "escalation",
+      "title": "Escalate for goodwill credit",
+      "owner": "Manager or operations lead",
+      "trigger": "The loss impacted event execution.",
+      "work": "Escalate. An additional goodwill credit beyond item cost may apply, which is a judgement call rather than the standard framework.",
+      "next": [{ "to": "approval" }]
+    },
+    {
+      "id": "approval",
+      "kind": "decision",
+      "title": "Get the credit approved at the right threshold",
+      "owner": "Team lead, manager, or senior leadership by amount",
+      "trigger": "A credit to the client has been decided.",
+      "work": "Approval depends on the amount: under $100 a team lead or account owner may approve independently; $100 to $250 needs secondary stakeholder sign-off from a manager or ops lead; over $250 must be escalated to senior leadership before issuance.",
+      "verification": "human",
+      "next": [
+        { "to": "issue-credit", "label": "Under $100: approve directly" },
+        { "to": "secondary-signoff", "label": "$100 to $250" },
+        { "to": "senior-signoff", "label": "Over $250" }
+      ]
+    },
+    {
+      "id": "secondary-signoff",
+      "title": "Get secondary stakeholder sign-off",
+      "owner": "Manager or ops lead",
+      "trigger": "The credit falls between $100 and $250.",
+      "work": "A manager or ops lead signs off before the credit is issued.",
+      "next": [{ "to": "issue-credit" }]
+    },
+    {
+      "id": "senior-signoff",
+      "title": "Escalate to senior leadership",
+      "owner": "Senior leadership",
+      "trigger": "The credit is over $250.",
+      "work": "Senior leadership must approve before the credit is issued.",
+      "rules": ["Credits over $250 are never issued without senior leadership approval."],
+      "next": [{ "to": "issue-credit" }]
+    },
+    {
+      "id": "issue-credit",
+      "title": "Issue the credit and confirm it in writing",
+      "owner": "Account owner or team lead",
+      "trigger": "The credit is approved at its threshold.",
+      "work": "Issue the credit for item cost, and document and communicate it to the client in writing by email or a Portal note.",
+      "where": "Portal, email",
+      "rules": ["Every client credit is documented and communicated in writing."],
+      "next": [{ "to": "done" }]
+    },
+    {
+      "id": "no-recovery",
+      "title": "Recover the cost from the Network Operator",
+      "owner": "Account owner or team lead",
+      "trigger": "The NO provided or confirmed the incorrect address.",
+      "work": "Deduct the item cost from the NO's next payout, or flag it on the next invoice with a written explanation. Notify the NO in writing with the date, event, items affected and the amount to be deducted.",
+      "rules": ["The NO is always notified in writing before a deduction lands."],
+      "next": [{ "to": "done" }]
+    }
+  ]
+}

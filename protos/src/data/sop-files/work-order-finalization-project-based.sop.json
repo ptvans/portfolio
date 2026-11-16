@@ -1,0 +1,240 @@
+{
+  "$schema": "../../../docs/sop-file.schema.json",
+  "id": "sop-work-order-finalization-project-based",
+  "name": "Work Order Finalization: Project-Based Customers",
+  "status": "draft",
+  "version": 1,
+  "scope": { "brandId": null, "customer": "Internal" },
+  "team": "AM",
+  "sopType": "external",
+  "owner": "TBD (no permanent owner assigned yet)",
+  "escalationContact": "TBD; findings go to the account manager for the brand",
+  "trigger": "Cadence sweep of the finalization page in Portal. Exact cadence is TBD.",
+  "purpose": "Finalization cannot be undone. Once a work order is finalized the charges are locked, so anything missed becomes work done for free or a rate that can no longer be corrected. This is the project-based variant, built from one Lagora run, so treat brand-specific detail as an example until other finalization runs confirm it. The weekly portfolio sweep is a separate SOP.",
+  "doneWhen": "Every fully clean work order has been finalized, and every work order left open has a named blocker and a named person chasing it.",
+  "timeToRun": "About 15 minutes per brand when clean, longer when chasing operators",
+  "tags": ["Work Orders"],
+  "source": {
+    "system": "notion",
+    "url": "https://app.notion.com/p/3dc71cfae62e811a9452c418d4132e3a",
+    "lastEditedAt": "2026-09-16T15:15:34.330Z",
+    "importedAt": "2026-09-17T00:00:00.000Z"
+  },
+  "steps": [
+    {
+      "id": "open-brand",
+      "title": "Open the brand on the finalization page",
+      "owner": "Account manager",
+      "trigger": "The cadence sweep of the finalization page comes round.",
+      "work": "In Portal, go to the finalization page and click the brand in the left panel. Look up the brand variables first rather than assuming the last brand's setup: Slack channel structure (one channel or a channel per market), rate setup, work type which sets the margin band, and who the account manager is.",
+      "where": "Portal",
+      "doneWhen": "The brand's work orders are listed.",
+      "actions": [
+        { "tool": "portal.finalization.open_brand", "label": "Open the brand on the finalization page", "kind": "read", "status": "confirmed", "args": "brand_id" },
+        { "tool": "portal.brands.get", "label": "Read the brand's rate setup, work type and account manager", "kind": "read", "status": "confirmed", "args": "brand_id" },
+        { "tool": "slack.channels.resolve", "label": "Work out whether the brand runs one channel or one per market", "kind": "read", "status": "detected", "args": "brand_id" }
+      ],
+      "next": [{ "to": "expand-tasks" }]
+    },
+    {
+      "id": "expand-tasks",
+      "title": "Expand every work order and check its tasks",
+      "owner": "Account manager",
+      "trigger": "The brand's work orders are listed.",
+      "work": "Press the plus button on each work order to expand it, and read the status of every task underneath. You are looking for anything in progress or overdue.",
+      "where": "Portal",
+      "rules": ["Never finalize a work order that still has an in-progress or overdue task."],
+      "doneWhen": "Every work order is sorted into all tasks complete, or has an open task.",
+      "actions": [
+        { "tool": "portal.work_orders.list", "label": "List the brand's work orders", "kind": "read", "status": "confirmed", "args": "brand_id, status=completed" },
+        { "tool": "portal.tasks.list", "label": "Read every task under each work order", "kind": "read", "status": "confirmed", "args": "work_order_id" }
+      ],
+      "next": [{ "to": "task-status" }]
+    },
+    {
+      "id": "task-status",
+      "kind": "decision",
+      "title": "Does this work order have an open task?",
+      "owner": "Account manager",
+      "trigger": "Every work order has been expanded and read.",
+      "work": "An open task means the operator gets chased, but it does not hold up the work orders that are clean. Pending tasks and completed ones are worked in the same pass.",
+      "verification": "human",
+      "actions": [
+        { "tool": "stella.sort_work_orders", "label": "Sort each work order into all-complete or has-an-open-task", "kind": "decide", "status": "detected", "args": "tasks[]" }
+      ],
+      "next": [
+        { "to": "check-rates", "label": "All tasks complete" },
+        { "to": "chase-operator", "label": "Has an open task" }
+      ]
+    },
+    {
+      "id": "chase-operator",
+      "title": "Chase the operator on the open task",
+      "owner": "Assigned operator",
+      "trigger": "A task is in progress or overdue.",
+      "work": "Open the task, find the assigned operator, copy the task link, and post it in the brand's Slack channel tagging the operator. Ask them to complete the task or update it. Then move on, do not wait for the reply. Post in a channel, never a DM, and if the brand runs a channel per market use the market channel for that work order.",
+      "actors": ["network_operator", "brick_operator"],
+      "where": "Brand Slack channel",
+      "rules": ["Post in a channel, never a DM."],
+      "actions": [
+        { "tool": "portal.tasks.get_assignee", "label": "Find the operator assigned to the open task", "kind": "read", "status": "detected", "args": "task_id" },
+        { "tool": "portal.tasks.permalink", "label": "Copy the task link to post", "kind": "read", "status": "detected", "args": "task_id" },
+        { "tool": "slack.messages.post", "label": "Post the link in the brand channel, tagging the operator", "kind": "notify", "status": "detected", "args": "channel_id, operator_user_id, task_url" }
+      ],
+      "next": [{ "to": "check-rates" }]
+    },
+    {
+      "id": "check-rates",
+      "title": "Check how the brand's rates are set up",
+      "owner": "Account manager",
+      "trigger": "Open tasks have been chased, or there were none.",
+      "work": "Open the brand's page in Portal and check whether they are on Brick's default work order kinds, custom kinds, or a rate sheet. The greyed-out list under New Kind tells you the brand is on default kinds; that is a hint, not proof that every charge is right. This check goes away for a brand once they move to the rate sheet.",
+      "where": "Portal",
+      "actions": [
+        { "tool": "portal.brands.get_rate_setup", "label": "Read whether the brand is on default kinds, custom kinds or a rate sheet", "kind": "read", "status": "detected", "args": "brand_id" }
+      ],
+      "next": [{ "to": "check-margin" }]
+    },
+    {
+      "id": "check-margin",
+      "title": "Check margin on each completed work order",
+      "owner": "Account manager",
+      "trigger": "The brand's rate setup is known.",
+      "work": "Read the margin on every completed work order and flag anything outside the normal band for that work type. For event ops work, flag it if margin is negative or above roughly 60%. A margin that is too high is as much of a flag as one that is too low, because it usually means a charge or a payout is missing. The working reference for event ops is around 30% or better, a rule of thumb rather than a contractual floor. Bands for other work types are TBD.",
+      "where": "Portal",
+      "verification": "human",
+      "actions": [
+        { "tool": "portal.work_orders.get_margin", "label": "Read margin on each completed work order", "kind": "read", "status": "confirmed", "args": "work_order_id" },
+        { "tool": "portal.rates.margin_band", "label": "Look up the expected margin band for this work type", "kind": "read", "status": "missing", "args": "work_type", "gap": "Only event ops has a band in the document (negative to roughly 60%). Bands for every other work type are marked TBD." },
+        { "tool": "stella.flag_margin", "label": "Flag any margin outside the band, high or low", "kind": "decide", "status": "detected", "args": "margin, work_type" }
+      ],
+      "next": [{ "to": "check-charges" }]
+    },
+    {
+      "id": "check-charges",
+      "title": "Check every completed task carries a charge",
+      "owner": "Account manager",
+      "trigger": "Margins have been read and flagged.",
+      "work": "Go task by task on each completed work order and look for anything sitting at $0. For each one, check whether another task on the same work order carries a charge that actually covers that work. A task should not be completed without the quantity logged that drives its charge, and that count usually already exists in the operator's own tracker. On the Lagora Iltacon run a post-event inspection came through at $0 while the operator's tracker showed 621 items at $1 each: the work was real, the charge was missing.",
+      "where": "Portal",
+      "rules": ["Never accept a $0 task just because other tasks on the work order have charges."],
+      "actions": [
+        { "tool": "portal.tasks.list_charges", "label": "Read the charge on every completed task", "kind": "read", "status": "confirmed", "args": "work_order_id" },
+        { "tool": "stella.find_zero_charge", "label": "Pick out tasks sitting at $0 and the tasks that might cover them", "kind": "decide", "status": "detected", "args": "charges[]" },
+        { "tool": "operator.tracker.lookup", "label": "Pull the operator's own quantity tracker for the task", "kind": "read", "status": "missing", "args": "operator_id, task_id", "gap": "Operator trackers live in each operator's own spreadsheet. Nothing Brick-side can read them, so a person opens the tracker today." }
+      ],
+      "next": [{ "to": "flag-status" }]
+    },
+    {
+      "id": "flag-status",
+      "kind": "decision",
+      "title": "Is anything flagged?",
+      "owner": "Account manager",
+      "trigger": "Margin and charge checks are done.",
+      "work": "A work order with no flags is ready for the finalization checklist. Anything flagged in the margin or charge checks needs evidence gathered before the account manager is pinged.",
+      "verification": "human",
+      "actions": [
+        { "tool": "stella.collect_flags", "label": "Decide whether this work order carries any flags", "kind": "decide", "status": "detected", "args": "work_order_id" }
+      ],
+      "next": [
+        { "to": "finalize-check", "label": "Nothing flagged" },
+        { "to": "search-context", "label": "Flags to resolve" }
+      ]
+    },
+    {
+      "id": "search-context",
+      "title": "Search Slack, email and Granola for the missing context",
+      "owner": "Account manager",
+      "trigger": "A task was flagged on margin or on a missing charge.",
+      "work": "Search outside Portal for anything that explains, confirms or fills the gap: the brand's Slack channels, email for the brand and the account manager, and Granola notes from calls with the brand or internal calls about the event. Look for a scope change, a comped item, a count the operator posted, a rate the AM agreed to, or an instruction that the work was out of scope. Operator trackers are worth checking whenever a task is missing a quantity.",
+      "actor": "agent",
+      "actors": ["stella"],
+      "where": "Slack, email, Granola",
+      "when": "Before pinging the account manager",
+      "autonomy": 3,
+      "doneWhen": "Each flagged task has either a source explaining it, with the link, or a written \"nothing found\".",
+      "actions": [
+        { "tool": "slack.search", "label": "Search the brand's channels for scope changes, counts and agreed rates", "kind": "read", "status": "detected", "args": "brand_id, query" },
+        { "tool": "gmail.search", "label": "Search brand and account-manager email for the same", "kind": "read", "status": "detected", "args": "query, from/to" },
+        { "tool": "granola.notes.search", "label": "Search Granola call notes for the event", "kind": "read", "status": "missing", "args": "query", "gap": "Granola is not wired into Brick. The document asks for it, so the step is written as if it were; today a person reads the notes." },
+        { "tool": "stella.summarize_evidence", "label": "Attach a source and link to each flag, or write \u201cnothing found\u201d", "kind": "write", "status": "detected", "args": "flags[]" }
+      ],
+      "next": [{ "to": "ping-am" }]
+    },
+    {
+      "id": "ping-am",
+      "title": "Take unresolved flags to the account manager",
+      "owner": "Account manager for the brand",
+      "trigger": "The context search is complete, so the ping carries evidence rather than a question.",
+      "work": "Ping the account manager with what the search turned up, plus the work order, the task, who completed it and who created it. Ask whether the task should carry a dollar amount and whether a manual charge needs adding.",
+      "when": "Same day you find it",
+      "rules": ["Never add the manual charge yourself without the AM confirming the rate; finding a rate in Slack is evidence, not authorization."],
+      "actions": [
+        { "tool": "portal.work_orders.get_context", "label": "Collect the work order, the task, who completed it and who created it", "kind": "read", "status": "detected", "args": "task_id" },
+        { "tool": "slack.messages.post", "label": "Ping the account manager with the evidence and the question", "kind": "notify", "status": "detected", "args": "am_user_id, evidence" }
+      ],
+      "next": [{ "to": "finalize-check" }]
+    },
+    {
+      "id": "finalize-check",
+      "kind": "decision",
+      "title": "Is this work order safe to finalize?",
+      "owner": "Account manager",
+      "trigger": "A work order has been through the task, margin and charge checks.",
+      "work": "Check all four: every task is complete with nothing in progress or overdue; margin is inside the band for this work type; every $0 task is explained or the AM confirmed no charge is needed; and any manual charge the AM asked for has been added. Stella proposes, the account manager approves.",
+      "verification": "human",
+      "autonomy": 2,
+      "actions": [
+        { "tool": "stella.finalization_checklist", "label": "Run all four checks and propose a verdict", "kind": "decide", "status": "detected", "args": "work_order_id" },
+        { "tool": "portal.approvals.request", "label": "Put the proposal to the account manager to approve", "kind": "write", "status": "detected", "args": "work_order_id, verdict" }
+      ],
+      "next": [
+        { "to": "finalize", "label": "All yes" },
+        { "to": "leave-blocked", "label": "Any no" }
+      ]
+    },
+    {
+      "id": "finalize",
+      "title": "Finalize the work order",
+      "owner": "Account manager",
+      "trigger": "The work order clears all four checks.",
+      "work": "Finalize it. Work through the completed work orders one at a time; a work order waiting on an operator or on the AM does not hold up the ones that are clean. If a work order was finalized that should not have been, it cannot be undone: tell the AM immediately with the work order link and what was missed.",
+      "where": "Portal",
+      "rules": ["Never finalize to clear the page; anything missed is billed wrong permanently or written off."],
+      "actions": [
+        { "tool": "portal.work_orders.finalize", "label": "Finalize the work order \u2014 this cannot be undone", "kind": "write", "status": "confirmed", "args": "work_order_id" },
+        { "tool": "slack.messages.post", "label": "Tell the account manager at once if one was finalized in error", "kind": "notify", "status": "detected", "args": "am_user_id, work_order_url" }
+      ],
+      "next": [{ "to": "next-order" }]
+    },
+    {
+      "id": "leave-blocked",
+      "title": "Leave it blocked and name the blocker",
+      "owner": "Account manager",
+      "trigger": "A work order fails one of the four checks.",
+      "work": "Leave this work order and move to the next one. Post the blocker and who you are waiting on in the brand channel, and pick it back up next sweep.",
+      "where": "Brand Slack channel",
+      "doneWhen": "The work order has a named blocker and a named person.",
+      "actions": [
+        { "tool": "portal.work_orders.set_blocker", "label": "Record the blocker and who is being waited on", "kind": "write", "status": "missing", "args": "work_order_id, blocker, waiting_on", "gap": "A work order has no blocker field in Portal. Today the blocker exists only in the Slack post, so the next sweep has to re-read the channel." },
+        { "tool": "slack.messages.post", "label": "Post the blocker and the named person in the brand channel", "kind": "notify", "status": "detected", "args": "channel_id, blocker, waiting_on" }
+      ],
+      "next": [{ "to": "next-order" }]
+    },
+    {
+      "id": "next-order",
+      "kind": "decision",
+      "title": "Any work orders left in this brand?",
+      "owner": "Account manager",
+      "trigger": "A work order has been finalized or left blocked.",
+      "work": "Work through the rest of the brand's completed work orders one at a time, then move to the next brand in the sweep.",
+      "actions": [
+        { "tool": "stella.next_work_order", "label": "Take the next completed work order, or move to the next brand", "kind": "decide", "status": "detected", "args": "brand_id" }
+      ],
+      "next": [
+        { "to": "finalize-check", "label": "More work orders" },
+        { "to": "done", "label": "Brand complete" }
+      ]
+    }
+  ]
+}

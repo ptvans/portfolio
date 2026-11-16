@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../docs/sop-file.schema.json",
+  "id": "sop-anonymous-whistleblower-channel",
+  "name": "Anonymous Whistleblower Channel",
+  "status": "active",
+  "version": 1,
+  "scope": { "brandId": null, "customer": "Internal" },
+  "team": "Cross-team",
+  "sopType": "internal",
+  "owner": "Leadership (unassigned in SOP Hub)",
+  "trigger": "Any Brick Dynamics employee identifies a potential issue they want to report anonymously.",
+  "purpose": "A company-wide channel that lets anyone at Brick Dynamics report a concern anonymously, with confidential handling. The source page is a reference link, not a step-by-step process; the receiving side is not documented.",
+  "doneWhen": "The concern has been submitted through the form and received for confidential handling.",
+  "tags": [],
+  "source": {
+    "system": "notion",
+    "url": "https://app.notion.com/p/3db71cfae62e811a9c8fdf75b3c8c565",
+    "lastEditedAt": "2026-09-14T18:25:42.802Z",
+    "importedAt": "2026-09-15T20:00:00.000Z"
+  },
+  "steps": [
+    {
+      "id": "submit",
+      "title": "Submit the concern through the anonymous form",
+      "owner": "Reporting employee",
+      "trigger": "You have identified a concern to report.",
+      "work": "Open the Whistleblower form (Google Form linked from the SOP Hub page) and submit the concern. The form does not collect your identity.",
+      "where": "Google Form",
+      "next": [{ "to": "handle" }]
+    },
+    {
+      "id": "handle",
+      "title": "Confidential handling of the report",
+      "owner": "Leadership (unassigned in SOP Hub)",
+      "trigger": "A form submission arrives.",
+      "work": "The report is handled confidentially. Who receives it and what happens next is not documented on the source page; the owner should fill this in.",
+      "next": [{ "to": "done" }]
+    }
+  ]
+}

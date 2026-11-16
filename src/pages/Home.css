@@ -10,13 +10,8 @@
   width: 100%;
 }
 
-.profile-section {
-  margin-bottom: 60px;
-}
-
-.avatar {
-  margin-bottom: 24px;
-  color: currentColor;
+.hero {
+  margin-bottom: 72px;
 }
 
 .avatar-image {
@@ -26,21 +21,53 @@
   object-fit: cover;
 }
 
-.name {
-  font-size: 18px;
+.hero-title {
+  font-size: clamp(52px, 15vw, 112px);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+  white-space: nowrap;
+}
+
+/* The avatar stands in for the period: sits on the baseline, same 40px size as before. */
+.hero-period {
+  display: inline-block;
+  vertical-align: baseline;
+  margin-left: 0.06em;
+}
+
+.hero-subtitle {
+  margin-top: 20px;
+  font-size: 13px;
   font-weight: 500;
-  margin-bottom: 8px;
-  line-height: 1.3;
-}
-
-.title {
-  font-size: 16px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: rgb(162, 162, 162);
-  line-height: 1.5;
 }
 
-body.light .title {
+body.light .hero-subtitle {
   color: #666;
+}
+
+.pitch-section {
+  margin-bottom: 72px;
+}
+
+.pitch-section h2 {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+
+.pitch-section p {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  color: rgb(162, 162, 162);
 }
 
 .about-section,

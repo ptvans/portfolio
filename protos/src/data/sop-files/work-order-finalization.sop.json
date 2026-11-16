@@ -1,0 +1,118 @@
+{
+  "$schema": "../../../docs/sop-file.schema.json",
+  "id": "sop-work-order-finalization",
+  "name": "Work Order Finalization",
+  "status": "draft",
+  "version": 1,
+  "scope": { "brandId": null, "customer": "Internal" },
+  "team": "AM",
+  "sopType": "internal",
+  "owner": "Account manager for the brand",
+  "escalationContact": "Engineering",
+  "trigger": "Weekly, before invoicing runs.",
+  "purpose": "Finalizing a work order locks its charges and releases them into brand invoices and operator payouts. Finalize while tasks are still open and you bill the customer for work that did not happen and pay an operator for work they did not do. After finalization the fix is a credit memo, not an edit.",
+  "doneWhen": "Every clean row you own is finalized, everything held has a reason, and every operator holding up a task has been pinged.",
+  "tags": ["Work Orders"],
+  "source": {
+    "system": "notion",
+    "url": "https://app.notion.com/p/3db71cfae62e810480f1cabb7400fca8",
+    "lastEditedAt": "2026-09-14T18:25:30.853Z",
+    "importedAt": "2026-09-15T21:00:00.000Z"
+  },
+  "steps": [
+    {
+      "id": "open-page",
+      "title": "Open the finalization page and work down the sidebar",
+      "owner": "Account manager",
+      "trigger": "The weekly finalization pass begins, before invoicing runs.",
+      "work": "Open the finalization page. The left sidebar lists every brand with two counts: green is work orders ready to finalize, red is tasks still pending. Work down the sidebar from the top so you cover every brand in the same order each week. Click your first brand; pending tasks list at the top and a Region/Project table sits below.",
+      "where": "Finalization page",
+      "when": "Weekly",
+      "next": [{ "to": "group-pending" }]
+    },
+    {
+      "id": "group-pending",
+      "title": "Group the pending tasks by operator and age",
+      "owner": "Account manager",
+      "trigger": "A brand's finalization page is loaded.",
+      "work": "Group the pending tasks by network operator and by age, so you see who is holding up what and what has been sitting longest. Pending tasks do not block completed ones: chase the open tasks and finalize the clean rows in the same pass.",
+      "where": "Finalization page",
+      "next": [{ "to": "chase-operators" }]
+    },
+    {
+      "id": "chase-operators",
+      "title": "Post one message per operator in their market channel",
+      "owner": "Account manager",
+      "trigger": "Pending tasks are grouped by operator.",
+      "work": "Open the market Slack channel for each operator with pending tasks (named brand-market-brick, for example #chewy-houston-brick). Post one message per channel listing that operator's open tasks. One message per operator, not one per task. A task pending for weeks rather than days gets a ping and a flag.",
+      "where": "Slack market channels",
+      "rules": ["One message per operator, not one per task."],
+      "next": [{ "to": "check-charges" }]
+    },
+    {
+      "id": "check-charges",
+      "title": "Expand the rows and check the charge math",
+      "owner": "Account manager",
+      "trigger": "Operators have been chased; the clean rows can be reviewed.",
+      "work": "Expand every Region/Project row down to the charge tables. Check quantity times rate against the subtotal on every charge line. Check that the charge lines sum to the task, the tasks to the work order, and the work orders to the Region/Project row. Then read the Margin column on every Region/Project row; most land around 25 to 30 percent. Expect the page to be slow on high-volume brands; let it load rather than reloading repeatedly.",
+      "where": "Finalization page",
+      "verification": "human",
+      "next": [{ "to": "row-check" }]
+    },
+    {
+      "id": "row-check",
+      "kind": "decision",
+      "title": "Is a row wrong, or just unusual?",
+      "owner": "Account manager",
+      "trigger": "The charge tables and margins have been read.",
+      "work": "Check all: every line and level reconciles; the margin matches what you know about that market; no row shows $0 in NO Credits (100 percent margin means the operator will not get paid); no receiving task has both a flat fee and a per-unit fee with quantity on both; no completed task has every charge at $0; no quantity is an order of magnitude off other tasks for the same operator. Negative margin means we are paying the operator more than we bill the brand. Known exceptions: Stack runs Tuesday and gets select-all; markets where we agreed to pay above the standard rate read low or negative and that is correct; after a rate renegotiation new rates do not flow through until charge configs are entered; receiving flat fee plus per-unit at quantity 0/$0 is not a double bill.",
+      "verification": "human",
+      "next": [
+        { "to": "finalize", "label": "All yes" },
+        { "to": "hold-rows", "label": "Any no" },
+        { "to": "ping-eng", "label": "Not sure" }
+      ]
+    },
+    {
+      "id": "hold-rows",
+      "title": "Deselect the flagged rows and hold them",
+      "owner": "Account manager",
+      "trigger": "A row failed one of the checks.",
+      "work": "Deselect the flagged rows, finalize the rest, and hold only what you flagged. A quantity far larger than others gets flagged and questioned with the operator, not rejected. A completed task with every charge at $0 gets confirmed rather than assumed; sometimes it is correct, such as a monthly minimum.",
+      "where": "Finalization page",
+      "next": [{ "to": "finalize" }]
+    },
+    {
+      "id": "ping-eng",
+      "kind": "escalation",
+      "title": "Ping engineering with the brand, market and operator",
+      "owner": "Engineering",
+      "trigger": "A row does not reconcile, or you cannot tell whether it is wrong.",
+      "work": "Deselect that row, finalize the rest, and ping eng with the brand, market and operator. Quantity times rate not matching the subtotal, or a level that does not sum, is a hard error: do not finalize that row. If you finalized something you should not have, ping eng; finalized charges are locked and the fix is a credit memo.",
+      "where": "Slack to eng",
+      "next": [{ "to": "finalize" }]
+    },
+    {
+      "id": "finalize",
+      "title": "Select the clean rows and finalize",
+      "owner": "Account manager",
+      "trigger": "The rows that passed are identified and the flagged ones deselected.",
+      "work": "Check the boxes for the rows that passed and click Finalize. The banner reads \"Finalization successful\" and the brand's counts drop.",
+      "where": "Finalization page",
+      "doneWhen": "The banner confirms success and the brand's green count drops.",
+      "next": [{ "to": "revisit" }]
+    },
+    {
+      "id": "revisit",
+      "kind": "decision",
+      "title": "Anything still held or pending?",
+      "owner": "Account manager",
+      "trigger": "A brand's clean rows are finalized.",
+      "work": "Move to the next brand in the sidebar until every brand you own is covered. Come back later in the week for the rows you held and the tasks you chased.",
+      "next": [
+        { "to": "open-page", "label": "More brands or held rows" },
+        { "to": "done", "label": "All covered" }
+      ]
+    }
+  ]
+}

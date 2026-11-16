@@ -1,0 +1,468 @@
+@import "tailwindcss";
+@import "./theme-dark.css";
+
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Type scale in rem rather than px, so it honours the browser's / OS root
+     font size and so a container can re-scale the whole ladder (see
+     .phone-viewport below). Values are the previous px sizes at a 16px root.
+     Tailwind's --text-*--line-height companions are unitless ratios, so line
+     heights follow the font size automatically and need no rescaling. */
+  --text-2xs: 0.625rem; /* 10px — mobile tab bar labels */
+  --text-xs: 0.6875rem; /* 11px */
+  --text-sm: 0.75rem; /* 12px */
+  --text-base: 0.8125rem; /* 13px */
+  --text-md: 0.9375rem; /* 15px — mobile card titles / controls */
+  --text-md--line-height: calc(1.4 / 0.9375);
+  --text-lg: 1rem; /* 16px */
+
+  /* Brick brand palette: terracotta (brick) + industrial slate */
+  --color-brick-50: #fdf4f1;
+  --color-brick-100: #fbe6de;
+  --color-brick-200: #f6cab8;
+  --color-brick-300: #eea488;
+  --color-brick-400: #e2754f;
+  --color-brick-500: #d15a34;
+  --color-brick-600: #b34526;
+  --color-brick-700: #93361f;
+  --color-brick-800: #772e1d;
+  --color-brick-900: #63291c;
+
+  /* Brand (customer/brand persona) accent */
+  --color-brand-50: #eef4ff;
+  --color-brand-100: #dbe6ff;
+  --color-brand-200: #b8ceff;
+  --color-brand-300: #8badff;
+  --color-brand-400: #5c85f7;
+  --color-brand-500: #3a63e0;
+  --color-brand-600: #2a4bc0;
+  --color-brand-700: #223b9a;
+  --color-brand-800: #1f3179;
+  --color-brand-900: #1c2b60;
+
+  /* Network Operator persona accent */
+  --color-op-50: #eefdf5;
+  --color-op-100: #d6f9e6;
+  --color-op-200: #b0f0d0;
+  --color-op-300: #7ce1b3;
+  --color-op-400: #45c890;
+  --color-op-500: #23aa74;
+  --color-op-600: #158a5e;
+  --color-op-700: #146e4d;
+  --color-op-800: #135840;
+  --color-op-900: #114836;
+}
+
+/* The Network Operator surfaces (the mobile field-operator app + the NO web
+   app) render their `op` accent as indigo rather than green. Rather than change
+   every op-* utility across those apps, remap the op-* tokens to the brand
+   (indigo) palette within this scope; it is applied to each NO app root, so the
+   other personas keep the green op accent. */
+.theme-op-indigo {
+  --color-op-50: var(--color-brand-50);
+  --color-op-100: var(--color-brand-100);
+  --color-op-200: var(--color-brand-200);
+  --color-op-300: var(--color-brand-300);
+  --color-op-400: var(--color-brand-400);
+  --color-op-500: var(--color-brand-500);
+  --color-op-600: var(--color-brand-600);
+  --color-op-700: var(--color-brand-700);
+  --color-op-800: var(--color-brand-800);
+  --color-op-900: var(--color-brand-900);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  background-color: #f6f7f9;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* The mobile prototype's viewport — PhoneFrame's inner scroll area. It stands
+   in for a hand-held device, so its type runs larger than the desktop chrome
+   around it. Tune the whole mobile scale with --ui-scale alone.
+
+   The ladder is re-declared here rather than just setting a font-size or a bare
+   --ui-scale, and that is load-bearing:
+     * Tailwind's text-* utilities emit `font-size: var(--text-sm)`, so they
+       read these tokens, not the container's font-size. A container font-size
+       alone would only affect text with no text-* class.
+     * A custom property has its var()s substituted *before* it is inherited,
+       so declaring the ladder on :root as calc(… * var(--ui-scale)) and then
+       overriding only --ui-scale here would inherit the already-resolved root
+       value and do nothing. --ui-scale must be declared on the same element as
+       the ladder that reads it.
+   em-based tokens would also scale, but they compound: text-xs nested inside
+   text-sm would multiply. rem × scale keeps every step absolute. */
+.phone-viewport {
+  --ui-scale: 1.4;
+
+  --text-2xs: calc(0.625rem * var(--ui-scale));
+  --text-xs: calc(0.6875rem * var(--ui-scale));
+  --text-sm: calc(0.75rem * var(--ui-scale));
+  --text-base: calc(0.8125rem * var(--ui-scale));
+  --text-md: calc(0.9375rem * var(--ui-scale));
+  --text-lg: calc(1rem * var(--ui-scale));
+  --text-xl: calc(1.25rem * var(--ui-scale));
+  --text-2xl: calc(1.5rem * var(--ui-scale));
+  --text-3xl: calc(1.875rem * var(--ui-scale));
+
+  /* Not a rescale (the ratio is unitless, so it needs none) — a tighter leading
+     for the phone only. Tailwind's default is calc(1.75 / 1.125); text-lg here
+     is a heading size (schedule day headings, screen titles) where that much
+     leading reads as a gap. Desktop text-lg keeps the default. */
+  --text-lg--line-height: calc(1.5 / 1.125);
+
+  /* Text with no text-* class inherits from here rather than from body. */
+  font-size: var(--text-base);
+}
+
+/* Brick Ops (the Internal Ops phone app) reads a touch smaller than the
+   field app: the same ladder at a lower scale. It has to be redeclared in
+   full here, not just --ui-scale, for the reason given above. */
+.brick-ops-type {
+  --ui-scale: 1.32;
+
+  --text-2xs: calc(0.625rem * var(--ui-scale));
+  --text-xs: calc(0.6875rem * var(--ui-scale));
+  --text-sm: calc(0.75rem * var(--ui-scale));
+  --text-base: calc(0.8125rem * var(--ui-scale));
+  --text-md: calc(0.9375rem * var(--ui-scale));
+  --text-lg: calc(1rem * var(--ui-scale));
+  --text-xl: calc(1.25rem * var(--ui-scale));
+  --text-2xl: calc(1.5rem * var(--ui-scale));
+  --text-3xl: calc(1.875rem * var(--ui-scale));
+
+  font-size: var(--text-base);
+}
+
+/* ---------------------------------------------------------------------------
+   Liquid Glass — the mobile prototype's take on Apple's iOS 26 material.
+
+   Glass is reserved for the layer that floats over content (tab bar, nav
+   buttons, segmented controls, toasts, sheets); content itself stays on solid
+   white cards, as it does on iOS. Every glass surface is built from the same
+   four parts:
+     * a translucent fill, plus a soft top-down sheen gradient
+     * a backdrop blur + saturation boost, so what's behind reads as coloured
+       light rather than grey mush
+     * a specular rim: two offset inset shadows that light the top-left and
+       bottom-right edges, like light catching the glass's bevel
+     * a soft drop shadow that lifts it off the content
+   On Chromium, <LiquidGlass> (src/apps/mobile/components/LiquidGlass.tsx) adds
+   real edge refraction on top through an SVG displacement filter; other
+   browsers keep the blur-only version below.
+   --------------------------------------------------------------------------- */
+:root {
+  --ios-bg: #f2f2f7;
+  --glass-fill: rgb(255 255 255 / 0.5);
+  --glass-fill-thick: rgb(255 255 255 / 0.78);
+  --glass-sheen: linear-gradient(to bottom, rgb(255 255 255 / 0.45), rgb(255 255 255 / 0) 55%);
+  --glass-blur: 10px;
+  --glass-rim:
+    inset 1.5px 1.5px 1px -1px rgb(255 255 255 / 0.95),
+    inset -1.5px -1.5px 1px -1px rgb(255 255 255 / 0.75),
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.5);
+  --glass-lift: 0 10px 30px -8px rgb(15 23 42 / 0.18), 0 2px 6px -2px rgb(15 23 42 / 0.08);
+}
+
+@utility glass {
+  background-color: var(--glass-fill);
+  background-image: var(--glass-sheen);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(190%) brightness(1.05);
+  backdrop-filter: blur(var(--glass-blur)) saturate(190%) brightness(1.05);
+  box-shadow: var(--glass-rim), var(--glass-lift);
+}
+
+/* Frostier, for surfaces that carry reading text (sheets, composers). */
+@utility glass-thick {
+  background-color: var(--glass-fill-thick);
+  background-image: var(--glass-sheen);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: var(--glass-rim), var(--glass-lift);
+}
+
+/* Dark glass for transient status (the toast). */
+@utility glass-dark {
+  background-color: rgb(28 28 34 / 0.62);
+  background-image: linear-gradient(to bottom, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0) 60%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  backdrop-filter: blur(18px) saturate(170%);
+  box-shadow:
+    inset 1.5px 1.5px 1px -1px rgb(255 255 255 / 0.35),
+    inset -1.5px -1.5px 1px -1px rgb(255 255 255 / 0.18),
+    0 12px 30px -8px rgb(15 23 42 / 0.35);
+}
+
+/* Tinted glass — the prominent (primary) button. The accent is the fill, with
+   the same sheen and rim so it still reads as glass rather than flat colour. */
+@utility glass-tint {
+  background-color: var(--color-op-600);
+  background-image: linear-gradient(to bottom, rgb(255 255 255 / 0.24), rgb(255 255 255 / 0) 60%);
+  color: #fff;
+  box-shadow:
+    inset 1.5px 1.5px 1px -1px rgb(255 255 255 / 0.55),
+    inset -1.5px -1.5px 1px -1px rgb(255 255 255 / 0.3),
+    0 8px 20px -8px color-mix(in srgb, var(--color-op-600) 70%, transparent);
+}
+
+/* A content card: solid, borderless, with the large continuous corners of iOS
+   26 grouped lists. Not glass — content never is. */
+@utility ios-card {
+  background-color: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 14px -6px rgb(15 23 42 / 0.08);
+}
+
+/* The screen behind everything: the iOS grouped grey, lit by a few soft
+   colour washes so the glass above has light to bend. It sits on the phone
+   viewport and does not scroll, like a wallpaper. */
+.ios-wallpaper {
+  background-color: var(--ios-bg);
+  background-image:
+    radial-gradient(70% 45% at 0% 0%, color-mix(in srgb, var(--color-op-400) 22%, transparent), transparent 70%),
+    radial-gradient(60% 40% at 100% 8%, rgb(255 176 140 / 0.22), transparent 70%),
+    radial-gradient(80% 45% at 30% 100%, rgb(150 190 255 / 0.22), transparent 70%);
+}
+
+/* Scroll-edge effect: a header that floats over the scrolling content with no
+   bar of its own. Content passing beneath fades into a soft blur instead of
+   meeting a hard edge — iOS 26 dropped the nav bar background for this. */
+.scroll-edge-top {
+  isolation: isolate;
+}
+.scroll-edge-top::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -28px 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgb(242 242 247 / 0.85), rgb(242 242 247 / 0));
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent);
+  mask-image: linear-gradient(to bottom, #000 50%, transparent);
+  /* Hidden at rest so the wallpaper's colour reaches the top of the screen;
+     it fades in once content is actually passing underneath. */
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.scroll-edge-top[data-scrolled]::before {
+  opacity: 1;
+}
+
+/* Springy easing for glass that moves (the tab bar lens, segment thumbs):
+   overshoots slightly and settles, like a droplet. */
+:root {
+  --ease-glass: cubic-bezier(0.34, 1.36, 0.64, 1);
+}
+
+/* Tailwind v4's preflight leaves buttons on `cursor: default`, so every
+   clickable control in the app would read as inert. Restore the pointer for
+   anything actually actionable — disabled controls keep the default cursor. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary {
+  cursor: pointer;
+}
+
+/* Hide the native scrollbar while keeping the element scrollable. */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE/legacy Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* WebKit (Chrome/Safari) */
+}
+
+/* A minimal scrollbar: a thin, faint thumb on no track, a shade darker while
+   the list is hovered. */
+/* Firefox only: in Chrome the standard properties override the -webkit-
+   rules below, which draw the slimmer bar. */
+@supports not selector(::-webkit-scrollbar) {
+  .thin-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(148 163 184 / 0.35) transparent;
+  }
+  .thin-scrollbar:hover {
+    scrollbar-color: rgb(148 163 184 / 0.6) transparent;
+  }
+}
+.thin-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: rgb(148 163 184 / 0.35);
+  border-radius: 9999px;
+}
+.thin-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: rgb(148 163 184 / 0.6);
+}
+
+/* Bottom toast — rises into place from below the phone's edge. */
+@keyframes toastRise {
+  from {
+    transform: translateY(130%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.toast-rise {
+  animation: toastRise 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast-rise {
+    animation: none;
+  }
+}
+
+/* Agent orb — glows purple/pink while the agent is working, turns solid
+   green when it is done and awaiting user input. */
+@keyframes agentOrbGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 6px 1px rgba(168, 85, 247, 0.55), 0 0 12px 3px rgba(236, 72, 153, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 14px 4px rgba(168, 85, 247, 0.85), 0 0 26px 9px rgba(236, 72, 153, 0.55);
+  }
+}
+
+.agent-orb {
+  display: inline-block;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.agent-orb--thinking {
+  background: radial-gradient(circle at 32% 30%, #f5d0fe, #c026d3 55%, #7e22ce);
+  animation: agentOrbGlow 1.4s ease-in-out infinite;
+}
+
+.agent-orb--idle {
+  background: radial-gradient(circle at 32% 30%, #e9d5ff, #a855f7 75%);
+  box-shadow: 0 0 6px 1px rgba(168, 85, 247, 0.35);
+}
+
+.agent-orb--done {
+  background: radial-gradient(circle at 32% 30%, #bbf7d0, #22c55e 60%, #15803d);
+  box-shadow: 0 0 10px 3px rgba(34, 197, 94, 0.6);
+}
+
+/* Stella's mark: the artwork has no shadow, so a soft one in a dark
+   purple-blue-black is added here. */
+.stella-icon {
+  --stella-shadow: drop-shadow(0 1px 2px rgba(24, 16, 64, 0.35));
+  filter: var(--stella-shadow);
+}
+
+/* The large avatar is big enough to carry a wider, softer shadow. */
+.stella-icon--xl {
+  --stella-shadow: drop-shadow(0 4px 10px rgba(24, 16, 64, 0.32));
+}
+
+/* A My Work row in the Stella sidebar: a 2px dashed underline in the group's
+   colour, with the gradient drifting left to right along the dashes so the
+   rows read as live rather than as more history. The gradient (--work-line)
+   starts and ends on the same colour and is two rows wide, so shifting it by
+   its own width (-200% at this size) loops without a seam. The dashes are a
+   mask over it and stay put; the colour moves through them. */
+.work-line {
+  height: 2px;
+  background-image: var(--work-line);
+  background-size: 200% 100%;
+  background-repeat: repeat-x;
+  -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 3px, transparent 3px 6px);
+  mask-image: repeating-linear-gradient(90deg, #000 0 3px, transparent 3px 6px);
+  animation: work-line-drift 3s linear infinite;
+}
+
+@keyframes work-line-drift {
+  from {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-line {
+    animation: none;
+  }
+}
+
+/* A Stella work group's tinted band (WorkGroupCard): its light gradient, or in
+   dark mode a wash of the group's dot colour. */
+.group-wash {
+  background: var(--wash);
+}
+html.dark .group-wash {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--wash-dot) 26%, transparent),
+    color-mix(in srgb, var(--wash-dot) 6%, transparent)
+  );
+}
+
+/* The Brick tile on the prototype landing page: its squares pop in from the
+   top left, then the lit ones glow in a wave that sweeps the diagonal. */
+.pixel-logo .pixel {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pixel-in 520ms cubic-bezier(0.2, 0.9, 0.3, 1.2) backwards var(--in, 0ms);
+}
+
+.pixel-logo .pixel-lit {
+  animation:
+    pixel-in 520ms cubic-bezier(0.2, 0.9, 0.3, 1.2) backwards var(--in, 0ms),
+    pixel-glow 3.4s ease-in-out infinite var(--glow, 1200ms);
+}
+
+@keyframes pixel-in {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: var(--o, 1);
+    transform: scale(1);
+  }
+}
+
+@keyframes pixel-glow {
+  0%,
+  100% {
+    fill-opacity: 1;
+  }
+  40% {
+    fill-opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-logo .pixel,
+  .pixel-logo .pixel-lit {
+    animation: none;
+  }
+}

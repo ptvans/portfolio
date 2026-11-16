@@ -1,0 +1,128 @@
+{
+  "$schema": "../../../docs/sop-file.schema.json",
+  "id": "sop-coco-regulatory-compliance",
+  "name": "Coco Regulatory Compliance",
+  "status": "active",
+  "version": 1,
+  "scope": { "brandId": "brand-coco", "customer": "Coco" },
+  "team": "Ops",
+  "sopType": "external",
+  "owner": "TBD (assign an owner)",
+  "escalationContact": "TBD (owner to fill in)",
+  "trigger": "Coco's automated monitoring agent detects one of the listed conditions and it does not self-resolve within 2 minutes.",
+  "purpose": "Coco is an AI agent that monitors Coco cities for bot issues that could cause regulatory problems (overcrowded clusters, unsafe spacing, bots obstructing public pathways) and dispatches a worker when something looks wrong. These are the conditions it watches for and how a dispatched worker should respond. Scope: Coco, all markets.",
+  "doneWhen": "The flagged condition is resolved and the worker has photographed the resolved state.",
+  "tags": ["Regulatory & Compliance"],
+  "source": {
+    "system": "notion",
+    "url": "https://app.notion.com/p/3db71cfae62e81c7a99cfc462a8b38a9",
+    "lastEditedAt": "2026-09-14T18:11:30.724Z",
+    "importedAt": "2026-09-15T20:00:00.000Z"
+  },
+  "steps": [
+    {
+      "id": "detect",
+      "title": "Coco's agent detects a watched condition",
+      "owner": "Coco monitoring agent",
+      "trigger": "A bot or cluster matches one of the twelve watched conditions.",
+      "work": "Watched conditions: more than 5 bots in a cluster; clusters under 50 feet apart; more than 2 bots driving together during deploy/undeploy; a bot encroaching on the sidewalk right of way, fallen onto the road, blocking an ADA ramp or doorway, tipped over, stuck in a road, crosswalk, train track or alley; a bot missing its flag, flag bent down, or graffitied.",
+      "actor": "agent",
+      "where": "Coco monitoring",
+      "verification": "automated",
+      "autonomy": 4,
+      "next": [{ "to": "self-resolve" }]
+    },
+    {
+      "id": "self-resolve",
+      "kind": "decision",
+      "title": "Did it resolve itself within 2 minutes?",
+      "owner": "Coco monitoring agent",
+      "trigger": "A condition was detected.",
+      "work": "The agent waits two minutes. If the condition clears on its own, no worker is dispatched.",
+      "actor": "agent",
+      "when": "2 minutes",
+      "autonomy": 4,
+      "next": [
+        { "to": "done", "label": "Yes" },
+        { "to": "dispatch", "label": "No" }
+      ]
+    },
+    {
+      "id": "dispatch",
+      "title": "Dispatch a worker",
+      "owner": "Coco monitoring agent",
+      "trigger": "The condition persisted past 2 minutes.",
+      "work": "The agent dispatches a worker to the bot's location with the condition and the expected resolution.",
+      "actor": "agent",
+      "where": "Coco dispatch tooling",
+      "autonomy": 4,
+      "next": [{ "to": "arrive" }]
+    },
+    {
+      "id": "arrive",
+      "title": "Arrive and photograph the bot",
+      "owner": "Dispatched worker",
+      "trigger": "A dispatch was received.",
+      "work": "Go to the bot and take a photo of it on arrival, before touching anything.",
+      "actors": ["network_operator"],
+      "where": "On site",
+      "next": [{ "to": "known-condition" }]
+    },
+    {
+      "id": "known-condition",
+      "kind": "decision",
+      "title": "Does the issue match a listed condition?",
+      "owner": "Dispatched worker",
+      "trigger": "The worker has assessed the bot.",
+      "work": "Compare what you see with the watched-conditions table. Anything not on the list is escalated rather than improvised.",
+      "actors": ["network_operator"],
+      "next": [
+        { "to": "resolve", "label": "Yes" },
+        { "to": "escalate", "label": "No" }
+      ]
+    },
+    {
+      "id": "resolve",
+      "title": "Resolve per the condition table",
+      "owner": "Dispatched worker",
+      "trigger": "The issue matches a listed condition.",
+      "work": "Clusters: reduce to 5 or fewer bots, or increase spacing to 50+ feet; stop additional deployments if more than 2 bots are driving together. Right-of-way issues: move the bot out of the right of way, back onto the sidewalk, or stand it up and move it. Flag missing: ground the bot, add the flag if you have the part. Flag bent: put it back up. Graffiti: ground the bot and clean it if you have supplies.",
+      "actors": ["network_operator"],
+      "where": "On site",
+      "next": [
+        { "to": "after-photo", "label": "Resolved in place" },
+        { "to": "depot", "label": "Needs a part or supplies you don't have" }
+      ]
+    },
+    {
+      "id": "depot",
+      "title": "Return the bot to depot",
+      "owner": "Dispatched worker",
+      "trigger": "A grounded bot needs a part or supplies the worker does not have.",
+      "work": "Return the bot to depot rather than leaving it in place.",
+      "actors": ["network_operator"],
+      "where": "Depot",
+      "next": [{ "to": "after-photo" }]
+    },
+    {
+      "id": "after-photo",
+      "title": "Photograph the resolved state and complete the task",
+      "owner": "Dispatched worker",
+      "trigger": "The condition is resolved (or the bot is at depot).",
+      "work": "Take a second photo showing the resolved state, then complete the task in the dispatch tooling.",
+      "actors": ["network_operator"],
+      "where": "Coco dispatch tooling",
+      "verification": "human",
+      "next": [{ "to": "done" }]
+    },
+    {
+      "id": "escalate",
+      "kind": "escalation",
+      "title": "Escalate an unlisted issue",
+      "owner": "TBD (owner to fill in)",
+      "trigger": "The issue does not match any watched condition.",
+      "work": "Escalate to the SOP owner's designated contact with the arrival photo and a description. The contact is not yet filled in on the source page.",
+      "next": [{ "to": "after-photo" }]
+    }
+  ]
+}

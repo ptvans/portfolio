@@ -1,0 +1,174 @@
+{
+  "$schema": "../../../docs/sop-file.schema.json",
+  "id": "sop-autolane-dispatch",
+  "name": "Autolane Dispatch Shift",
+  "status": "draft",
+  "version": 1,
+  "scope": { "brandId": "brand-autolane", "customer": "Autolane" },
+  "team": "Ops",
+  "sopType": "external",
+  "owner": "Michael Bencic",
+  "escalationContact": "Brad Hoffa (judgment calls), @ops in #ext-tso-dispatch (platform and fleet)",
+  "trigger": "You're on the Sling schedule for an Autolane dispatch shift. Coverage starts one hour before shift start.",
+  "purpose": "If nobody is on dispatch, quotes to the Tso expire and orders stop. Dispatch is the only role that can fix assignment and order problems mid-shift, and the End User never sees any of it.",
+  "doneWhen": "Every exception has a Console note, the End of Shift single pager is written, and anything still open is posted in #ext-tso-dispatch before you go off dispatch.",
+  "timeToRun": "Full shift: 4.5 hrs (lunch) to 6.5 hrs (dinner Thu–Sun)",
+  "tags": ["Work Orders"],
+  "source": {
+    "system": "notion",
+    "url": "https://app.notion.com/p/3db71cfae62e81db9742e3a17c94d122",
+    "lastEditedAt": "2026-09-14T18:11:30.721Z",
+    "importedAt": "2026-09-15T21:00:00.000Z"
+  },
+  "steps": [
+    {
+      "id": "pre-shift-posts",
+      "title": "Post vehicle assignments, your number and the schedule",
+      "owner": "Dispatcher",
+      "trigger": "You're on the Sling schedule; coverage starts one hour before shift start.",
+      "work": "At least one hour before shift start, post vehicle assignments in #ext-tso-dispatch, post your phone number in the channel canvas, and post the day's schedule to the Tso managers in #ext-tso-managers. Use the vehicle mapping sheet: Car # 1–14 maps to the 6-digit ID the portal uses.",
+      "where": "Slack #ext-tso-dispatch, #ext-tso-managers",
+      "when": "One hour before shift start",
+      "next": [{ "to": "start-dispatch" }]
+    },
+    {
+      "id": "start-dispatch",
+      "title": "Start Dispatch and assign vehicles to merchant locations",
+      "owner": "Dispatcher",
+      "trigger": "The pre-shift posts are out.",
+      "work": "Open Start Dispatch on your profile block, set your scope and an end time, and confirm. Then assign each vehicle to its merchant location in the Vehicles tab. Merchant assignment comes before driver assignment; assigning a driver to a car with no merchant location has never been tested, so flag it if you see it.",
+      "where": "Operations Console",
+      "rules": ["Merchant assignment comes before driver assignment."],
+      "next": [{ "to": "check-ins" }]
+    },
+    {
+      "id": "check-ins",
+      "title": "Watch for each driver's three Slack check-ins",
+      "owner": "Dispatcher",
+      "trigger": "Vehicles are assigned to merchant locations.",
+      "work": "Watch for each driver's three check-ins in channel: arrived at depot, departed for store, arrived at store.",
+      "where": "Slack #ext-tso-dispatch",
+      "next": [{ "to": "roster-covered" }]
+    },
+    {
+      "id": "roster-covered",
+      "kind": "decision",
+      "title": "Is the roster covered for start?",
+      "owner": "Dispatcher",
+      "trigger": "Check-ins are arriving ahead of shift start.",
+      "work": "Check all: every scheduled driver has posted \"arrived at depot\" and none arrived more than an hour early; each has a permissioned vehicle for their retailer showing in the Console; each has confirmed in-channel that they can see their assigned car.",
+      "verification": "human",
+      "next": [
+        { "to": "start-shifts", "label": "All yes" },
+        { "to": "chase-driver", "label": "Any no" },
+        { "to": "ask-brad", "label": "Not sure" }
+      ]
+    },
+    {
+      "id": "chase-driver",
+      "title": "Ping the driver, then escalate",
+      "owner": "Christina Roman (driver coverage) / @ops (permissioning)",
+      "trigger": "A driver has not checked in, or a car is not in the permissioned list.",
+      "work": "Ping the driver in channel. No check-in by 45 minutes before shift start, or 15 minutes into the shift, escalates to Christina Roman for an alternate. If a car isn't in the permissioned list, @ops. A driver arriving more than an hour early gets feedback direct to them and to Christina.",
+      "where": "Slack #ext-tso-dispatch",
+      "next": [{ "to": "roster-covered" }]
+    },
+    {
+      "id": "ask-brad",
+      "kind": "escalation",
+      "title": "Ask Brad Hoffa",
+      "owner": "Brad Hoffa",
+      "trigger": "You can't tell whether the roster is ready for start.",
+      "work": "Take the judgment call to Brad Hoffa with what is unclear about the roster.",
+      "where": "Slack DM",
+      "next": [{ "to": "roster-covered" }]
+    },
+    {
+      "id": "start-shifts",
+      "title": "Start each shift and put supervisors on duty",
+      "owner": "Dispatcher",
+      "trigger": "The roster is covered for start.",
+      "work": "In the Drivers tab, hit Start Shift, select the supervisor, their retailer, then their vehicle. Put each supervisor on duty when they reach the store, or within about 5 minutes of it.",
+      "where": "Operations Console",
+      "next": [{ "to": "work-shift" }]
+    },
+    {
+      "id": "work-shift",
+      "title": "Work the Alerts tab and Intercom through the shift",
+      "owner": "Dispatcher",
+      "trigger": "Supervisors are on duty and orders are flowing.",
+      "work": "Work the Alerts tab through the shift. Pick up Intercom conversations the moment Fin hands one off, using Reply rather than Note, and close when resolved. Add a note to the order's Activity every time something goes off plan. Keep one issue to one top-level message in #ext-tso-dispatch, formatted [CAR 6332 or ORDER #656] – ISSUE NAME – Description. An alert type you've never seen: read the severity, act in the relevant tab, then raise it at the daily huddle. Dispatch makes the customer call, not the supervisor.",
+      "where": "Operations Console, Intercom, Slack",
+      "rules": ["One issue, one top-level message in #ext-tso-dispatch.", "Dispatch makes the customer call, not the supervisor."],
+      "next": [
+        { "to": "fix-yourself", "label": "An order problem comes up" },
+        { "to": "end-of-shift", "label": "Shift end reached" }
+      ]
+    },
+    {
+      "id": "fix-yourself",
+      "kind": "decision",
+      "title": "Can you fix this order yourself?",
+      "owner": "Dispatcher",
+      "trigger": "An order goes off plan mid-shift.",
+      "work": "Check all: the fix is on the driver or order side (address, assignment, delivery state, or contacting the End User); if it needs reassigning, the food is not yet loaded; it does not need a vehicle permissioning or retailer change. Common fixes: wrong address, confirm and call the End User yourself then update the Console; \"arrived at customer\" won't fire, have the supervisor cross the ~100m geofence then Actions → Advance Status; order on the wrong supervisor and not loaded, Actions → Reassign with a noted reason; order already loaded, the supervisor holding it completes it.",
+      "verification": "human",
+      "next": [
+        { "to": "fix-in-console", "label": "All yes" },
+        { "to": "escalate-ops", "label": "Any no, or not sure" },
+        { "to": "stuck-delivery", "label": "Autonomous delivery is stuck" }
+      ]
+    },
+    {
+      "id": "fix-in-console",
+      "title": "Fix it in the Console and note it",
+      "owner": "Dispatcher",
+      "trigger": "The fix is on the driver or order side and within dispatch's reach.",
+      "work": "Make the fix in the Operations Console and add a note to the order's Activity. An End User unresponsive at drop-off gets an SMS then a call from the Console, the supervisor knocks, and failing that: leave at door, photo, log a manual delivery. \"Manual\" is a delivery-method tag on an order; it never means driving the car by hand.",
+      "where": "Operations Console",
+      "next": [{ "to": "work-shift" }]
+    },
+    {
+      "id": "escalate-ops",
+      "kind": "escalation",
+      "title": "@ops in #ext-tso-dispatch",
+      "owner": "@ops (Autolane platform / fleet)",
+      "trigger": "The fix needs vehicle permissioning, a retailer change, or you're not sure.",
+      "work": "@ops in #ext-tso-dispatch. Platform issues get a 1 minute response and 5 minute resolution; fleet issues 1 minute and 30 minutes. Vehicle permissioning and retailer changes are Autolane-only. Stale or off telemetry: resync in the Vehicles tab, have the supervisor advance states manually, escalate to the Autolane platform contact. Doors that won't unlock at the depot or a vehicle that keeps auto-unassigning: refresh and reassign from the Drivers side first, then Chad Wagner if it persists.",
+      "where": "Slack #ext-tso-dispatch",
+      "next": [{ "to": "work-shift" }]
+    },
+    {
+      "id": "stuck-delivery",
+      "kind": "decision",
+      "title": "An autonomous delivery is stuck. What now?",
+      "owner": "Dispatcher",
+      "trigger": "An autonomous delivery will not progress.",
+      "work": "Check all: you've reassigned it, or it's loaded and can't be reassigned; you've advanced it only to a state that's actually true on the ground; you've tried the supervisor and the End User. All yes means manual-complete it and note it. Any no means work the untried option first. Never cancel an autonomous delivery, even when the Console lets you.",
+      "rules": ["Never cancel an autonomous delivery, even when the Console lets you."],
+      "next": [
+        { "to": "fix-in-console", "label": "All yes: manual-complete and note" },
+        { "to": "escalate-ops", "label": "Not sure: @ops" }
+      ]
+    },
+    {
+      "id": "end-of-shift",
+      "title": "Close out supervisors and vehicles",
+      "owner": "Dispatcher",
+      "trigger": "Supervisors reach their scheduled end time.",
+      "work": "Confirm the end-of-shift inspection is done. Take each supervisor off duty at their scheduled end; the Console blocks this during an active run. Unassign each supervisor from their vehicle as they get back to the depot. If a store asks supervisors to stay past close, check with that store's supervisors individually first.",
+      "where": "Operations Console",
+      "next": [{ "to": "eos-report" }]
+    },
+    {
+      "id": "eos-report",
+      "title": "Write the End of Shift report single pager",
+      "owner": "Dispatcher",
+      "trigger": "Supervisors are off duty and vehicles unassigned.",
+      "work": "Write the End of Shift report single pager. Where it lives and what fields it needs is TBD for the owner to fill in. Post anything still open in #ext-tso-dispatch before going off dispatch.",
+      "where": "TBD",
+      "doneWhen": "The single pager is written and open items are posted in #ext-tso-dispatch.",
+      "next": [{ "to": "done" }]
+    }
+  ]
+}

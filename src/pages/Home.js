@@ -1,38 +1,43 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PrototypeDiagram from '../components/PrototypeDiagram';
 import './Home.css';
 
 function Home({ theme, toggleTheme }) {
   return (
     <div className="home">
       <div className="home-container">
-        <div className="profile-section">
-          <div className="avatar">
-            <img 
-              src="./images/paul-blue-avatar-pfp.jpg" 
-              alt="Thom Van Slembrouck" 
-              className="avatar-image"
+        <header className="hero">
+          <h1 className="hero-title">
+            Get Thom
+            <img
+              src="./images/paul-blue-avatar-pfp.jpg"
+              alt="."
+              className="avatar-image hero-period"
             />
-            {/* SVG logo - commented out for potential future use
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="20" cy="20" r="20" fill="currentColor" opacity="0.1"/>
-              <circle cx="20" cy="16" r="6" fill="currentColor" opacity="0.6"/>
-              <path d="M8 32c0-6.627 5.373-12 12-12s12 5.373 12 12" fill="currentColor" opacity="0.6"/>
-            </svg>
-            */}
-          </div>
-          <h2 className="name">Thom Van Slembrouck</h2>
-          <p className="title">
-            Product designer, with front end experience
+          </h1>
+          <p className="hero-subtitle">Creative Technologist</p>
+        </header>
+
+        <section className="pitch-section">
+          <h2>Product Design has changed.</h2>
+          <p>
+            We have been providing rapid-prototyping in code for the past decade. Thanks to coding
+            models like Opus, we can now prototype 20 times faster.
           </p>
-        </div>
+          <p>
+            In a few hours, we can generate multiple new product concepts to test with users, based
+            on the appropriate sample data.
+          </p>
+          <PrototypeDiagram />
+        </section>
 
         <section className="about-section">
           <h2>About</h2>
           <p>I have experience in automated and AI / ML workflows, enterprise systems, and data visualization.</p>
           <p>
             I have worked on product teams at{' '}
-            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>, <a href="https://www.uber.com" target="_blank" rel="noopener noreferrer">Uber</a>, <a href="https://www.apple.com" target="_blank" rel="noopener noreferrer">Apple</a> and{' '}
+            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>, <a href="https://www.uber.com" target="_blank" rel="noopener noreferrer">Uber</a>, <a href="https://www.apple.com" target="_blank" rel="noopener noreferrer">Apple</a>, <a href="https://www.netflix.com" target="_blank" rel="noopener noreferrer">Netflix</a> and{' '}
             <a href="https://replit.com" target="_blank" rel="noopener noreferrer">Replit</a>.{' '} I've also helped <a href="https://waterinthewest.stanford.edu/" target="_blank" rel="noopener noreferrer">Stanford University</a> publish climate and water use research data.
           </p>
         </section>

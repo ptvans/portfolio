@@ -1,0 +1,199 @@
+{
+  "$schema": "../../../docs/sop-file.schema.json",
+  "id": "sop-autolane-pre-shift-dispatch",
+  "name": "Autolane Pre-Shift Dispatch",
+  "status": "draft",
+  "version": 1,
+  "scope": { "brandId": "brand-autolane", "customer": "Autolane" },
+  "team": "Ops",
+  "sopType": "external",
+  "owner": "Michael Bencic",
+  "escalationContact": "Michael Bencic",
+  "trigger": "3:30pm CST, every day there is a delivery shift.",
+  "purpose": "If dispatch does not have vehicles and stores assigned before supervisors arrive, supervisors cannot access their vehicles and stores miss the start of the delivery window. Autolane monitors on-time shift starts as a metric. Scope: Autolane Austin, dispatch role.",
+  "doneWhen": "Every supervisor is marked on shift in the Autolane Operations Console and receiving orders from their merchant.",
+  "timeToRun": "About 90 minutes, 3:30pm CST until all supervisors are on shift",
+  "tags": [],
+  "source": {
+    "system": "notion",
+    "url": "https://app.notion.com/p/3dc71cfae62e81d3aa27e3685a76c119",
+    "lastEditedAt": "2026-09-16T15:15:19.919Z",
+    "importedAt": "2026-09-17T00:00:00.000Z"
+  },
+  "steps": [
+    {
+      "id": "pull-sling",
+      "title": "Pull the day's Sling schedule",
+      "owner": "Michael Bencic",
+      "trigger": "3:30pm CST on a day with a delivery shift.",
+      "work": "Open Sling and pull up today's date. Note who is on dispatch, which supervisors are working, which store each is assigned to, and their hours. Ignore the dispatch hours block in Sling; those are operating hours, not the hours the work requires. Dispatch always starts at 3:30pm CST regardless of what Sling shows.",
+      "actor": "agent",
+      "actors": ["stella", "brick_operator"],
+      "where": "Sling",
+      "when": "3:30pm CST",
+      "doneWhen": "You have the supervisor list with stores and hours for tonight.",
+      "next": [{ "to": "vehicle-check" }]
+    },
+    {
+      "id": "vehicle-check",
+      "kind": "decision",
+      "title": "Has Chad posted tonight's vehicle assignments?",
+      "owner": "Michael Bencic",
+      "trigger": "The Sling schedule for tonight is in hand.",
+      "work": "In #ext-tso-dispatch, find the vehicle assignments the fleet manager, Chad Wagner, posted for tonight's supervisors. Check the post exists and covers every supervisor on tonight's Sling schedule.",
+      "where": "Slack #ext-tso-dispatch",
+      "verification": "human",
+      "next": [
+        { "to": "assign-stores", "label": "Posted and complete" },
+        { "to": "request-assignments", "label": "Missing or incomplete" },
+        { "to": "ask-michael", "label": "Not sure" }
+      ]
+    },
+    {
+      "id": "request-assignments",
+      "title": "Request the assignments, then fall back",
+      "owner": "Michael Bencic",
+      "trigger": "No vehicle assignments were posted, or they do not cover everyone.",
+      "work": "Request assignments in #autolane-austin-brick. If no answer comes, run from the Sling schedule and reuse the vehicle grid from the last shift. If a vehicle is down and Chad has not reposted, use the previous shift's assignments to pick and send a replacement car.",
+      "where": "Slack #autolane-austin-brick",
+      "next": [{ "to": "assign-stores" }]
+    },
+    {
+      "id": "ask-michael",
+      "kind": "escalation",
+      "title": "Ask Michael Bencic",
+      "owner": "Michael Bencic",
+      "trigger": "You cannot tell whether the posted assignments are complete.",
+      "work": "Send Michael the Sling schedule and whatever post you found, and let him make the call.",
+      "where": "Slack DM",
+      "next": [{ "to": "vehicle-check" }]
+    },
+    {
+      "id": "assign-stores",
+      "title": "Assign stores to vehicles in the Console",
+      "owner": "Michael Bencic",
+      "trigger": "Every supervisor on tonight's schedule has a vehicle number.",
+      "work": "In the Operations Console vehicles tab, check which store each of tonight's vehicles is assigned to and fix any that are wrong. Vehicles are identified by the last six of the VIN. Cross-check that vehicle, supervisor and location all match the Sling schedule. Vehicles are usually tagged to the right restaurant but sometimes carry the wrong location from a prior shift, so check every one.",
+      "where": "Autolane Operations Console",
+      "when": "By 3:30pm, at latest 30 minutes before supervisors reach the depot",
+      "rules": ["Never assign a vehicle to a driver before the vehicle's store is correct."],
+      "doneWhen": "Every vehicle in the Console shows the correct store for tonight and matches Sling.",
+      "next": [{ "to": "assign-vehicles" }]
+    },
+    {
+      "id": "assign-vehicles",
+      "title": "Assign vehicles to drivers in the Console",
+      "owner": "Michael Bencic",
+      "trigger": "Every vehicle shows the correct store.",
+      "work": "In the Operations Console drivers tab, assign each vehicle to its supervisor for tonight. The assignment is the digital key: without it the supervisor's phone cannot access or control the vehicle at all.",
+      "where": "Autolane Operations Console",
+      "when": "30 minutes before supervisors reach the depot",
+      "rules": ["Never skip this step; the assignment is the digital key to the vehicle."],
+      "next": [{ "to": "draft-notice" }]
+    },
+    {
+      "id": "draft-notice",
+      "title": "Draft the start-of-shift notice",
+      "owner": "Michael Bencic",
+      "trigger": "Vehicles are assigned to supervisors.",
+      "work": "Draft the start-of-shift notice: a short encouraging line, then each supervisor with their vehicle, store and hours, then any shift reminders at the bottom. Stella drafts it; the dispatcher approves and posts.",
+      "actor": "agent",
+      "actors": ["stella", "brick_operator"],
+      "autonomy": 2,
+      "next": [{ "to": "notice-check" }]
+    },
+    {
+      "id": "notice-check",
+      "kind": "decision",
+      "title": "Is the notice ready to post?",
+      "owner": "Michael Bencic",
+      "trigger": "A draft notice is ready for review.",
+      "work": "Check both: every supervisor, vehicle, store and hours matches the Console and Sling, and the shift reminders are current rather than a repeat of last night's.",
+      "verification": "human",
+      "next": [
+        { "to": "post-notice", "label": "All matches" },
+        { "to": "draft-notice", "label": "Any mismatch: fix first" }
+      ]
+    },
+    {
+      "id": "post-notice",
+      "title": "Post the start-of-shift notice",
+      "owner": "Michael Bencic",
+      "trigger": "The notice has been checked against the Console and Sling.",
+      "work": "Post it in #ext-tso-dispatch.",
+      "where": "Slack #ext-tso-dispatch",
+      "when": "No later than 60 to 90 minutes before the delivery window opens",
+      "next": [{ "to": "post-manager-summary" }]
+    },
+    {
+      "id": "post-manager-summary",
+      "title": "Post the supervisor summary for managers",
+      "owner": "Michael Bencic",
+      "trigger": "The start-of-shift notice is live.",
+      "work": "Post a short statement in #ext-tso-managers of which sites have supervisors tonight and their hours. Supervisor count and hours only, no vehicle or name details.",
+      "where": "Slack #ext-tso-managers",
+      "when": "At least 1 hour before the delivery window opens",
+      "next": [{ "to": "monitor-checkins" }]
+    },
+    {
+      "id": "monitor-checkins",
+      "title": "Monitor depot check-ins",
+      "owner": "Michael Bencic",
+      "trigger": "The notices are out and supervisors are heading to the depot.",
+      "work": "Watch #ext-tso-dispatch for each supervisor's post that they have arrived at the depot and started their vehicle inspection. Supervisors arrive an hour before the delivery window; the check-in window is 4:00 to 4:15. If anyone has not checked in by 4:10, reach out to them directly.",
+      "where": "Slack #ext-tso-dispatch",
+      "when": "4:00 to 4:15, chase at 4:10",
+      "next": [{ "to": "checkin-status" }]
+    },
+    {
+      "id": "checkin-status",
+      "kind": "decision",
+      "title": "Has everyone checked in?",
+      "owner": "Michael Bencic",
+      "trigger": "The check-in window has passed or a supervisor is unreachable.",
+      "work": "Everyone in means the shift can start. Anyone still missing after a direct approach moves onto the escalation ladder.",
+      "verification": "human",
+      "next": [
+        { "to": "put-on-shift", "label": "All checked in" },
+        { "to": "escalate-no", "label": "Still missing after a direct ping" }
+      ]
+    },
+    {
+      "id": "escalate-no",
+      "kind": "escalation",
+      "title": "4:15, escalate to the network operator",
+      "owner": "Network operator",
+      "trigger": "4:15 with no positive response from the supervisor.",
+      "work": "Post in #autolane-austin-brick to the network operator naming who has not checked in and which store is at risk. The NO is responsible for reaching the supervisor locally or assigning a replacement before the delivery window opens.",
+      "actors": ["network_operator"],
+      "where": "Slack #autolane-austin-brick",
+      "when": "4:15 hard deadline",
+      "next": [
+        { "to": "put-on-shift", "label": "Covered or replaced" },
+        { "to": "escalate-autolane", "label": "4:30, still at risk" }
+      ]
+    },
+    {
+      "id": "escalate-autolane",
+      "kind": "escalation",
+      "title": "4:30, escalate to Autolane",
+      "owner": "Autolane, with the NO",
+      "trigger": "4:30 and there is any risk the shift start will be missed.",
+      "work": "Post in #autolane-austin-brick to Autolane. Dispatch states what is occurring and the NO adds next steps and contingencies.",
+      "actors": ["brand_user", "network_operator"],
+      "where": "Slack #autolane-austin-brick",
+      "when": "4:30 hard deadline",
+      "next": [{ "to": "put-on-shift" }]
+    },
+    {
+      "id": "put-on-shift",
+      "title": "Put supervisors on shift",
+      "owner": "Michael Bencic",
+      "trigger": "A supervisor posts that they are in place and ready.",
+      "work": "Watch supervisors travel from depot to store on the Operations Console. When a supervisor posts that they are in place and ready, mark them on shift in the Console. You can put someone on shift early if the Console shows quotes and the supervisor has arrived early, so those orders get captured. Supervisors currently cannot put themselves on shift. The shift runs until exactly 9pm.",
+      "where": "Autolane Operations Console",
+      "doneWhen": "Every supervisor is on shift and receiving orders.",
+      "next": [{ "to": "done" }]
+    }
+  ]
+}

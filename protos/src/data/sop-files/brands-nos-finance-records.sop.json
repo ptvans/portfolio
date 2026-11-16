@@ -1,0 +1,126 @@
+{
+  "$schema": "../../../docs/sop-file.schema.json",
+  "id": "sop-brands-nos-finance-records",
+  "name": "Creating and Updating Brands & NOs (For Finance Reasons)",
+  "status": "active",
+  "version": 1,
+  "scope": { "brandId": null, "customer": "Internal" },
+  "team": "Cross-team",
+  "sopType": "internal",
+  "owner": "Ops",
+  "escalationContact": "Engineering (missing QB records)",
+  "trigger": "A new Brand or Network Operator is added, or an existing one's billing information must change.",
+  "purpose": "How Brands (QuickBooks Customers) and NOs (QuickBooks Vendors) get created and maintained via Portal and the AP team. Portal holds partial data at creation; AP fills in the rest from Ops emails. Portal is not yet the source of truth for QB data, so this document is until Engineering ships the Portal ↔ QB sync.",
+  "doneWhen": "The QuickBooks Customer or Vendor record carries complete, accurate billing information that matches Portal.",
+  "tags": ["Finance & Invoicing"],
+  "source": {
+    "system": "notion",
+    "url": "https://app.notion.com/p/3db71cfae62e8192b10ff4e1ff7553f9",
+    "lastEditedAt": "2026-09-14T18:26:23.358Z",
+    "importedAt": "2026-09-15T20:00:00.000Z"
+  },
+  "steps": [
+    {
+      "id": "new-or-update",
+      "kind": "decision",
+      "title": "New record, or an update?",
+      "owner": "Ops",
+      "trigger": "A Brand or NO needs a QuickBooks change.",
+      "work": "Decide whether this is a brand-new Brand or NO, or a change to an existing one's fields.",
+      "next": [
+        { "to": "create-portal", "label": "New Brand or NO" },
+        { "to": "email-update", "label": "Update existing" }
+      ]
+    },
+    {
+      "id": "create-portal",
+      "title": "Create the Brand or NO in Portal",
+      "owner": "Ops",
+      "trigger": "A new Brand or NO is being onboarded.",
+      "work": "Create the Brand or NO in Portal with whatever information is available. Partial information is expected and acceptable.",
+      "where": "Portal",
+      "next": [{ "to": "qb-automation" }]
+    },
+    {
+      "id": "qb-automation",
+      "title": "Automation creates the QuickBooks record",
+      "owner": "Engineering",
+      "trigger": "A Brand or NO is created in Portal.",
+      "work": "Engineering's automation creates the matching QB Customer (for a Brand) or Vendor (for an NO). No Ops action. QB records are always created by automation, never by hand; if one is missing, escalate to Eng.",
+      "actor": "automation",
+      "where": "Portal → QuickBooks",
+      "rules": ["Never create a QB Customer or Vendor manually."],
+      "verification": "automated",
+      "autonomy": 4,
+      "next": [
+        { "to": "gather-brand", "label": "Brand" },
+        { "to": "gather-no", "label": "NO" }
+      ]
+    },
+    {
+      "id": "gather-brand",
+      "title": "Gather the Brand's billing details",
+      "owner": "Ops",
+      "trigger": "The QB Customer exists but is incomplete.",
+      "work": "Collect from the Brand: legal business name, business address, and billing contact name, email and phone.",
+      "next": [{ "to": "email-ap" }]
+    },
+    {
+      "id": "gather-no",
+      "title": "Gather the NO's billing details, W9 and ACH",
+      "owner": "Ops",
+      "trigger": "The QB Vendor exists but is incomplete.",
+      "work": "Collect from the NO: business name (must match the W9), business address, billing contact name, email and phone, the W9, and ACH information. Do not store ACH details in Portal.",
+      "rules": ["Never store ACH details in Portal.", "Send W9s and ACH info only to ap@."],
+      "next": [{ "to": "email-ap" }]
+    },
+    {
+      "id": "email-ap",
+      "title": "Email the details to AP",
+      "owner": "Ops",
+      "trigger": "Billing details have been collected.",
+      "work": "Email ap@brickdynamics.com with the collected information, including the W9 and ACH details for an NO. Forgetting this step leaves the QB record incomplete.",
+      "where": "Email to ap@brickdynamics.com",
+      "next": [{ "to": "ap-update" }]
+    },
+    {
+      "id": "email-update",
+      "title": "Email AP the update request",
+      "owner": "Ops",
+      "trigger": "An existing Brand's or NO's information changed.",
+      "work": "Email ap@brickdynamics.com specifying the field(s) and new value(s). Updating Portal alone does nothing; QB will not follow in the current state.",
+      "where": "Email to ap@brickdynamics.com",
+      "next": [{ "to": "ap-update" }]
+    },
+    {
+      "id": "ap-update",
+      "title": "AP updates the QuickBooks record",
+      "owner": "Accounts Payable",
+      "trigger": "An email from Ops arrives at ap@.",
+      "work": "AP manually updates the QB Customer or Vendor record with the supplied information.",
+      "where": "QuickBooks",
+      "next": [{ "to": "w9-check" }]
+    },
+    {
+      "id": "w9-check",
+      "kind": "decision",
+      "title": "Does the W9 name match the Vendor name?",
+      "owner": "Accounts Payable",
+      "trigger": "An NO record was updated with a W9.",
+      "work": "For NOs, compare the business name on the W9 with the Vendor name in QB. For Brands this check does not apply.",
+      "verification": "human",
+      "next": [
+        { "to": "done", "label": "Matches / Brand" },
+        { "to": "fix-mismatch", "label": "Mismatch" }
+      ]
+    },
+    {
+      "id": "fix-mismatch",
+      "title": "Fix the name in QB and Portal",
+      "owner": "Accounts Payable",
+      "trigger": "The W9 name does not match the QB Vendor name.",
+      "work": "AP updates the QB Vendor name to match the W9 and emails Ops to update Portal accordingly.",
+      "next": [{ "to": "done" }]
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "$schema": "../../../docs/sop-file.schema.json",
+  "id": "sop-ap-bill-invoice-request",
+  "name": "Accounts Payable: Bill & Invoice Request Email Format",
+  "status": "active",
+  "version": 1,
+  "scope": { "brandId": null, "customer": "Internal" },
+  "team": "Finance",
+  "sopType": "internal",
+  "owner": "Accounts Payable",
+  "trigger": "Someone needs Accounts Payable to generate a bill or an invoice.",
+  "purpose": "Ensures every bill and invoice request sent to A/P is entered correctly and nothing is lost or missed. Any email to ap@brickdynamics.com requesting a bill or invoice must carry the matching data block in the body.",
+  "doneWhen": "A/P has entered the bill or invoice from a complete, correctly formatted request.",
+  "tags": ["Finance & Invoicing"],
+  "source": {
+    "system": "notion",
+    "url": "https://app.notion.com/p/3db71cfae62e818b805bf5d44813fc0b",
+    "lastEditedAt": "2026-09-14T18:26:21.050Z",
+    "importedAt": "2026-09-15T20:00:00.000Z"
+  },
+  "steps": [
+    {
+      "id": "choose-block",
+      "kind": "decision",
+      "title": "Bill or invoice?",
+      "owner": "Requester",
+      "trigger": "A bill or invoice needs to be generated.",
+      "work": "Decide which block applies. A bill is owed to a Network Operator; an invoice is issued to a Brand. If both are needed in one email, use separate blocks; never combine them.",
+      "rules": ["Do not combine bill and invoice in the same block."],
+      "next": [
+        { "to": "fill-bill", "label": "Bill (NO)" },
+        { "to": "fill-invoice", "label": "Invoice (Brand)" }
+      ]
+    },
+    {
+      "id": "fill-bill",
+      "title": "Fill in the Bill block",
+      "owner": "Requester",
+      "trigger": "The request is for a bill.",
+      "work": "Copy the Bill block and fill every field: NO (bill number if applicable), Service Period, Bill Date (use the date on the source document), Description, Project (name or code, e.g. Brand and city for robots), Amount (if quantity × rate, specify both). Write N/A rather than leaving a field blank.",
+      "rules": ["Fill in every field; write N/A if not applicable."],
+      "next": [{ "to": "check-amount" }]
+    },
+    {
+      "id": "fill-invoice",
+      "title": "Fill in the Invoice block",
+      "owner": "Requester",
+      "trigger": "The request is for an invoice.",
+      "work": "Copy the Invoice block and fill every field: Brand Name (the brand the invoice is issued under), Service Period, Invoice Date, Line Description, Project, Amount (if quantity × rate, specify both), Memo (optional). Write N/A rather than leaving a field blank.",
+      "rules": ["Fill in every field; write N/A if not applicable."],
+      "next": [{ "to": "check-amount" }]
+    },
+    {
+      "id": "check-amount",
+      "title": "Double-check the amount",
+      "owner": "Requester",
+      "trigger": "The block is filled in.",
+      "work": "Re-check the amount before sending, including the quantity × rate breakdown when applicable (e.g. 10 hrs × $50/hr = $500).",
+      "verification": "human",
+      "next": [{ "to": "send" }]
+    },
+    {
+      "id": "send",
+      "title": "Email the request to A/P",
+      "owner": "Requester",
+      "trigger": "The amount is confirmed.",
+      "work": "Send the email to ap@brickdynamics.com with the completed block(s) in the body. Never send an A/P request without the block.",
+      "where": "Email to ap@brickdynamics.com",
+      "rules": ["Do not send an A/P email without the block."],
+      "next": [{ "to": "ap-review" }]
+    },
+    {
+      "id": "ap-review",
+      "kind": "decision",
+      "title": "A/P checks the request is complete",
+      "owner": "Accounts Payable",
+      "trigger": "A request email arrives at ap@.",
+      "work": "A/P checks that the block is present and every field is filled. Incomplete requests are returned to the requester.",
+      "where": "Email",
+      "verification": "human",
+      "next": [
+        { "to": "ap-enter", "label": "Complete" },
+        { "to": "choose-block", "label": "Incomplete, returned" }
+      ]
+    },
+    {
+      "id": "ap-enter",
+      "title": "A/P generates the bill or invoice",
+      "owner": "Accounts Payable",
+      "trigger": "The request is complete.",
+      "work": "A/P enters the bill or invoice in the accounting system from the block, charging it to the stated project.",
+      "where": "QuickBooks",
+      "next": [{ "to": "done" }]
+    }
+  ]
+}

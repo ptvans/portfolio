@@ -1,0 +1,111 @@
+{
+  "id": "states-coco-deployment",
+  "sopId": "sop-coco-chicago-pilot-deployment",
+  "name": "Bot states: overnight to in service",
+  "subject": "A Coco bot in the Chicago pilot",
+  "description": "The states a bot moves through on the way out, from the secure area at dawn to working at a merchant. Hands over to the Regulatory Compliance model once the bot is in service, and to the Undeployment model at end of service. Exception states sit below the main run.",
+  "start": "overnight-secure",
+  "states": [
+    {
+      "id": "overnight-secure",
+      "label": "Overnight in the secure area",
+      "kind": "resting",
+      "description": "Where the day starts. The bot is inside a private secure area, indoor or outdoor, with the overnight power state the Undeployment SOP set for it.",
+      "rule": "Nothing is left sitting in public overnight",
+      "steps": [{ "sopId": "sop-coco-chicago-pilot-undeployment", "stepId": "power-state" }]
+    },
+    {
+      "id": "overnight-merchant",
+      "label": "Overnight at the merchant",
+      "kind": "resting",
+      "description": "Leave-out markets only. The bot never came back to a secure area, so prep happens at the merchant instead and the set is already in position.",
+      "rule": "The 4-bot-per-merchant cap still holds",
+      "steps": [{ "sopId": "sop-coco-chicago-pilot-undeployment", "stepId": "power-state" }]
+    },
+    {
+      "id": "health-check",
+      "label": "Powered on, health check",
+      "kind": "active",
+      "description": "The deployment window opens and every bot in the set is powered on and checked. Each one comes out of this with a pass or a fail recorded, and nothing sits in between.",
+      "steps": [{ "sopId": "sop-coco-chicago-pilot-deployment", "stepId": "health-check" }]
+    },
+    {
+      "id": "tier1-repair",
+      "label": "Tier 1 repair on the spot",
+      "kind": "exception",
+      "description": "Failed the check, but it is a tier 1 repair and the part is on hand. The health check re-runs before the bot goes anywhere. Where the tier 1 repair list is documented is still TBD.",
+      "rule": "Never goes out on a failed check that was not fixed",
+      "steps": [{ "sopId": "sop-coco-chicago-pilot-deployment", "stepId": "fix-or-ground" }]
+    },
+    {
+      "id": "grounded",
+      "label": "Grounded",
+      "kind": "exception",
+      "description": "Not going out. Either the failure is beyond a tier 1 repair, the part is not on hand, or the bot grounded mid-route on the way to its merchant.",
+      "steps": [
+        { "sopId": "sop-coco-chicago-pilot-deployment", "stepId": "ground-bot" },
+        { "sopId": "sop-coco-chicago-pilot-deployment", "stepId": "ask-moises" }
+      ]
+    },
+    {
+      "id": "awaiting-pickup",
+      "label": "Awaiting pickup, inside",
+      "kind": "exception",
+      "description": "Held inside the private secure area for the pickup team, never staged on the sidewalk for a quick grab. What happens after the driver collects it is not documented in the SOP.",
+      "rule": "Never visible from the public right of way",
+      "steps": [{ "sopId": "sop-coco-chicago-pilot-undeployment", "stepId": "grounded-bots" }]
+    },
+    {
+      "id": "ready",
+      "label": "Clean, charged and ready",
+      "kind": "active",
+      "description": "Passed the check, and cleaned and battery-swapped if last night was skipped. All of it inside the private secure area.",
+      "rule": "Never prep or swap where the public can see it",
+      "steps": [{ "sopId": "sop-coco-chicago-pilot-deployment", "stepId": "clean-swap" }]
+    },
+    {
+      "id": "staged",
+      "label": "Staged nose-in",
+      "kind": "active",
+      "description": "Parked facing into the sidewalk so the pilot's first move is forward, with a dry departure path. Standing water on the path sends the bot back to be restaged rather than driven through.",
+      "rule": "Never more than 2 bots staged together in the public right of way",
+      "steps": [
+        { "sopId": "sop-coco-chicago-pilot-deployment", "stepId": "stage-nose-in" },
+        { "sopId": "sop-coco-chicago-pilot-deployment", "stepId": "clear-water" }
+      ]
+    },
+    {
+      "id": "deploying",
+      "label": "Driving out under pilot",
+      "kind": "active",
+      "description": "Trip sent and moving. The next pair does not leave until this one is out of sight, which is the rule that stops a line of bots forming on the sidewalk.",
+      "rule": "Never more than 2 bots sent at a time",
+      "steps": [
+        { "sopId": "sop-coco-chicago-pilot-deployment", "stepId": "send-pair" },
+        { "sopId": "sop-coco-chicago-pilot-deployment", "stepId": "out-of-sight" }
+      ]
+    },
+    {
+      "id": "in-service",
+      "label": "In service at the merchant",
+      "kind": "active",
+      "description": "Deployed and working. This SOP ends here; the bot is now watched by the Regulatory Compliance model and comes home through the Undeployment model.",
+      "rule": "Never more than 4 bots at any one merchant"
+    }
+  ],
+  "transitions": [
+    { "id": "t-wake", "from": "overnight-secure", "to": "health-check", "label": "Deployment window opens" },
+    { "id": "t-wake-merchant", "from": "overnight-merchant", "to": "health-check", "label": "Prep happens at the merchant" },
+    { "id": "t-pass", "from": "health-check", "to": "ready", "label": "Passes the check" },
+    { "id": "t-fix", "from": "health-check", "to": "tier1-repair", "label": "Fails, tier 1 with the part on hand" },
+    { "id": "t-fail", "from": "health-check", "to": "grounded", "label": "Fails, not tier 1 or no part" },
+    { "id": "t-recheck", "from": "tier1-repair", "to": "health-check", "label": "Repaired, re-run the check" },
+    { "id": "t-stage", "from": "ready", "to": "staged", "label": "Staged nose-in with a dry path" },
+    { "id": "t-restage", "from": "staged", "to": "ready", "label": "No dry path: restage", "note": "Standing water damages the base, so this is a hard stop rather than a judgement call." },
+    { "id": "t-send", "from": "staged", "to": "deploying", "label": "Trip sent, two at a time" },
+    { "id": "t-arrive", "from": "deploying", "to": "in-service", "label": "Out of sight, reaches the merchant" },
+    { "id": "t-ground-route", "from": "deploying", "to": "grounded", "label": "Grounds mid-route", "note": "Goes into the nearest private secure area, never the curb." },
+    { "id": "t-secure", "from": "grounded", "to": "awaiting-pickup", "label": "Moved into the secure area" },
+    { "id": "t-leaveout", "from": "in-service", "to": "overnight-merchant", "label": "Leave-out market: stays put overnight" }
+  ]
+}

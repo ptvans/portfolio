@@ -1,0 +1,102 @@
+{
+  "id": "states-coco-undeployment",
+  "sopId": "sop-coco-chicago-pilot-undeployment",
+  "name": "Bot states: end of service to overnight",
+  "subject": "A Coco bot in the Chicago pilot",
+  "description": "The states a bot moves through coming home, from end of service to its overnight power state. This is the higher-risk half: bots arriving faster than one receiver can absorb is how the sidewalk lineup happened, so the rally point gates everything. Picks up where the Deployment model hands off.",
+  "start": "in-service",
+  "states": [
+    {
+      "id": "in-service",
+      "label": "In service at the merchant",
+      "kind": "active",
+      "description": "Where this SOP picks up. The bot is deployed and working, and service is about to end for the night.",
+      "rule": "Never more than 4 bots at any one merchant"
+    },
+    {
+      "id": "returning",
+      "label": "Driving back under pilot",
+      "kind": "active",
+      "description": "Sent back once its rally point has a receiver on site and a private secure area to take bots into. Nothing is sent to a rally point that cannot absorb it.",
+      "rule": "Never undeploy the whole market at once",
+      "steps": [{ "sopId": "sop-coco-chicago-pilot-undeployment", "stepId": "rally-ready" }]
+    },
+    {
+      "id": "held-on-route",
+      "label": "Held on route",
+      "kind": "exception",
+      "description": "The rally point is not ready: the receiver is late or a no-show, the secure area fell through, or receivers are spread across more rally points than they can cover. The bot waits where it is rather than landing somewhere with nobody to take it in.",
+      "rule": "Never let bots accumulate at a rally point with no receiver",
+      "steps": [
+        { "sopId": "sop-coco-chicago-pilot-undeployment", "stepId": "hold-bots" },
+        { "sopId": "sop-coco-chicago-pilot-undeployment", "stepId": "ask-moises" }
+      ]
+    },
+    {
+      "id": "at-rally",
+      "label": "At the rally point",
+      "kind": "active",
+      "description": "Landed and waiting to be taken in. The riskiest moment of the day, and the one the whole SOP is shaped around.",
+      "rule": "Never left to line up along a sidewalk, even for a few minutes",
+      "steps": [{ "sopId": "sop-coco-chicago-pilot-undeployment", "stepId": "take-in" }]
+    },
+    {
+      "id": "prepped",
+      "label": "Cleaned and prepped inside",
+      "kind": "active",
+      "description": "The night's cleaning, battery swap and prep, done inside the secure area. Anything skipped tonight is caught by the morning clean-and-swap in the Deployment SOP.",
+      "rule": "Never prep or swap in view of the public",
+      "steps": [{ "sopId": "sop-coco-chicago-pilot-undeployment", "stepId": "clean-prep" }]
+    },
+    {
+      "id": "overnight-outdoor",
+      "label": "Overnight outdoors, powered on",
+      "kind": "resting",
+      "description": "Spending the night in a secured private lot. It stays powered on so it keeps pinging and the camera feed stays up.",
+      "rule": "Stays on, even though the lot is private and secured",
+      "steps": [{ "sopId": "sop-coco-chicago-pilot-undeployment", "stepId": "power-state" }]
+    },
+    {
+      "id": "overnight-indoor",
+      "label": "Overnight indoors, powered off",
+      "kind": "resting",
+      "description": "Spending the night in a locked indoor facility, so it is powered off.",
+      "steps": [{ "sopId": "sop-coco-chicago-pilot-undeployment", "stepId": "power-state" }]
+    },
+    {
+      "id": "overnight-merchant",
+      "label": "Overnight at the merchant",
+      "kind": "resting",
+      "description": "Leave-out markets only. There is no undeployment run at all: the bot stays at its merchant, and swapping there is fine and expected. Whether the overnight power rule applies here is TBD, to confirm with Moises.",
+      "rule": "The 4-bot-per-merchant cap still holds"
+    },
+    {
+      "id": "grounded",
+      "label": "Grounded",
+      "kind": "exception",
+      "description": "Grounded on the way back, so it never reaches a rally point under its own power. It goes into the nearest private secure area rather than being left at the curb.",
+      "steps": [{ "sopId": "sop-coco-chicago-pilot-undeployment", "stepId": "grounded-bots" }]
+    },
+    {
+      "id": "awaiting-pickup",
+      "label": "Awaiting pickup, inside",
+      "kind": "exception",
+      "description": "Held inside the private secure area for the pickup driver to retrieve. Grounded bots used to be left out front for a quick grab; that stopped. The actual time limit is TBD, and what happens after collection is not documented.",
+      "rule": "Never visible from the public right of way",
+      "steps": [{ "sopId": "sop-coco-chicago-pilot-undeployment", "stepId": "grounded-bots" }]
+    }
+  ],
+  "transitions": [
+    { "id": "t-eos", "from": "in-service", "to": "returning", "label": "End of service" },
+    { "id": "t-leaveout", "from": "in-service", "to": "overnight-merchant", "label": "Leave-out market: no undeployment run" },
+    { "id": "t-rally", "from": "returning", "to": "at-rally", "label": "Rally point has a receiver" },
+    { "id": "t-hold", "from": "returning", "to": "held-on-route", "label": "Receiver late, or no secure area" },
+    { "id": "t-release", "from": "held-on-route", "to": "at-rally", "label": "Receiver on site; one rally point at a time" },
+    { "id": "t-ground-route", "from": "returning", "to": "grounded", "label": "Grounds mid-route" },
+    { "id": "t-takein", "from": "at-rally", "to": "prepped", "label": "Taken into the private secure area" },
+    { "id": "t-stop", "from": "at-rally", "to": "held-on-route", "label": "Stacking up faster than they can be taken in", "note": "Stop sending; clear what is outside before anything else arrives." },
+    { "id": "t-outdoor", "from": "prepped", "to": "overnight-outdoor", "label": "Night in a secured private lot" },
+    { "id": "t-indoor", "from": "prepped", "to": "overnight-indoor", "label": "Night in a locked indoor facility" },
+    { "id": "t-secure", "from": "grounded", "to": "awaiting-pickup", "label": "Moved into the secure area" }
+  ]
+}

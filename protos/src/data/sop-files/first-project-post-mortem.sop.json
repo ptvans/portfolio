@@ -1,0 +1,103 @@
+{
+  "$schema": "../../../docs/sop-file.schema.json",
+  "id": "sop-first-project-post-mortem",
+  "name": "First Project Post Mortem",
+  "status": "active",
+  "version": 1,
+  "scope": { "brandId": null, "customer": "Internal" },
+  "team": "Cross-team",
+  "sopType": "internal",
+  "owner": "Account Manager",
+  "trigger": "A brand new to Brick has its first project marked Complete in Portal.",
+  "purpose": "A 15-minute sync between the Account Manager and the Sales Rep who closed the deal, held after a new brand's first project completes, to close the loop between what was sold and what got delivered while it is fresh. Fires only for the first project from a new brand.",
+  "doneWhen": "The four questions have been answered, follow-ups routed, and the post-mortem logged in the First-Project Post-Mortem Logs database.",
+  "timeToRun": "15 minutes",
+  "tags": [],
+  "source": {
+    "system": "notion",
+    "url": "https://app.notion.com/p/3db71cfae62e81488df5dbbcb769821d",
+    "lastEditedAt": "2026-09-14T18:26:15.391Z",
+    "importedAt": "2026-09-15T20:00:00.000Z"
+  },
+  "steps": [
+    {
+      "id": "new-brand",
+      "kind": "decision",
+      "title": "Is this the brand's first project with Brick?",
+      "owner": "Account Manager",
+      "trigger": "A project reaches Complete in Portal.",
+      "work": "Only the first project from a new brand triggers the post-mortem. Repeat projects from the same brand do not.",
+      "next": [
+        { "to": "schedule", "label": "Yes, first project" },
+        { "to": "done", "label": "Repeat project, no post-mortem" }
+      ]
+    },
+    {
+      "id": "schedule",
+      "title": "Schedule the 15-minute sync with the Sales Rep",
+      "owner": "Account Manager",
+      "trigger": "A new brand's first project is Complete.",
+      "work": "Grab 15 minutes on the Sales Rep's calendar within a few days of completion. Don't wait for them to come to you. Quick, focused, no deck.",
+      "where": "Calendar",
+      "when": "Within a few days of completion",
+      "next": [{ "to": "questions" }]
+    },
+    {
+      "id": "questions",
+      "title": "Run the four questions",
+      "owner": "Account Manager",
+      "trigger": "The sync starts.",
+      "work": "1. How'd it go? Smooth or fire drills; what the rep should know about working with this brand. 2. Is the customer happy? Signals, not guesses: direct feedback, tone, willingness to commit to project #2. 3. How were the NOs? Friction, missed SLAs, communication gaps. 4. What does the P&L look like and were the quoted rates clear and accurate in execution?",
+      "when": "15 minutes",
+      "next": [{ "to": "route" }]
+    },
+    {
+      "id": "route",
+      "kind": "decision",
+      "title": "What did the answers surface?",
+      "owner": "Account Manager",
+      "trigger": "The four questions are answered.",
+      "work": "Route each finding to the right follow-up. Everything went well still gets captured, especially anything reusable for similar brands.",
+      "next": [
+        { "to": "flag-risk", "label": "Customer unhappy or at risk" },
+        { "to": "log-no", "label": "NO friction" },
+        { "to": "pricing", "label": "P&L surprise or rate ambiguity" },
+        { "to": "log", "label": "All good" }
+      ]
+    },
+    {
+      "id": "flag-risk",
+      "kind": "escalation",
+      "title": "Flag to the Sales Rep and leadership immediately",
+      "owner": "Account Manager",
+      "trigger": "The customer is unhappy or at risk.",
+      "work": "Flag it to the Sales Rep and leadership now. Don't wait for the next QBR.",
+      "next": [{ "to": "log" }]
+    },
+    {
+      "id": "log-no",
+      "title": "Log NO friction against the brand",
+      "owner": "Account Manager",
+      "trigger": "Network Operator friction was reported.",
+      "work": "Log it against the brand so it informs NO assignment on project #2.",
+      "next": [{ "to": "log" }]
+    },
+    {
+      "id": "pricing",
+      "title": "Loop in pricing and Ops before the next quote",
+      "owner": "Account Manager",
+      "trigger": "Margin missed or the quoted rates were ambiguous in execution.",
+      "work": "Loop in pricing and Ops before the next quote goes out so the next SOW is tighter.",
+      "next": [{ "to": "log" }]
+    },
+    {
+      "id": "log",
+      "title": "Log the post-mortem",
+      "owner": "Account Manager",
+      "trigger": "Follow-ups are routed.",
+      "work": "Log it in the First-Project Post-Mortem Logs database. The four questions are pre-filled via the template button; drop the Granola URL in the property at the top.",
+      "where": "Notion (First-Project Post-Mortem Logs)",
+      "next": [{ "to": "done" }]
+    }
+  ]
+}
