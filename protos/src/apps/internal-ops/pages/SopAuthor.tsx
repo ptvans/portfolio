@@ -18,7 +18,7 @@
 // columns). Either way the document shown is the one that version carried.
 // Edits are held here until Save publishes the next version.
 
-import { ChevronDown, Maximize2, MoreHorizontal, PanelLeftOpen, PanelRightClose, PanelRightOpen, X, type LucideIcon } from "lucide-react";
+import { ChevronDown, Maximize2, MessageSquare, MoreHorizontal, PanelRightClose, PanelRightOpen, X, type LucideIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { EmptyState } from "../../../components/EmptyState";
@@ -138,9 +138,10 @@ export function SopAuthor() {
   // inspector stays closed until a node or block is picked.
   const [inspectorOpen, setInspectorOpen] = useState(!versionMode);
   // The Stella column folds into a narrow tray so the document and graph can
-  // take the width. It stays mounted while collapsed, so the conversation
-  // survives; Modify w/ prompt reopens it.
-  const [chatOpen, setChatOpen] = useState(true);
+  // take the width. It starts collapsed so the graph gets the room; it stays
+  // mounted while collapsed, so the conversation survives; Modify w/ prompt
+  // reopens it.
+  const [chatOpen, setChatOpen] = useState(false);
   // The document's right gutter: the actions and tool calls Stella read out of
   // each section. On by default wherever a SOP has any, because composing the
   // SOP accurately is what the gutter is for.
@@ -702,19 +703,19 @@ function ExecutorLegend() {
   );
 }
 
-// The collapsed Stella column: a narrow tray with just the expand control.
-// A dot on the control marks a block waiting to be sent.
+// The collapsed Stella column: a narrow tray with a chat icon that opens it.
+// A dot on the icon marks a block waiting to be sent.
 function StellaTray({ onExpand, attached }: { onExpand: () => void; attached: boolean }) {
   return (
     <button
       type="button"
       onClick={onExpand}
-      aria-label="Expand Stella"
-      title="Expand Stella"
+      aria-label="Open Stella chat"
+      title="Open Stella chat"
       className="group flex h-full w-full flex-col items-center gap-3 px-2 py-3 text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-600"
     >
       <span className="relative">
-        <PanelLeftOpen className="h-4 w-4" strokeWidth={2} />
+        <MessageSquare className="h-4 w-4" strokeWidth={2} />
         {attached && <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-brand-500 ring-2 ring-white" aria-hidden />}
       </span>
     </button>
