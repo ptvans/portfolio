@@ -118,7 +118,13 @@ function PrototypeDiagram() {
           {Object.entries(NODES).map(([name, { x, y }]) => (
             <g key={name}>
               <circle className={`pd-dot-${name}`} cx={x} cy={y} r="7" />
-              <text x={x} y={y + 19} textAnchor="middle">
+              {/* The halo is its own copy under the label, not paint-order on
+                  one element: Safari ignores paint-order here and draws the
+                  page-colored stroke over the text, hiding it. */}
+              <text className="pd-label-halo" x={x} y={y + 19} textAnchor="middle" aria-hidden="true">
+                {name}
+              </text>
+              <text className="pd-label-text" x={x} y={y + 19} textAnchor="middle">
                 {name}
               </text>
             </g>

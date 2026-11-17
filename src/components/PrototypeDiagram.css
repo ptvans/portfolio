@@ -99,14 +99,22 @@ body.light .pd-cluster circle {
 }
 
 .pd-cluster text {
-  fill: var(--pd-muted);
-  /* A halo in the page color keeps labels readable where links cross them. */
-  paint-order: stroke;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+/* A halo in the page color keeps labels readable where links cross them.
+   It's drawn as a separate copy underneath (see PrototypeDiagram.js). */
+.pd-cluster .pd-label-halo {
+  fill: var(--pd-bg);
   stroke: var(--pd-bg);
   stroke-width: 4px;
   stroke-linejoin: round;
-  font-size: 12px;
-  font-family: inherit;
+}
+
+.pd-cluster .pd-label-text {
+  fill: var(--pd-muted);
+  stroke: none;
 }
 
 .pd-arrow {
