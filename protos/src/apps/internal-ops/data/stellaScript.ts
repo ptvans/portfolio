@@ -609,7 +609,7 @@ const MARGIN_RAW =
 const ZERO_RAW = "Flag any completed task whose charges net to $0 and get my approval before it goes out on an invoice.";
 export const STELLA_FINANCE_PROMPT = `${MARGIN_RAW} Also flag any completed task whose charges net to $0 and get my approval before it goes out on an invoice.`;
 
-const FINANCE_OWNER = "kenny@brickdynamics.com";
+const FINANCE_OWNER = "kenny@getthom.com";
 const FINANCE_SCHEDULE = "Weekdays at 5:00 PM PT";
 
 const MARGIN_COMPILED = [

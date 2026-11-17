@@ -9,7 +9,7 @@
   "sopType": "internal",
   "owner": "Accounts Payable",
   "trigger": "Someone needs Accounts Payable to generate a bill or an invoice.",
-  "purpose": "Ensures every bill and invoice request sent to A/P is entered correctly and nothing is lost or missed. Any email to ap@brickdynamics.com requesting a bill or invoice must carry the matching data block in the body.",
+  "purpose": "Ensures every bill and invoice request sent to A/P is entered correctly and nothing is lost or missed. Any email to ap@getthom.com requesting a bill or invoice must carry the matching data block in the body.",
   "doneWhen": "A/P has entered the bill or invoice from a complete, correctly formatted request.",
   "tags": ["Finance & Invoicing"],
   "source": {
@@ -64,8 +64,8 @@
       "title": "Email the request to A/P",
       "owner": "Requester",
       "trigger": "The amount is confirmed.",
-      "work": "Send the email to ap@brickdynamics.com with the completed block(s) in the body. Never send an A/P request without the block.",
-      "where": "Email to ap@brickdynamics.com",
+      "work": "Send the email to ap@getthom.com with the completed block(s) in the body. Never send an A/P request without the block.",
+      "where": "Email to ap@getthom.com",
       "rules": ["Do not send an A/P email without the block."],
       "next": [{ "to": "ap-review" }]
     },

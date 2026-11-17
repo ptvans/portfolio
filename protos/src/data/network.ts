@@ -96,7 +96,7 @@ export const networkOperators: NetworkOperator[] = [
     fieldOperatorIds: ["fo-bd-1", "fo-bd-2", "fo-bd-3"],
     vehicleIds: [],
     contactName: "Michael Bencic",
-    contactEmail: "dispatch@brickdynamics.com",
+    contactEmail: "dispatch@getthom.com",
     status: "active",
   },
   {

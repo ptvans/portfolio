@@ -79,8 +79,8 @@
       "title": "Email the details to AP",
       "owner": "Ops",
       "trigger": "Billing details have been collected.",
-      "work": "Email ap@brickdynamics.com with the collected information, including the W9 and ACH details for an NO. Forgetting this step leaves the QB record incomplete.",
-      "where": "Email to ap@brickdynamics.com",
+      "work": "Email ap@getthom.com with the collected information, including the W9 and ACH details for an NO. Forgetting this step leaves the QB record incomplete.",
+      "where": "Email to ap@getthom.com",
       "next": [{ "to": "ap-update" }]
     },
     {
@@ -88,8 +88,8 @@
       "title": "Email AP the update request",
       "owner": "Ops",
       "trigger": "An existing Brand's or NO's information changed.",
-      "work": "Email ap@brickdynamics.com specifying the field(s) and new value(s). Updating Portal alone does nothing; QB will not follow in the current state.",
-      "where": "Email to ap@brickdynamics.com",
+      "work": "Email ap@getthom.com specifying the field(s) and new value(s). Updating Portal alone does nothing; QB will not follow in the current state.",
+      "where": "Email to ap@getthom.com",
       "next": [{ "to": "ap-update" }]
     },
     {

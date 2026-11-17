@@ -84,11 +84,11 @@
     },
     {
       "id": "email-911",
-      "title": "Email 911@brickdynamics.com",
+      "title": "Email 911@getthom.com",
       "owner": "Bryan (Ground Ops) / whoever caught it",
       "trigger": "The problem cleared the 911 bar.",
-      "work": "Email 911@brickdynamics.com with what's broken, what you were doing, and roughly when it started. Don't worry about formatting it nicely. This calls an on-call engineer for immediate attention.",
-      "where": "Email to 911@brickdynamics.com",
+      "work": "Email 911@getthom.com with what's broken, what you were doing, and roughly when it started. Don't worry about formatting it nicely. This calls an on-call engineer for immediate attention.",
+      "where": "Email to 911@getthom.com",
       "when": "About 5 minutes",
       "doneWhen": "Email sent.",
       "next": [
