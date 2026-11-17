@@ -25,3 +25,5 @@ yarn-error.log*
 # prototype sub-app (built output is committed under public/protos)
 /protos/node_modules
 /protos/dist
+.vercel
+.env*

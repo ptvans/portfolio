@@ -44,6 +44,9 @@ This creates an optimized production build in the `build/` folder.
 
 ## Deployment to GitHub Pages
 
+> **Moving to Vercel at www.getthom.com.** See [DEPLOYMENT.md](DEPLOYMENT.md) for the
+> Vercel setup and the cutover plan. GitHub Pages stays live until the switch.
+
 This project is configured to automatically deploy to GitHub Pages when you push to the `main` branch.
 
 ### Setup Instructions
