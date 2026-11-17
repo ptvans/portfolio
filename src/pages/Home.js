@@ -27,7 +27,7 @@ function Home({ theme, toggleTheme }) {
           </p>
           <p>
             In a few hours, we can generate multiple new product concepts to test with users, as long as we 
-            have appropriate sample data to build with. These are real examples... 
+            have appropriate sample data to build upon. These are real examples... 
           </p>
           <PrototypeDiagram />
         </section>
@@ -35,9 +35,9 @@ function Home({ theme, toggleTheme }) {
         <section className="about-section">
           <h2>About</h2>
           <p>As a product designer and engineer, I have helped build web & mobile apps across many industries. 
-            These products are powered by complex workflows, automation, and AI agents. 
+            These products are powered by complex workflows, automations, and AI agents. 
             </p>
-            <p>They are complex under the hood, but we strive to make their surfaces simple... designed 
+            <p>While these systems are complex, we strive to make the surfaces we touch simple... designed 
            to bring clarity —
             <em>What do I need to know right now? What should I do next?</em>
             </p>
@@ -60,7 +60,7 @@ function Home({ theme, toggleTheme }) {
             <li>
               <Link to="/case-study/app-performance">Facebook: Make the Mobile Apps Faster</Link>
             </li>
-            <li>
+            <li className="case-studies-more">
               (More available upon request...)
             </li>
           </ul>

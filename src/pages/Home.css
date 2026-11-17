@@ -117,6 +117,16 @@ body.light .about-section p {
   color: var(--link-text);
 }
 
+/* A quiet aside, a step back from the case study links. */
+.case-studies-section .case-studies-more {
+  font-size: 16px;
+  color: #808080;
+}
+
+body.light .case-studies-section .case-studies-more {
+  color: #a6a6a6;
+}
+
 .pitch-section p a,
 .about-section p a {
   color: var(--link-text);
