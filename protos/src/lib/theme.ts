@@ -8,14 +8,15 @@ import { useLayoutEffect, useSyncExternalStore } from "react";
 
 export type Theme = "light" | "dark";
 
-const STORAGE_KEY = "brick-proto-theme";
+// Dark is the default; light only when someone picked it with the toggle.
+const STORAGE_KEY = "getthom-proto-theme";
 const listeners = new Set<() => void>();
 
 function read(): Theme {
   try {
-    return localStorage.getItem(STORAGE_KEY) === "dark" ? "dark" : "light";
+    return localStorage.getItem(STORAGE_KEY) === "light" ? "light" : "dark";
   } catch {
-    return "light";
+    return "dark";
   }
 }
 

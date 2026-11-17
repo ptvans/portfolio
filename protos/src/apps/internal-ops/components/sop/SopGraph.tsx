@@ -20,6 +20,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Sop, SopNode, SopNodeHealth, SopNodeRun, SopState } from "../../../../types/domain";
 import { SOP_AUTONOMY_LABELS } from "../../../../data";
 import { executorFor, EXECUTOR_SENTENCE, formatRuntime, HEALTH_DOT, runHealth } from "./sopFormat";
+import { useTheme, type Theme } from "../../../../lib/theme";
 
 // Card geometry in graph units (== CSS px at zoom 1).
 const CARD_W = 300;
@@ -323,6 +324,27 @@ const CY_STYLE: cytoscape.StylesheetJson = [
   },
 ];
 
+// Cytoscape paints on a canvas, so html.dark can't reach it: in dark mode the
+// edges and their label chips get their own palette, matched to the graph
+// panel (#161d2b) instead of white chips on a dark field.
+const CY_STYLE_DARK: cytoscape.StylesheetJson = [
+  {
+    selector: "edge",
+    style: {
+      "line-color": "#5b64a8",
+      "target-arrow-color": "#8f99e6",
+      color: "#a3aec4",
+      "text-background-color": "#232c40",
+    },
+  },
+  { selector: "edge[?back]", style: { "line-color": "#6a5aa8", "target-arrow-color": "#9d8be0" } },
+  { selector: "edge[?stub]", style: { "line-color": "#343c5c", "target-arrow-color": "#343c5c" } },
+];
+
+function cyStyleFor(theme: Theme): cytoscape.StylesheetJson {
+  return theme === "dark" ? [...CY_STYLE, ...CY_STYLE_DARK] : CY_STYLE;
+}
+
 interface Placed {
   x: number;
   y: number;
@@ -368,6 +390,9 @@ export function SopGraph({
   const cyRef = useRef<Core | null>(null);
   const [placed, setPlaced] = useState<Record<string, Placed>>({});
   const [zoom, setZoom] = useState(1);
+  const [theme] = useTheme();
+  const themeRef = useRef(theme);
+  themeRef.current = theme;
 
   const draggable = scope === "whole" && !!onMoveNode;
   const graph = useMemo(
@@ -409,7 +434,7 @@ export function SopGraph({
     const cy = cytoscape({
       container,
       elements: [],
-      style: CY_STYLE,
+      style: cyStyleFor(themeRef.current),
       layout: { name: "preset" },
       autoungrabify: !draggable,
       boxSelectionEnabled: false,
@@ -501,6 +526,11 @@ export function SopGraph({
   const positionKey = useMemo(() => graph.nodes.map((n) => `${n.id}:${n.x},${n.y}`).join("|"), [graph]);
   const graphRef = useRef(graph);
   graphRef.current = graph;
+
+  // Repaint edges when the theme toggles; the graph itself is untouched.
+  useEffect(() => {
+    cyRef.current?.style(cyStyleFor(theme));
+  }, [theme]);
 
   useEffect(() => {
     const cy = cyRef.current;
