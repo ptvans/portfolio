@@ -23,11 +23,10 @@ function Home({ theme, toggleTheme }) {
           <h2>Product Design is changing rapidly</h2>
           <p>
             I have been providing rapid-prototyping in code for the past decade. Thanks to the latest coding
-            models like Opus and Sol, we can now prototype 20 times faster. ⚡
+            models like Opus and Sol, we can now prototype about 20 times faster. ⚡
           </p>
           <p>
-            In a few hours, we can generate multiple new product concepts to test with users, as long as we 
-            have appropriate sample data to build upon. These are real examples... 
+            In a matter of hours, we can generate new product concepts to test with users, built upon appropriate sample data. These are real examples... 
           </p>
           <PrototypeDiagram />
         </section>
