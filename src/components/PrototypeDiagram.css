@@ -7,15 +7,21 @@
   --pd-arrow: #3cc3cf; /* teal-blue */
   --pd-bg: #1a1a1a; /* page background, for the label halo */
 
+  /* Wider than the text column: it breaks out evenly on both sides, but
+     never past the page's 24px gutters. */
+  --pd-width: min(880px, calc(100vw - 48px));
+  width: var(--pd-width);
+  margin: 40px 0 0 calc((100% - var(--pd-width)) / 2);
+
   display: grid;
   grid-template-columns: minmax(170px, 0.8fr) 64px minmax(0, 1.2fr);
+  /* Each arrow shares a row with its screenshot, so it points at that one. */
   grid-template-areas:
-    'data arrows enterprise'
-    'data arrows consumer';
+    'data arrow-enterprise enterprise'
+    'data arrow-consumer consumer';
   align-items: center;
   column-gap: 12px;
   row-gap: 24px;
-  margin: 40px 0 0;
 }
 
 body.light .prototype-diagram {
@@ -37,9 +43,11 @@ body.light .prototype-diagram {
   margin-bottom: 12px;
 }
 
+/* Top-aligned, level with the "Enterprise Tools" title, so the cluster
+   spans the two arrows rather than hanging below them. */
 .pd-data {
   grid-area: data;
-  align-self: center;
+  align-self: start;
 }
 
 .pd-cluster {
@@ -133,18 +141,14 @@ body.light .pd-cluster circle {
   stroke-linejoin: round;
 }
 
-/* The arrows fan out from the middle of the cluster toward the two
-   screenshots: one column spanning both rows, centered like the cluster. */
+/* The arrows sit in the grid directly (the wrapper only exists for the
+   stacked phone layout), each level with its own screenshot and tilted
+   slightly outward from the cluster. */
 .pd-arrows {
-  grid-area: arrows;
-  align-self: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 36px;
+  display: contents;
 }
-.pd-arrow-enterprise { transform: rotate(-28deg); }
-.pd-arrow-consumer { transform: rotate(28deg); }
+.pd-arrow-enterprise { grid-area: arrow-enterprise; transform: rotate(-12deg); }
+.pd-arrow-consumer { grid-area: arrow-consumer; transform: rotate(12deg); }
 .pd-card-enterprise { grid-area: enterprise; }
 .pd-card-consumer { grid-area: consumer; }
 
@@ -167,9 +171,9 @@ body.light .pd-thumb {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.14);
 }
 
-/* The graph is wide; the phone is tall, so show more of it. */
-.pd-card-enterprise .pd-thumb { aspect-ratio: 2 / 1; }
-.pd-card-consumer .pd-thumb { aspect-ratio: 4 / 5; }
+/* Close in shape, so the two screenshots read as a pair. */
+.pd-card-enterprise .pd-thumb { aspect-ratio: 4 / 3; }
+.pd-card-consumer .pd-thumb { aspect-ratio: 5 / 4; }
 
 .pd-thumb img {
   display: block;
@@ -213,12 +217,14 @@ body.light .pd-thumb {
   /* Stacked: the cluster sits above, so the arrows point down and out to
      the left and right cards. */
   .pd-arrows {
+    grid-area: arrows;
+    display: flex;
     flex-direction: row;
     justify-content: center;
     gap: 56px;
   }
-  .pd-arrow-enterprise { transform: rotate(120deg); }
-  .pd-arrow-consumer { transform: rotate(60deg); }
+  .pd-arrow-enterprise { grid-area: auto; transform: rotate(120deg); }
+  .pd-arrow-consumer { grid-area: auto; transform: rotate(60deg); }
 
   .pd-card {
     align-self: start;

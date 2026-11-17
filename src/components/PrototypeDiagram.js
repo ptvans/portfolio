@@ -41,7 +41,7 @@ const PROTOTYPES = [
     label: 'Enterprise Tools',
     caption: 'Ops console: automation graph inspector',
     href: './protos/#/internal-ops/sops/sop-coco-dispatch/versions/3?view=graph',
-    image: './images/protos/automation-graph-dark.jpg',
+    image: './images/protos/automation-graph-4x3.jpg',
     alt: 'Internal ops web app showing a large automation workflow graph',
     position: 'center',
   },

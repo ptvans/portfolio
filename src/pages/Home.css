@@ -6,7 +6,7 @@
 }
 
 .home-container {
-  max-width: 720px;
+  max-width: 640px;
   width: 100%;
 }
 
@@ -115,6 +115,51 @@ body.light .about-section p {
   font-size: 16px;
   line-height: 1.2;
   color: var(--link-text);
+}
+
+/* "Send me a Message": the one filled control on the page, in the link color,
+   with the page color for its text so it flips cleanly with the theme. */
+.connect-section .connect-primary {
+  margin-bottom: 20px;
+}
+
+.connect-section .contact-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 20px 11px 16px;
+  border-radius: 999px;
+  background: var(--link-text);
+  color: #1a1a1a;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+body.light .connect-section .contact-button {
+  color: #ffffff;
+}
+
+.connect-section .contact-button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.connect-section .contact-button:focus-visible {
+  outline: 2px solid var(--link-text);
+  outline-offset: 3px;
+}
+
+.contact-button-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* A quiet aside, a step back from the case study links. */

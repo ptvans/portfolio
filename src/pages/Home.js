@@ -71,14 +71,17 @@ function Home({ theme, toggleTheme }) {
         <section className="connect-section">
           <h2>Connect</h2>
           <ul>
-            <li>
-              <a href="https://github.com/ptvans" target="_blank" rel="noopener noreferrer">Github</a>
+            <li className="connect-primary">
+              <a href="mailto:thomhvans@gmail.com" className="contact-button">
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="contact-button-icon">
+                  <rect x="3" y="5" width="18" height="14" rx="2.5" />
+                  <path d="m4 7 8 6 8-6" />
+                </svg>
+                Send me a Message
+              </a>
             </li>
             <li>
               <a href="https://www.linkedin.com/in/thom-van-6469a71a4/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            </li>
-            <li>
-              <a href="mailto:thomhvans@gmail.com">Email</a>
             </li>
           </ul>
         </section>
