@@ -24,7 +24,7 @@ body.dark {
 
 body.light {
   background-color: #ffffff;
-  color: #1a1a1a;
+  color: #363b56; /* headings: deep blue-slate, kin to the body text */
   --body-text: #7a7fb8; /* same hue, deep enough to read on white */
   --link-text: #585d9c; /* a step darker than body text */
 }
