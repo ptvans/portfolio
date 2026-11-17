@@ -1,0 +1,93 @@
+/* About page: same column, type and colors as the home page. */
+
+.about-back {
+  display: inline-block;
+  margin-bottom: 48px;
+}
+
+.about-header {
+  margin-bottom: 56px;
+}
+
+.about-header h1 {
+  font-family: 'Averia Sans Libre', 'Figtree', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.about-lede {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+  line-height: 1.45;
+  color: var(--body-text);
+}
+
+.about-block {
+  margin-bottom: 56px;
+}
+
+.about-block h2 {
+  font-family: 'Averia Sans Libre', 'Figtree', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+
+.about-block p,
+.about-block dd,
+.about-skills li {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+  line-height: 1.6;
+  color: var(--body-text);
+}
+
+/* Skills read as a set of tags: two columns, a hairline between rows. */
+.about-skills {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 32px;
+}
+
+.about-skills li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.about-clients {
+  display: grid;
+  gap: 24px;
+}
+
+.about-client dt {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 2px;
+}
+
+.about-client dd {
+  margin: 0;
+}
+
+@media (max-width: 560px) {
+  .about-header h1 {
+    font-size: 40px;
+  }
+
+  .about-lede {
+    font-size: 19px;
+  }
+
+  .about-skills {
+    grid-template-columns: 1fr;
+  }
+}

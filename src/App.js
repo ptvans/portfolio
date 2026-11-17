@@ -3,6 +3,7 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
 import CaseStudy from './pages/CaseStudy';
+import About from './pages/About';
 
 function App() {
   const [theme, setTheme] = useState('dark');
@@ -25,6 +26,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home theme={theme} toggleTheme={toggleTheme} />} />
+        <Route path="/about" element={<About theme={theme} toggleTheme={toggleTheme} />} />
         <Route path="/case-study/:slug" element={<CaseStudy theme={theme} toggleTheme={toggleTheme} />} />
       </Routes>
     </Router>

@@ -46,6 +46,9 @@ function Home({ theme, toggleTheme }) {
             <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>, <a href="https://www.uber.com" target="_blank" rel="noopener noreferrer">Uber</a>, <a href="https://www.apple.com" target="_blank" rel="noopener noreferrer">Apple</a>, <a href="https://www.netflix.com" target="_blank" rel="noopener noreferrer">Netflix</a> and{' '}
             <a href="https://replit.com" target="_blank" rel="noopener noreferrer">Replit</a>.{' '} I've also helped <a href="https://waterinthewest.stanford.edu/" target="_blank" rel="noopener noreferrer">Stanford University</a> publish climate and water use research data.
           </p>
+          <p>
+            <Link to="/about" className="about-more">More →</Link>
+          </p>
         </section>
 
         <section className="case-studies-section">

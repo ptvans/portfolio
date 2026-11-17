@@ -132,6 +132,11 @@ body.light .case-studies-section .case-studies-more {
   color: var(--link-text);
 }
 
+/* "More →" to the About page. */
+.about-section .about-more {
+  font-weight: 600;
+}
+
 .home-footer {
   display: flex;
   justify-content: space-between;
