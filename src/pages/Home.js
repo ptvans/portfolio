@@ -76,7 +76,7 @@ function Home({ theme, toggleTheme }) {
               <a href="https://www.linkedin.com/in/thom-van-6469a71a4/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             </li>
             <li>
-              <a href="mailto:ptvans@gmail.com">Email</a>
+              <a href="mailto:thomhvans@gmail.com">Email</a>
             </li>
           </ul>
         </section>
