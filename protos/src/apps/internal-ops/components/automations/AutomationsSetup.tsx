@@ -1,4 +1,4 @@
-// The Automations Setup page: what Stella runs on its own, in two tabs —
+// The Automations Setup page: what Sol runs on its own, in two tabs —
 // SOPs (the step-by-step documents and, as SOPs of type Alert, the prompts
 // she keeps evaluating) and Goals (targets she tracks). Each tab is its own
 // route, so the index pages render inside this frame and keep their URLs.

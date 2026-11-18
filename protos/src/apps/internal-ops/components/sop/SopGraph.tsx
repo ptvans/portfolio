@@ -483,7 +483,7 @@ export function SopGraph({
       });
     }
 
-    // When the container changes size (the inspector or Stella column opening
+    // When the container changes size (the inspector or Sol column opening
     // or closing), keep the user's zoom and keep whatever was in the middle of
     // the viewport in the middle: shift the pan by half the size change. Only
     // the first real layout, from zero size, fits the whole graph.
@@ -734,7 +734,7 @@ function NodeCard({
   const scoped = cardMode === "run";
   // A version has no runtime health; its dot only marks who runs the step.
   const health: SopNodeHealth = cardMode === "version" ? "idle" : scoped ? runHealth(nodeRun) : node.health;
-  const executorDot = { stella: "bg-violet-400", operator: "bg-amber-400", automation: "bg-sky-400", external: "bg-slate-400" }[executorFor(node)];
+  const executorDot = { sol: "bg-violet-400", operator: "bg-amber-400", automation: "bg-sky-400", external: "bg-slate-400" }[executorFor(node)];
   const dot = cardMode === "version" ? executorDot : HEALTH_DOT[health];
   if (node.kind === "trigger" || node.kind === "completion") {
     return (

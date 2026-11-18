@@ -4,7 +4,7 @@
 
 import { Check, CornerDownRight, TriangleAlert } from "lucide-react";
 import { useState } from "react";
-import type { SopProposal, StellaEntry } from "../../data/stellaScript";
+import type { SopProposal, SolEntry } from "../../data/solScript";
 import { MessageTypeBadge } from "../messages/messageUi";
 
 // One proposed SOP: what it runs over, and the page's steps it keeps.
@@ -27,7 +27,7 @@ function ProposalBody({ sop }: { sop: SopProposal }) {
   );
 }
 
-export function ProposalsCard({ entry }: { entry: Extract<StellaEntry, { kind: "proposals" }> }) {
+export function ProposalsCard({ entry }: { entry: Extract<SolEntry, { kind: "proposals" }> }) {
   return (
     <div className="ml-[34px] max-w-3xl space-y-2.5">
       {entry.sops.map((sop, i) => (
@@ -46,14 +46,14 @@ export function ProposalsCard({ entry }: { entry: Extract<StellaEntry, { kind: "
   );
 }
 
-// Questions with options to pick. Each starts on Stella's suggestion; nothing
+// Questions with options to pick. Each starts on Sol's suggestion; nothing
 // goes out until the answers are sent, and once they are the card is locked
 // on what was picked.
 export function QuestionsCard({
   entry,
   onAnswer,
 }: {
-  entry: Extract<StellaEntry, { kind: "questions" }>;
+  entry: Extract<SolEntry, { kind: "questions" }>;
   onAnswer?: (entryId: string, picks: Record<string, number>) => void;
 }) {
   const [draft, setDraft] = useState<Record<string, number>>(() =>
@@ -159,7 +159,7 @@ export function QuestionsCard({
   );
 }
 
-export function SopListCard({ entry }: { entry: Extract<StellaEntry, { kind: "sopList" }> }) {
+export function SopListCard({ entry }: { entry: Extract<SolEntry, { kind: "sopList" }> }) {
   return (
     <div className="ml-[34px] max-w-3xl rounded-xl border border-slate-200 bg-white shadow-sm">
       <p className="border-b border-slate-100 px-4 py-2.5 text-md font-semibold text-slate-900">{entry.heading}</p>

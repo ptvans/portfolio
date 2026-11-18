@@ -1,7 +1,7 @@
-// Session state for the Stella chat, and the state of My Work.
+// Session state for the Sol chat, and the state of My Work.
 //
 // One session is one task. A session starts untasked: the first message routes
-// it to one of the scripted tasks in stellaScript.ts, and from then on it
+// it to one of the scripted tasks in solScript.ts, and from then on it
 // walks that task's turns. A My Work group gets a session of its own the
 // first time you respond to it — by acting on one of its messages, by writing
 // in its chat, or by opening one of its messages — and that session is the
@@ -14,27 +14,27 @@ import {
   formatAnswers,
   rewriteSopPart,
   routeToTask,
-  STELLA_HISTORY,
-  STELLA_NEW_TITLE,
-  STELLA_NO_ROUTE,
-  STELLA_THINKING_BEATS,
-  STELLA_THINKING_TRIGGER,
+  SOL_HISTORY,
+  SOL_NEW_TITLE,
+  SOL_NO_ROUTE,
+  SOL_THINKING_BEATS,
+  SOL_THINKING_TRIGGER,
   taskById,
   withEdits,
   type SopDraft,
   type SopEdits,
   type SopRef,
-  type StellaAnswers,
-  type StellaEntry,
-  type StellaTask,
-} from "../data/stellaScript";
+  type SolAnswers,
+  type SolEntry,
+  type SolTask,
+} from "../data/solScript";
 import { WORK_GROUPS, workGroupById, workGroupTitle, type WorkGroup, type WorkItem } from "../data/myWork";
 import { useMessages, type MessageSeverity } from "./MessagesContext";
 import { severityRank, topSeverity } from "../components/messages/severity";
 
 export type SessionStatus = "active" | "waiting" | "done" | "idle";
 
-export interface StellaSession {
+export interface SolSession {
   id: string;
   title: string;
   status: SessionStatus;
@@ -44,7 +44,7 @@ export interface StellaSession {
   // How far through that task's turns the session is.
   turn: number;
   // What the user has picked on question cards so far, by question key.
-  answers: StellaAnswers;
+  answers: SolAnswers;
   // Paragraphs of its SOPs rewritten with Modify.
   edits: SopEdits;
   // What the task is scoped to. Picked in the composer; a task that names its
@@ -52,17 +52,17 @@ export interface StellaSession {
   brandId: string | null;
   // Set on a conversation opened from My Work: the group it came from, and,
   // for a conversation about one of the group's messages, that message. Such
-  // a session never routes to a task: Stella answers for the group.
+  // a session never routes to a task: Sol answers for the group.
   groupId: string | null;
   itemId: string | null;
   pinned: boolean;
-  // Stella has written in it since you last opened it. Cleared by select.
+  // Sol has written in it since you last opened it. Cleared by select.
   unread: boolean;
-  // In a group's conversation: when Stella last wrote with no reply from you
+  // In a group's conversation: when Sol last wrote with no reply from you
   // since. Null while the last word is yours, or outside a group
   // conversation. What the reminder on the home counts from.
   awaitingSince: number | null;
-  entries: StellaEntry[];
+  entries: SolEntry[];
   // True while beats are still landing, which disables the composer.
   busy: boolean;
   live: boolean;
@@ -72,7 +72,7 @@ export interface StellaSession {
 export interface WorkItemState {
   // The response picked on its card, by index, once one is.
   acted: number | null;
-  // True while Stella acts on the pick.
+  // True while Sol acts on the pick.
   busy: boolean;
   // A refresh in flight.
   checking: boolean;
@@ -89,22 +89,22 @@ export const DISMISS_REASONS: Record<DismissReason, string> = {
   invalid: "Not valid",
 };
 
-// A message that needs nothing more from you: answered (and Stella is done
+// A message that needs nothing more from you: answered (and Sol is done
 // acting on it), dismissed, or cleared by itself. What a card files under
 // Resolved.
 export function isSettled(s: WorkItemState) {
   return (s.acted !== null && !s.busy) || s.dismissed !== null || s.checked === "cleared";
 }
 
-// How long Stella's last message in a group conversation can sit unanswered
+// How long Sol's last message in a group conversation can sit unanswered
 // before the home reminds you of it.
 export const REMINDER_AFTER_MS = 6 * 60 * 60 * 1000;
 
-// A group conversation Stella has been waiting in for longer than that.
-export interface StellaReminder {
-  session: StellaSession;
+// A group conversation Sol has been waiting in for longer than that.
+export interface SolReminder {
+  session: SolSession;
   group: WorkGroup;
-  // When Stella wrote the message still waiting on a reply.
+  // When Sol wrote the message still waiting on a reply.
   since: number;
 }
 
@@ -119,20 +119,20 @@ const SEED_WAITING = {
 
 const IDLE_ITEM: WorkItemState = { acted: null, busy: false, checking: false, checked: null, dismissed: null };
 
-// How Stella opens a message's conversation when you want to tell the
+// How Sol opens a message's conversation when you want to tell the
 // automation behind it what it got wrong.
 const FEEDBACK_PROMPT =
   "What should this have done differently? Tell me what was off — the trigger, the timing, who it went to — and I'll pass it to the automation that raised it.";
 
-// What Stella says to typed input in one message's conversation.
+// What Sol says to typed input in one message's conversation.
 const ITEM_TYPED_REPLY =
   "Noted. Pick a response on the card above and I'll act on it, or tell me what you'd rather do and I'll draft it for you to check.";
 
-interface StellaContextValue {
-  sessions: StellaSession[];
+interface SolContextValue {
+  sessions: SolSession[];
   activeId: string;
-  active: StellaSession;
-  activeTask: StellaTask | undefined;
+  active: SolSession;
+  activeTask: SolTask | undefined;
   select: (id: string) => void;
   newChat: () => string;
   // `brandId` overrides the session's scope for this message, for a URL
@@ -169,7 +169,7 @@ interface StellaContextValue {
   openItems: (group: WorkGroup) => WorkItem[];
   itemState: (messageId: string) => WorkItemState;
   // Every message on the group's card has been answered: acted on (and
-  // Stella is done acting), dismissed, or cleared itself.
+  // Sol is done acting), dismissed, or cleared itself.
   groupSettled: (group: WorkGroup) => boolean;
   // Groups moved out of My Work into Resolved, most recent first.
   resolvedGroups: WorkGroup[];
@@ -178,28 +178,28 @@ interface StellaContextValue {
   inMyWork: (group: WorkGroup) => boolean;
   // Move a settled group out of My Work into Resolved.
   resolveGroup: (groupId: string) => void;
-  // Group conversations Stella has waited in for six hours or more, for the
+  // Group conversations Sol has waited in for six hours or more, for the
   // alert above the groups on the home.
-  reminders: StellaReminder[];
+  reminders: SolReminder[];
   dismissReminder: (sessionId: string) => void;
   // The group's own conversation, once it has one: a message has been sent
   // in it. The group merely opened to see all of its messages doesn't count,
   // nor does a conversation about one of its messages: the group stays in
   // My Work.
-  groupSession: (groupId: string) => StellaSession | undefined;
+  groupSession: (groupId: string) => SolSession | undefined;
   // Open a conversation and switch to it: the group's, with all of its open
   // messages, or, given a message, that message's own, titled for it.
   openGroup: (groupId: string, messageId?: string) => void;
   // Write into the group's conversation from its chat on the home, opening
   // it if it has none, and switch to it.
   sendToGroup: (groupId: string, text: string) => void;
-  // Pick one of a message's responses. Stella acts on it and settles the
+  // Pick one of a message's responses. Sol acts on it and settles the
   // message in Messages; the result shows on its row. No conversation is
   // started: that takes writing in a chat.
   actOn: (groupId: string, messageId: string, option: number) => void;
   // In a summarised group's conversation: give every message still open
   // its shared response. The press goes into the transcript as your message
-  // in place of the button, then Stella works and reports.
+  // in place of the button, then Sol works and reports.
   actOnAll: (groupId: string) => void;
   // Take back a response picked on a card: the message is open again, here
   // and in Messages, and a group filed under Resolved returns to My Work.
@@ -209,7 +209,7 @@ interface StellaContextValue {
   // Put a message aside without acting on it. It stays on its card, struck
   // through with the reason, and settles in Messages.
   dismissItem: (groupId: string, messageId: string, reason: DismissReason) => void;
-  // Open the message's conversation with Stella asking what the automation
+  // Open the message's conversation with Sol asking what the automation
   // that raised it should have done differently.
   feedbackOn: (groupId: string, messageId: string) => void;
   // Go back to the home with a group in view. The home scrolls to
@@ -219,16 +219,16 @@ interface StellaContextValue {
   clearHomeTarget: () => void;
 }
 
-const StellaContext = createContext<StellaContextValue | null>(null);
+const SolContext = createContext<SolContextValue | null>(null);
 
 // Ids carry the time as well as a counter, so a hot reload (which resets
 // the counter but keeps the sessions) can't hand out an id twice.
 let seq = 0;
-function freshSession(): StellaSession {
+function freshSession(): SolSession {
   seq += 1;
   return {
     id: `ses-live-${Date.now().toString(36)}-${seq}`,
-    title: STELLA_NEW_TITLE,
+    title: SOL_NEW_TITLE,
     status: "active",
     when: "Now",
     taskId: null,
@@ -250,12 +250,12 @@ function freshSession(): StellaSession {
 
 // A chat nobody has typed in yet. It isn't listed, and New Chat reuses it
 // rather than stacking up blanks.
-export function isBlank(s: StellaSession) {
+export function isBlank(s: SolSession) {
   return s.live && !s.groupId && s.entries.length === 0;
 }
 
-// A group conversation from earlier today that Stella is still waiting in.
-function seedWaitingSession(): StellaSession[] {
+// A group conversation from earlier today that Sol is still waiting in.
+function seedWaitingSession(): SolSession[] {
   const group = workGroupById(SEED_WAITING.groupId);
   if (!group) return [];
   return [
@@ -280,14 +280,14 @@ function seedWaitingSession(): StellaSession[] {
 // A group opened in the conversation view with nothing typed in it yet: a
 // way to see all of its messages, not a conversation. It isn't listed, and
 // the group keeps its card, until the first message is sent.
-export function isViewOnly(s: StellaSession) {
+export function isViewOnly(s: SolSession) {
   return !!s.groupId && !s.itemId && !s.entries.some((e) => e.kind === "user");
 }
 
-export function StellaProvider({ children }: { children: ReactNode }) {
-  const [sessions, setSessions] = useState<StellaSession[]>(() => [
+export function SolProvider({ children }: { children: ReactNode }) {
+  const [sessions, setSessions] = useState<SolSession[]>(() => [
     freshSession(),
-    ...STELLA_HISTORY.map<StellaSession>((h) => ({
+    ...SOL_HISTORY.map<SolSession>((h) => ({
       ...h,
       taskId: null,
       turn: 0,
@@ -320,11 +320,11 @@ export function StellaProvider({ children }: { children: ReactNode }) {
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const { getMessage, resolve: resolveMessage, unresolve: unresolveMessage, decide } = useMessages();
 
-  const patch = useCallback((id: string, fn: (s: StellaSession) => StellaSession) => {
+  const patch = useCallback((id: string, fn: (s: SolSession) => SolSession) => {
     setSessions((prev) => prev.map((s) => (s.id === id ? fn(s) : s)));
   }, []);
 
-  // Opening a conversation reads whatever Stella wrote in it.
+  // Opening a conversation reads whatever Sol wrote in it.
   const select = useCallback(
     (id: string) => {
       setActiveId(id);
@@ -334,7 +334,7 @@ export function StellaProvider({ children }: { children: ReactNode }) {
   );
 
   const append = useCallback(
-    (id: string, entry: StellaEntry) => patch(id, (s) => ({ ...s, entries: [...s.entries, entry] })),
+    (id: string, entry: SolEntry) => patch(id, (s) => ({ ...s, entries: [...s.entries, entry] })),
     [patch],
   );
 
@@ -350,7 +350,7 @@ export function StellaProvider({ children }: { children: ReactNode }) {
   // Sends `text` into `session` as it stands, which a caller may have just
   // changed (the answers on a card) ahead of React catching up.
   const dispatch = useCallback(
-    (session: StellaSession | undefined, text: string, brandOverride?: string | null, sopRef?: SopRef) => {
+    (session: SolSession | undefined, text: string, brandOverride?: string | null, sopRef?: SopRef) => {
       if (!session || session.busy || !session.live) return;
       const target = session.id;
       const trimmed = text.trim();
@@ -360,7 +360,7 @@ export function StellaProvider({ children }: { children: ReactNode }) {
       if (brandOverride !== undefined) patch(target, (s) => ({ ...s, brandId: brandOverride }));
       append(target, { kind: "user", text: trimmed, brandId, ...(sopRef && { sopRef }) });
 
-      // A change asked of one part of a SOP sits outside the script: Stella
+      // A change asked of one part of a SOP sits outside the script: Sol
       // makes it in that part if she can, and the task stays on the turn it
       // was on.
       if (sopRef) {
@@ -397,13 +397,13 @@ export function StellaProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      // A conversation from My Work never routes: Stella answers for the
+      // A conversation from My Work never routes: Sol answers for the
       // group, and its messages are settled from their cards.
       const group = workGroupById(session.groupId);
       if (group) {
         const text = session.itemId ? ITEM_TYPED_REPLY : group.typedReply;
         // In the group's own conversation the last word decides who is
-        // waiting: yours clears it, Stella's starts the clock again.
+        // waiting: yours clears it, Sol's starts the clock again.
         const ofGroup = !session.itemId;
         if (ofGroup) {
           patch(target, (s) => ({ ...s, status: "active", awaitingSince: null }));
@@ -419,12 +419,12 @@ export function StellaProvider({ children }: { children: ReactNode }) {
       }
 
       // Until it routes, a session is named for what was asked.
-      if (session.title === STELLA_NEW_TITLE) patch(target, (s) => ({ ...s, title: trimmed }));
+      if (session.title === SOL_NEW_TITLE) patch(target, (s) => ({ ...s, title: trimmed }));
 
       // Test message: hold the loader up for a long stretch, then reply. It
       // sits outside the tasks, so it never routes or moves a turn on.
-      if (STELLA_THINKING_TRIGGER.test(trimmed)) {
-        const { label, holds, reply } = STELLA_THINKING_BEATS;
+      if (SOL_THINKING_TRIGGER.test(trimmed)) {
+        const { label, holds, reply } = SOL_THINKING_BEATS;
         const statusId = `st-${Date.now()}-thinking`;
         patch(target, (s) => ({ ...s, busy: true }));
         timers.current.push(
@@ -453,7 +453,7 @@ export function StellaProvider({ children }: { children: ReactNode }) {
       if (!task) {
         const routed = routeToTask(trimmed);
         if (!routed) {
-          timers.current.push(setTimeout(() => append(target, { kind: "agent", text: STELLA_NO_ROUTE }), 700));
+          timers.current.push(setTimeout(() => append(target, { kind: "agent", text: SOL_NO_ROUTE }), 700));
           return;
         }
         task = routed;
@@ -469,7 +469,7 @@ export function StellaProvider({ children }: { children: ReactNode }) {
       }
 
       const turn = task.turns[turnIndex];
-      // Past the end of the script: Stella says so rather than inventing more.
+      // Past the end of the script: Sol says so rather than inventing more.
       if (!turn) {
         timers.current.push(
           setTimeout(
@@ -633,9 +633,9 @@ export function StellaProvider({ children }: { children: ReactNode }) {
     [groupSettled],
   );
 
-  // Leaving the Stella home files every fully answered group under Resolved:
+  // Leaving the Sol home files every fully answered group under Resolved:
   // going to another page, or opening a conversation in place of the home. A
-  // group Stella is still acting on waits for the next time.
+  // group Sol is still acting on waits for the next time.
   const showing = sessions.find((s) => s.id === activeId) ?? sessions[0];
   const onHome = /^\/internal-ops\/?$/.test(pathname) && isBlank(showing);
   const wasOnHome = useRef(onHome);
@@ -652,8 +652,8 @@ export function StellaProvider({ children }: { children: ReactNode }) {
     wasOnHome.current = onHome;
   }, [onHome]);
 
-  // Group conversations where Stella's last message has waited too long.
-  const reminders = useMemo<StellaReminder[]>(
+  // Group conversations where Sol's last message has waited too long.
+  const reminders = useMemo<SolReminder[]>(
     () =>
       sessions.flatMap((session) => {
         const group = workGroupById(session.groupId);
@@ -680,21 +680,21 @@ export function StellaProvider({ children }: { children: ReactNode }) {
   // session as it will stand, for a caller that sends into it in the same
   // tick.
   const ensureGroupSession = useCallback(
-    (group: WorkGroup, messageIds: string[]): StellaSession => {
+    (group: WorkGroup, messageIds: string[]): SolSession => {
       const existing = sessions.find((s) => s.groupId === group.id && !s.itemId);
       if (existing) {
         const shown = new Set(existing.entries.flatMap((e) => (e.kind === "work" ? e.messageIds : [])));
         const fresh = messageIds.filter((id) => !shown.has(id));
         if (fresh.length === 0) return existing;
-        const entry: StellaEntry = { kind: "work", groupId: group.id, messageIds: fresh };
+        const entry: SolEntry = { kind: "work", groupId: group.id, messageIds: fresh };
         const next = { ...existing, entries: [...existing.entries, entry] };
         patch(existing.id, () => next);
         return next;
       }
-      // A group Stella has summarised opens with that summary as her
+      // A group Sol has summarised opens with that summary as her
       // message under the card, since the card there shows only the first
       // of its messages, and under it the one response for all of them.
-      const session: StellaSession = {
+      const session: SolSession = {
         ...freshSession(),
         title: workGroupTitle(group),
         brandId: group.brandId,
@@ -718,10 +718,10 @@ export function StellaProvider({ children }: { children: ReactNode }) {
   // One message's own conversation, titled for it, created if it has none.
   // The group it came from stays in My Work.
   const ensureItemSession = useCallback(
-    (group: WorkGroup, item: WorkItem): StellaSession => {
+    (group: WorkGroup, item: WorkItem): SolSession => {
       const existing = sessions.find((s) => s.itemId === item.messageId);
       if (existing) return existing;
-      const session: StellaSession = {
+      const session: SolSession = {
         ...freshSession(),
         title: item.title,
         brandId: group.brandId,
@@ -980,11 +980,11 @@ export function StellaProvider({ children }: { children: ReactNode }) {
     [sessions, activeId, active, activeTask, select, newChat, send, setBrand, answer, progress, drafts, suggestion, groups, groupSeverity, openItems, itemState, groupSettled, resolvedGroups, inMyWork, resolveGroup, reminders, dismissReminder, groupSession, openGroup, sendToGroup, actOn, undoItem, actOnAll, refresh, dismissItem, feedbackOn, goHome, homeTarget, clearHomeTarget],
   );
 
-  return <StellaContext.Provider value={value}>{children}</StellaContext.Provider>;
+  return <SolContext.Provider value={value}>{children}</SolContext.Provider>;
 }
 
-export function useStella() {
-  const ctx = useContext(StellaContext);
-  if (!ctx) throw new Error("useStella must be used within a StellaProvider");
+export function useSol() {
+  const ctx = useContext(SolContext);
+  if (!ctx) throw new Error("useSol must be used within a SolProvider");
   return ctx;
 }

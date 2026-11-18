@@ -1,17 +1,17 @@
-// Column 1 of the SOP authoring page: the Stella agent chat.
+// Column 1 of the SOP authoring page: the Sol agent chat.
 //
-// Stella helps author and modify the SOP document and its compiled nodes. In
+// Sol helps author and modify the SOP document and its compiled nodes. In
 // production this is the compiler + patch loop from the PRD; here it is a
 // scripted stand-in: a message with a document block attached rewrites that
 // block after a short "Reworking" pause, and a bare message gets a canned
 // answer grounded in the sample run history.
 
 import { PanelLeftClose, Pencil } from "lucide-react";
-import { StellaComposer } from "../stella/StellaComposer";
-import { StellaIcon } from "../stella/StellaIcon";
+import { SolComposer } from "../sol/SolComposer";
+import { SolIcon } from "../sol/SolIcon";
 import { useEffect, useRef, useState } from "react";
 import type { Sop, SopDocBlock, SopVersion } from "../../../../types/domain";
-import { STELLA_HISTORY } from "../../data/stellaScript";
+import { SOL_HISTORY } from "../../data/solScript";
 import { formatElapsedMs } from "./sopFormat";
 
 type Entry =
@@ -41,11 +41,11 @@ function openingMessage(sop: Sop, version: SopVersion | undefined): string {
   return `I'm watching "${sop.name}". Version ${sop.version} is ${sop.status}. Ask me to change a step, or select a block and choose Modify with prompt.`;
 }
 
-// The pane is titled like a Stella conversation: the matching chat from the
-// Stella history when there is one (ses-<id> for sop-<id>), otherwise a title
+// The pane is titled like a Sol conversation: the matching chat from the
+// Sol history when there is one (ses-<id> for sop-<id>), otherwise a title
 // for what this chat is about.
 function conversationTitle(sop: Sop, version: SopVersion | undefined): string {
-  const seeded = STELLA_HISTORY.find((s) => s.id === `ses-${sop.id.replace(/^sop-/, "")}`);
+  const seeded = SOL_HISTORY.find((s) => s.id === `ses-${sop.id.replace(/^sop-/, "")}`);
   if (seeded) return seeded.title;
   return version ? `Edit ${sop.name} v${version.version}` : `${sop.name} run`;
 }
@@ -58,7 +58,7 @@ function genericReply(sop: Sop, turn: number): string {
   return `Noted. To change a step, select its block in the document and choose Modify with prompt; I'll rewrite only that block and leave the hard constraints alone.`;
 }
 
-export function StellaChat({
+export function SolChat({
   sop,
   version,
   attachedBlock,
@@ -71,7 +71,7 @@ export function StellaChat({
   version?: SopVersion;
   attachedBlock: SopDocBlock | null;
   onDetachBlock: () => void;
-  // Stella's rewrite of a block: the prompt is folded into the block body.
+  // Sol's rewrite of a block: the prompt is folded into the block body.
   onApplyEdit: (blockId: string, prompt: string) => void;
   // Bumped by the parent when it wants the input focused (Modify w/ prompt).
   focusSignal: number;
@@ -140,7 +140,7 @@ export function StellaChat({
           <button
             type="button"
             onClick={onCollapse}
-            aria-label="Collapse Stella"
+            aria-label="Collapse Sol"
             title="Collapse"
             className="ml-auto rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
           >
@@ -149,8 +149,8 @@ export function StellaChat({
         )}
       </div>
 
-      {/* Messages and composer match the Stella home chat (StellaTranscript /
-          StellaComposer): user bubbles on the right, Stella's replies beside
+      {/* Messages and composer match the Sol home chat (SolTranscript /
+          SolComposer): user bubbles on the right, Sol's replies beside
           her orb in plain text, and the same composer box. */}
       <div ref={scrollRef} className="thin-scrollbar min-h-0 flex-1 overflow-y-auto px-4 pb-4">
         {/* Push the conversation to the bottom of the column like a chat. */}
@@ -182,7 +182,7 @@ export function StellaChat({
             }
             return (
               <div key={i} className="flex items-start gap-3">
-                <StellaIcon size={20} className="mt-[3px]" />
+                <SolIcon size={20} className="mt-[3px]" />
                 <p className="min-w-0 flex-1 text-md leading-relaxed text-slate-700">{entry.text}</p>
               </div>
             );
@@ -191,11 +191,11 @@ export function StellaChat({
       </div>
 
       <div className="shrink-0 px-3 pb-3">
-        <StellaComposer
+        <SolComposer
           compact
           onSend={send}
           disabled={busy}
-          placeholder="Ask Stella to change the Automation…"
+          placeholder="Ask Sol to change the Automation…"
           sopRef={
             attachedBlock
               ? {

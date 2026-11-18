@@ -1,8 +1,8 @@
 // The SOP list, shared by the SOPs index and the SOP section of a Brand page.
 //
-// An SOP is one of two types. A Standard SOP (the default) is a document Stella
+// An SOP is one of two types. A Standard SOP (the default) is a document Sol
 // reads and runs step by step. An Alert (formerly an alert rule) is a prompt
-// Stella keeps evaluating against the ops data; when it matches it raises a
+// Sol keeps evaluating against the ops data; when it matches it raises a
 // message. Both list here with the same columns: what it is, who owns it, how
 // it stands, how many messages it has open, and when it last ran and runs
 // next.

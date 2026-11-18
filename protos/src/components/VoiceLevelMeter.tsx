@@ -1,4 +1,4 @@
-// The live mic level shown while dictating into a Stella composer. Bars follow
+// The live mic level shown while dictating into a Sol composer. Bars follow
 // the measured loudness; when the meter stream isn't available (see
 // useSpeechRecognition's `meterLive`) they pulse in place instead.
 export function VoiceLevelMeter({ level, live, barClassName }: { level: number; live: boolean; barClassName: string }) {

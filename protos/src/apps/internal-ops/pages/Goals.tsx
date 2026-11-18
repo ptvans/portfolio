@@ -1,4 +1,4 @@
-// The Goals tab of Automations Setup: the targets Stella tracks, per brand or
+// The Goals tab of Automations Setup: the targets Sol tracks, per brand or
 // Brick-wide, with where each one stands. Searched and laid out like the SOPs
 // tab next to it.
 

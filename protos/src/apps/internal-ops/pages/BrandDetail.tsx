@@ -96,7 +96,7 @@ export function BrandDetail() {
       </section>
 
       {/* SOPs: the processes Brick runs for this brand, as executable records
-          Stella reads and runs (see docs/prd-sop-platform.html). */}
+          Sol reads and runs (see docs/prd-sop-platform.html). */}
       <section className="mb-8">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-slate-900">Automations ({brandSops.length})</h2>
@@ -113,7 +113,7 @@ export function BrandDetail() {
           <EmptyState
             icon={Workflow}
             title="No Automations yet"
-            description="Describe a process to Stella and it compiles into an executable Automation scoped to this brand."
+            description="Describe a process to Sol and it compiles into an executable Automation scoped to this brand."
           />
         ) : (
           <SopTable sops={brandSops} />

@@ -1,7 +1,7 @@
 // Brick Ops seed data: the automation the agent offers on the home screen, and
 // the Needs Your Attention queue.
 //
-// Needs Your Attention is the mobile name for the requests (URMs) Stella has
+// Needs Your Attention is the mobile name for the requests (URMs) Sol has
 // grouped for Internal Ops on the web home — the same WORK_GROUPS, read
 // rather than copied, so the two surfaces never disagree about what is open.
 // State is the phone's own: acting here does not settle the web's copy.
@@ -14,7 +14,7 @@ export interface AttentionItem extends WorkItem {
   group: WorkGroup;
 }
 
-// Flattened in the web's ranking: what's blocking Stella first, then the
+// Flattened in the web's ranking: what's blocking Sol first, then the
 // one-press decisions, then the groups that need more thought.
 export const ATTENTION: AttentionItem[] = WORK_GROUPS.flatMap((group) =>
   group.items.map((item) => ({ ...item, group })),
@@ -28,7 +28,7 @@ export type { WorkAction };
 
 // ---- The agent ------------------------------------------------------------
 //
-// Brick Ops users name their agent themselves; it is Stella on the web. This
+// Brick Ops users name their agent themselves; it is Sol on the web. This
 // is the name it starts with, until someone renames it.
 export const DEFAULT_AGENT_NAME = "Brock";
 

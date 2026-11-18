@@ -8,7 +8,7 @@
 
 import { ChevronRight, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
-import { StellaIcon } from "./stella/StellaIcon";
+import { SolIcon } from "./sol/SolIcon";
 
 export function InspectionPane({
   icon,
@@ -72,13 +72,13 @@ export function PaneBadge({ tone, children }: { tone: "amber" | "emerald" | "sla
   return <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${tones[tone]}`}>{children}</span>;
 }
 
-// One part of what Stella says about the item, under her mark: a grey heading
+// One part of what Sol says about the item, under her mark: a grey heading
 // that folds the body away.
 export function PaneSection({ heading, children }: { heading: string; children: ReactNode }) {
   const [open, setOpen] = useState(true);
   return (
     <section className="flex items-start gap-3">
-      <StellaIcon size={18} className="mt-0.5" />
+      <SolIcon size={18} className="mt-0.5" />
       <div className="min-w-0 flex-1">
         <button
           type="button"

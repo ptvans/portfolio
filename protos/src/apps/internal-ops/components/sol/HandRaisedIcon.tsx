@@ -1,4 +1,4 @@
-// The raised hand that marks a My Work group in the Stella sidebar: a request
+// The raised hand that marks a My Work group in the Sol sidebar: a request
 // that came in for you. It takes the colour of the group's most serious open
 // message while the group waits in My Work, and turns neutral grey once the
 // group is a conversation, where the hand only says where it came from.

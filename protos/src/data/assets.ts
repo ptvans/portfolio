@@ -420,12 +420,12 @@ function cocoBots(): Asset[] {
 // Tonight's draft assignments (Autolane, G&C Roman supervisors)
 
 export const tonightAssignments: TonightAssignment[] = [
-  { id: "ta-1", assetId: "asset-606125", driver: "Cole Murski", locationId: "loc-cherrywood", start: "5:00 PM", end: "9:00 PM" },
-  { id: "ta-2", assetId: "asset-606332", driver: "George Roman III", locationId: "loc-soco", start: "5:00 PM", end: "10:00 PM" },
-  { id: "ta-3", assetId: "asset-606472", driver: "William Ringstaff", locationId: "loc-research", start: "5:00 PM", end: "10:00 PM" },
-  { id: "ta-4", assetId: "asset-606732", driver: "Paul Roman", locationId: "loc-roundrock", start: "5:00 PM", end: "9:00 PM" },
+  { id: "ta-1", assetId: "asset-606125", driver: "Colin Murray", locationId: "loc-cherrywood", start: "5:00 PM", end: "9:00 PM" },
+  { id: "ta-2", assetId: "asset-606332", driver: "Gordon Ronan III", locationId: "loc-soco", start: "5:00 PM", end: "10:00 PM" },
+  { id: "ta-3", assetId: "asset-606472", driver: "Walter Ringfield", locationId: "loc-research", start: "5:00 PM", end: "10:00 PM" },
+  { id: "ta-4", assetId: "asset-606732", driver: "Peter Ronan", locationId: "loc-roundrock", start: "5:00 PM", end: "9:00 PM" },
   { id: "ta-5", assetId: "asset-697036", driver: "Xavier Herrera", locationId: "loc-soco", start: "5:00 PM", end: "9:00 PM" },
-  { id: "ta-6", assetId: "asset-699757", driver: "Cole Pestana", locationId: "loc-cherrywood", start: "5:00 PM", end: "10:00 PM" },
+  { id: "ta-6", assetId: "asset-699757", driver: "Caleb Pendleton", locationId: "loc-cherrywood", start: "5:00 PM", end: "10:00 PM" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -434,7 +434,7 @@ export const tonightAssignments: TonightAssignment[] = [
 export const stakeholders: Stakeholder[] = [
   {
     id: "christina",
-    name: "Christina Roman",
+    name: "Carla Ronan",
     org: "G&C Roman",
     role: "Vehicle assignment",
     notifyWhen: "Any vehicle is flagged — a swap or a charging plan changes tonight's assignments",
@@ -490,7 +490,7 @@ function mulberry32(seed: number) {
 function buildShiftLogs(): ShiftLog[] {
   const rand = mulberry32(1014);
   const cars = ["asset-606125", "asset-606332", "asset-606472", "asset-606732", "asset-697036", "asset-699757", "asset-700581"];
-  const drivers = ["Cole Murski", "George Roman III", "William Ringstaff", "Paul Roman", "Xavier Herrera", "Cole Pestana", "John Joste"];
+  const drivers = ["Colin Murray", "Gordon Ronan III", "Walter Ringfield", "Peter Ronan", "Xavier Herrera", "Caleb Pendleton", "Jon Jorgensen"];
   const locs = ["loc-cherrywood", "loc-soco", "loc-research", "loc-roundrock", "loc-soco", "loc-cherrywood"];
   const out: ShiftLog[] = [];
   for (let d = 14; d <= 27; d++) {

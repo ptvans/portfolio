@@ -10,11 +10,11 @@
   },
   "team": "AM",
   "sopType": "external",
-  "owner": "Toni Callahan",
+  "owner": "Tara Whitmore",
   "escalationContact": "TBD (owner to fill in)",
   "trigger": "An Account Manager needs a freight quote for a shipment between two locations on a client project.",
-  "purpose": "Getting quotes from both vendors and reviewing them with Shannon before anything goes to the client keeps pricing consistent and catches problems before they reach the account. Scope: any AM requesting LTL or dedicated freight quotes for a client shipment.",
-  "doneWhen": "Both vendors have responded, Shannon and the AM have agreed on which option to present, and a recommendation is ready for the client.",
+  "purpose": "Getting quotes from both vendors and reviewing them with Sienna before anything goes to the client keeps pricing consistent and catches problems before they reach the account. Scope: any AM requesting LTL or dedicated freight quotes for a client shipment.",
+  "doneWhen": "Both vendors have responded, Sienna and the AM have agreed on which option to present, and a recommendation is ready for the client.",
   "timeToRun": "15 minutes to send requests, plus vendor response time",
   "tags": [
     "Freight & Shipping",
@@ -67,7 +67,7 @@
       "actor": "agent",
       "actors": [
         "brick_operator",
-        "stella"
+        "sol"
       ],
       "where": "Claude",
       "next": [
@@ -78,10 +78,10 @@
     },
     {
       "id": "send-requests",
-      "title": "Send the same request to both vendors, CC Shannon",
+      "title": "Send the same request to both vendors, CC Sienna",
       "owner": "Account Manager",
       "trigger": "Project code and shipment details are ready.",
-      "work": "Email Unishippers (Alex O'Reilly) and Flock Freight (Tucker Morris) with the identical request, CC Shannon. Subject: Build Dynamics [Client: {Client}] | Project Code = {Code} | New Quote Request | {Origin} to {Destination}. Ask for LTL and Dedicated quotes; include addresses, dates and windows, the manifest with dimensions or pallet count and total weight, whether palletized (ask for driver assist if not), and an Item / Qty Confirmed table.",
+      "work": "Email Unishippers (Alex O'Reilly) and Flock Freight (Tucker Morris) with the identical request, CC Sienna. Subject: Build Dynamics [Client: {Client}] | Project Code = {Code} | New Quote Request | {Origin} to {Destination}. Ask for LTL and Dedicated quotes; include addresses, dates and windows, the manifest with dimensions or pallet count and total weight, whether palletized (ask for driver assist if not), and an Item / Qty Confirmed table.",
       "where": "Email",
       "when": "About 15 minutes",
       "next": [
@@ -96,7 +96,7 @@
       "title": "Have both vendors responded?",
       "owner": "Account Manager",
       "trigger": "Requests are out.",
-      "work": "Wait for both quotes. If a vendor hasn't responded, follow up directly and loop in Shannon if it is holding up the timeline.",
+      "work": "Wait for both quotes. If a vendor hasn't responded, follow up directly and loop in Sienna if it is holding up the timeline.",
       "actors": [
         "external",
         "brick_operator"
@@ -117,7 +117,7 @@
       "title": "Follow up with the vendor",
       "owner": "Account Manager",
       "trigger": "A vendor has not responded.",
-      "work": "Follow up directly with the vendor contact; loop in Shannon if the delay threatens the client's timeline.",
+      "work": "Follow up directly with the vendor contact; loop in Sienna if the delay threatens the client's timeline.",
       "next": [
         {
           "to": "responses"
@@ -126,10 +126,10 @@
     },
     {
       "id": "review",
-      "title": "Review both quotes with Shannon",
-      "owner": "Shannon",
+      "title": "Review both quotes with Sienna",
+      "owner": "Sienna",
       "trigger": "Both vendors have responded.",
-      "work": "Huddle with Shannon to compare LTL and dedicated pricing from both vendors and agree on what to present.",
+      "work": "Huddle with Sienna to compare LTL and dedicated pricing from both vendors and agree on what to present.",
       "next": [
         {
           "to": "present-decision"
@@ -159,7 +159,7 @@
       "id": "present",
       "title": "Present the recommendation to the client",
       "owner": "Account Manager",
-      "trigger": "Shannon and the AM agree on the option.",
+      "trigger": "Sienna and the AM agree on the option.",
       "work": "Present the agreed recommendation and pricing to the client.",
       "next": [
         {

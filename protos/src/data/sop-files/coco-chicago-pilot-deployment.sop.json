@@ -10,8 +10,8 @@
   },
   "team": "Ops",
   "sopType": "external",
-  "owner": "Moises (NO lead, Robot Chicago)",
-  "escalationContact": "Moises, who takes it to Robot",
+  "owner": "Mateo (NO lead, Robot Chicago)",
+  "escalationContact": "Mateo, who takes it to Robot",
   "trigger": "The daily deployment window opens (start time TBD on the source page).",
   "purpose": "Robot judges us on what the public sees, and the public escalates. A resident photographed roughly a dozen bots lined up on a public sidewalk at night and posted it, tagging Robot, a community account and the 43rd Ward alderman. Every rule here is downstream of that: 2 at a time, 4 per merchant, nothing staged in bulk in public, no prep where people can see it. Pilot deployment only, where bots drive themselves out under pilot control; van and truck deployment is a different, undocumented process.",
   "doneWhen": "Every bot is deployed and clear, no merchant is over 4 bots, and nothing is left sitting in public.",
@@ -28,7 +28,7 @@
     {
       "id": "health-check",
       "title": "Power on the bots and run the health check",
-      "owner": "Moises / NO crew",
+      "owner": "Mateo / NO crew",
       "trigger": "The daily deployment window opens, with the plan checked against the 4-bot cap and batteries and supplies staged inside the secure area.",
       "work": "Power on every bot in the deployment set and run the health check on each one. What the health check covers is TBD for the owner to fill in.",
       "actors": [
@@ -47,7 +47,7 @@
       "id": "fix-or-ground",
       "kind": "decision",
       "title": "Fix it on the spot, or ground it?",
-      "owner": "Moises / NO crew on the ground",
+      "owner": "Mateo / NO crew on the ground",
       "trigger": "A bot failed the health check.",
       "work": "Check both: it is a tier 1 repair, and it needs no part or you have the part on you. Never send out a bot that failed the check and was not fixed; that becomes a grounded bot in public, which is the thing this Automation exists to prevent. Where the tier 1 repair list is documented is TBD, and without it a new person cannot run this decision.",
       "actors": [
@@ -75,7 +75,7 @@
     {
       "id": "ground-bot",
       "title": "Ground the bot",
-      "owner": "Moises / NO crew",
+      "owner": "Mateo / NO crew",
       "trigger": "A failed bot is not a tier 1 repair, or the part is not on hand.",
       "work": "The bot does not go out. It is handled under Step 5 of the Undeployment Automation: moved into the private secure area for the pickup team, never staged on the sidewalk.",
       "actors": [
@@ -91,10 +91,10 @@
     {
       "id": "ask-moises",
       "kind": "escalation",
-      "title": "Ping Moises about the failure",
-      "owner": "Moises (NO lead, Robot Chicago)",
+      "title": "Ping Mateo about the failure",
+      "owner": "Mateo (NO lead, Robot Chicago)",
       "trigger": "You cannot tell whether a failure is a tier 1 repair.",
-      "work": "Ping Moises with the bot ID, what failed, and the part you think it needs. The bot stays grounded while you wait.",
+      "work": "Ping Mateo with the bot ID, what failed, and the part you think it needs. The bot stays grounded while you wait.",
       "where": "Slack DM",
       "next": [
         {
@@ -105,7 +105,7 @@
     {
       "id": "clean-swap",
       "title": "Clean and swap batteries if it wasn't done last night",
-      "owner": "Moises / NO crew",
+      "owner": "Mateo / NO crew",
       "trigger": "The set's passing bots are identified.",
       "work": "Clean and battery swap any bot that did not get cleaned and swapped the night before. Do this inside the private secure area. Never swap batteries or prep bots where the public can see it, especially in quantity.",
       "actors": [
@@ -125,7 +125,7 @@
     {
       "id": "stage-nose-in",
       "title": "Stage each bot nose-in",
-      "owner": "Moises / NO crew",
+      "owner": "Mateo / NO crew",
       "trigger": "Bots are clean and on good batteries.",
       "work": "Park each bot facing into the sidewalk, not facing the street, so the pilot's first move is forward. Rolling a bot forward is faster than backing it up because of how you have to tip it, so the crew's instinct is to park at the curb facing out. Do it the other way. This takes mistakes out of the pilot's hands, so it applies to pilot deployment only.",
       "actors": [
@@ -142,7 +142,7 @@
       "id": "clear-water",
       "kind": "decision",
       "title": "Is the departure path clear of standing water?",
-      "owner": "Moises / NO crew",
+      "owner": "Mateo / NO crew",
       "trigger": "Bots are staged nose-in.",
       "work": "Look at the path each bot will take leaving the stage point. Never let a bot drive through standing water; it damages the base. Water on the path is a hard stop, not a judgment call about how deep it looks.",
       "actors": [
@@ -165,10 +165,10 @@
     {
       "id": "restage",
       "kind": "escalation",
-      "title": "Restage and ping Moises",
-      "owner": "Moises (NO lead, Robot Chicago)",
+      "title": "Restage and ping Mateo",
+      "owner": "Mateo (NO lead, Robot Chicago)",
       "trigger": "No dry path exists to leave the stage point.",
-      "work": "Do not send the bot. Restage it and ping Moises.",
+      "work": "Do not send the bot. Restage it and ping Mateo.",
       "where": "Slack DM",
       "next": [
         {
@@ -179,9 +179,9 @@
     {
       "id": "send-pair",
       "title": "Send trips to no more than 2 bots",
-      "owner": "Moises / NO crew",
+      "owner": "Mateo / NO crew",
       "trigger": "A pair of bots has a dry departure path and the merchant is under the 4-bot cap.",
-      "work": "Send trips to 2 bots, not the whole set. Never send trips to more than 2 at a time, never stage more than 2 together in the public right of way (including when staging for GPS or signal), and never put more than 4 bots at any one merchant. We used to blast the whole set of 15 or 20 and let pilots drive them away as they became active; that is the old process. If the plan would put a fifth bot at a merchant, do not send it: reassign or hold, and ping Moises, since the cap is Robot's.",
+      "work": "Send trips to 2 bots, not the whole set. Never send trips to more than 2 at a time, never stage more than 2 together in the public right of way (including when staging for GPS or signal), and never put more than 4 bots at any one merchant. We used to blast the whole set of 15 or 20 and let pilots drive them away as they became active; that is the old process. If the plan would put a fifth bot at a merchant, do not send it: reassign or hold, and ping Mateo, since the cap is Robot's.",
       "actors": [
         "network_operator"
       ],
@@ -202,9 +202,9 @@
       "id": "out-of-sight",
       "kind": "decision",
       "title": "Are both bots out of sight?",
-      "owner": "Moises / NO crew",
+      "owner": "Mateo / NO crew",
       "trigger": "A pair has trips and is moving.",
-      "work": "Watch the pair leave. Cleared means out of sight; never start the next pair because the first is basically gone. If too many bots are already staged in public because a pair has not cleared, stop sending and wait. Target state is Stella making this call off the map instead of a person, which is not live yet.",
+      "work": "Watch the pair leave. Cleared means out of sight; never start the next pair because the first is basically gone. If too many bots are already staged in public because a pair has not cleared, stop sending and wait. Target state is Sol making this call off the map instead of a person, which is not live yet.",
       "actors": [
         "network_operator"
       ],

@@ -32,7 +32,7 @@
       "work": "Prompt Claude to run the lead conversion to account and opportunity, and move the opportunity to Meeting Scheduled. The qualification decision is yours; the conversion is automated. Verify the record yourself before moving on.",
       "actor": "agent",
       "actors": [
-        "stella",
+        "sol",
         "brick_operator"
       ],
       "where": "Salesforce",
@@ -95,7 +95,7 @@
       "title": "Which Ops owner reviews this prospect?",
       "owner": "Opportunity-owning rep",
       "trigger": "The package is ready.",
-      "work": "Pick the Ops reviewer by vertical: Event Ops goes to Yesenia or Joe, and Robotics, DPO or AV goes to Bryan or Michael B. The wrong Ops owner has happened before and new reps get this wrong most often, so when in doubt ask rather than guess.",
+      "work": "Pick the Ops reviewer by vertical: Event Ops goes to Yesenia or Joe, and Robotics, DPO or AV goes to Brent or Marcus E. The wrong Ops owner has happened before and new reps get this wrong most often, so when in doubt ask rather than guess.",
       "verification": "human",
       "next": [
         {
@@ -115,10 +115,10 @@
     {
       "id": "ask-tj",
       "kind": "escalation",
-      "title": "Ask TJ before sending anything",
-      "owner": "TJ",
+      "title": "Ask RJ before sending anything",
+      "owner": "RJ",
       "trigger": "The prospect does not map cleanly to a vertical.",
-      "work": "Ask TJ which Ops owner should review, and send nothing until he answers.",
+      "work": "Ask RJ which Ops owner should review, and send nothing until he answers.",
       "rules": [
         "Never guess the Ops owner; a misroute repeats the gate cycle."
       ],
@@ -131,7 +131,7 @@
     {
       "id": "facility-visit",
       "title": "Schedule the facility visit",
-      "owner": "Ops reviewer (Bryan or Michael B)",
+      "owner": "Ops reviewer (Brent or Marcus E)",
       "trigger": "The prospect is an AV or Robotics vertical.",
       "work": "AV and Robotics prospects need a facility visit before the Ops ranking. Schedule it, brief the visitor, and capture the visit notes in Salesforce.",
       "where": "On site, notes in Salesforce",
@@ -211,10 +211,10 @@
     },
     {
       "id": "tom-gate",
-      "title": "Tom gate",
-      "owner": "Tom",
+      "title": "Theo gate",
+      "owner": "Theo",
       "trigger": "Ops has given the green light.",
-      "work": "Get Tom's call scheduled. Tom hosts it, then logs notes and Tom's Ranking via Granola. The same automation moves the opportunity stage and posts the notes to Salesforce.",
+      "work": "Get Theo's call scheduled. Theo hosts it, then logs notes and Theo's Ranking via Granola. The same automation moves the opportunity stage and posts the notes to Salesforce.",
       "actor": "automation",
       "actors": [
         "brick_operator",
@@ -231,10 +231,10 @@
     {
       "id": "tom-check",
       "kind": "decision",
-      "title": "Did Tom's ranking post?",
+      "title": "Did Theo's ranking post?",
       "owner": "Opportunity-owning rep",
-      "trigger": "Tom's call has happened.",
-      "work": "Check Tom's Ranking and notes appear on the Salesforce record and the stage has advanced. If nothing posts, flag the automation before assuming Tom skipped it.",
+      "trigger": "Theo's call has happened.",
+      "work": "Check Theo's Ranking and notes appear on the Salesforce record and the stage has advanced. If nothing posts, flag the automation before assuming Theo skipped it.",
       "verification": "human",
       "next": [
         {
@@ -250,10 +250,10 @@
     {
       "id": "chase-tom",
       "kind": "escalation",
-      "title": "Chase the stalled Tom review",
-      "owner": "Tom",
-      "trigger": "Tom's review has sat without movement.",
-      "work": "Ping Tom directly, and escalate to the weekly sync if it is still stuck.",
+      "title": "Chase the stalled Theo review",
+      "owner": "Theo",
+      "trigger": "Theo's review has sat without movement.",
+      "work": "Ping Theo directly, and escalate to the weekly sync if it is still stuck.",
       "next": [
         {
           "to": "tom-check"
@@ -266,7 +266,7 @@
       "title": "Do the three rankings agree?",
       "owner": "NO Sales team",
       "trigger": "All three rankings are logged.",
-      "work": "Salesforce calculates an aggregate score on the account, the average of the NO Sales, Ops and Tom rankings. Agreement clears the funnel; disagreement goes to the weekly sync.",
+      "work": "Salesforce calculates an aggregate score on the account, the average of the NO Sales, Ops and Theo rankings. Agreement clears the funnel; disagreement goes to the weekly sync.",
       "verification": "human",
       "next": [
         {

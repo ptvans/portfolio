@@ -1,4 +1,4 @@
-// The conversation itself: what the user said, what Stella said, the tools it
+// The conversation itself: what the user said, what Sol said, the tools it
 // called on the way, and the SOP that came out the other end.
 //
 // Tool calls are shown rather than hidden. The point of the task is that a
@@ -12,8 +12,8 @@ import { BrandChip } from "../../../../components/BrandChip";
 import { getBrand, getSop, runsForSop } from "../../../../data";
 import { alerts } from "../../../../data/alerts";
 import { formatDateTime, formatRelative } from "../../../../lib/format";
-import { StellaIcon } from "./StellaIcon";
-import type { StellaEntry } from "../../data/stellaScript";
+import { SolIcon } from "./SolIcon";
+import type { SolEntry } from "../../data/solScript";
 import { linkAlertText } from "../alerts/AlertCard";
 import { MessageMetaCard } from "../messages/MessageMeta";
 import { severityBorderClass } from "../alerts/alertUi";
@@ -21,13 +21,13 @@ import { formatElapsedMs } from "../sop/sopFormat";
 import { ProposalsCard, QuestionsCard, SopListCard } from "./SopBuilderCards";
 import { WorkAllEntry, WorkEntry } from "./WorkGroupCard";
 
-export function StellaTranscript({
+export function SolTranscript({
   entries,
   onChoose,
   onAnswer,
   busy = false,
 }: {
-  entries: StellaEntry[];
+  entries: SolEntry[];
   // Picks a response on a choice card. Without it the cards are read-only.
   onChoose?: (option: number) => void;
   // Sends the picks on a questions card. Without it the cards are read-only.
@@ -65,7 +65,7 @@ export function StellaTranscript({
     <div ref={scrollRef} className="thin-scrollbar relative min-h-0 flex-1 overflow-y-auto px-6 py-6">
       <div ref={listRef} className="mx-auto flex max-w-4xl flex-col gap-6">
         {entries.map((entry, i) => (
-          <StellaEntryView key={i} entry={entry} onChoose={onChoose} onAnswer={busy ? undefined : onAnswer} busy={busy} />
+          <SolEntryView key={i} entry={entry} onChoose={onChoose} onAnswer={busy ? undefined : onAnswer} busy={busy} />
         ))}
       </div>
     </div>
@@ -74,13 +74,13 @@ export function StellaTranscript({
 
 // One transcript entry. Exported for surfaces that lay a conversation out
 // themselves (the Messages pane).
-export function StellaEntryView({
+export function SolEntryView({
   entry,
   onChoose,
   onAnswer,
   busy,
 }: {
-  entry: StellaEntry;
+  entry: SolEntry;
   onChoose?: (option: number) => void;
   onAnswer?: (entryId: string, picks: Record<string, number>) => void;
   busy?: boolean;
@@ -119,7 +119,7 @@ export function StellaEntryView({
       const end = entry.endedAt ?? Date.now();
       return (
         <div className="flex items-center gap-2">
-          <StellaIcon size={20} thinking={!entry.endedAt} />
+          <SolIcon size={20} thinking={!entry.endedAt} />
           <p className={`text-base italic ${entry.endedAt ? "text-slate-400" : "text-brand-600"}`}>{entry.label}</p>
           <p className="text-xs tabular-nums text-slate-400">{formatElapsedMs(end - entry.startedAt)}</p>
         </div>
@@ -166,7 +166,7 @@ export function StellaEntryView({
   }
 }
 
-// Stella's prose. Lines that start with a bullet or a number are drawn as a
+// Sol's prose. Lines that start with a bullet or a number are drawn as a
 // list so the gaps she reports read as a list rather than a paragraph. A
 // heading titles the message; an alert is drawn under it as the source, and a
 // note as its message's metadata.
@@ -174,7 +174,7 @@ function AgentText({ text, heading, alertId, noteId }: { text: string; heading?:
   const alert = alertId ? alerts.find((a) => a.id === alertId) : undefined;
   return (
     <div className="flex items-start gap-3">
-      <StellaIcon size={20} className={heading ? "mt-0.5" : "mt-[3px]"} />
+      <SolIcon size={20} className={heading ? "mt-0.5" : "mt-[3px]"} />
       <div className="min-w-0 max-w-2xl flex-1 space-y-2 text-md leading-relaxed text-slate-700">
       {heading && <p className="font-semibold text-slate-900">{heading}</p>}
       {text.split("\n\n").map((para, i) => {
@@ -242,7 +242,7 @@ function SourceAlert({ alert }: { alert: (typeof alerts)[number] }) {
   );
 }
 
-// The responses Stella can act on, numbered with what each one does, and a
+// The responses Sol can act on, numbered with what each one does, and a
 // button per response. Once one is picked the card stays as the record: the
 // choice keeps its button, marked, and the other is struck from play.
 export function ActionsCard({
@@ -309,7 +309,7 @@ function renderCode(text: string) {
 
 // The finished SOP, with the three ways into it: the definition as written,
 // one execution of it, and every execution at once.
-function ArtifactCard({ entry }: { entry: Extract<StellaEntry, { kind: "artifact" }> }) {
+function ArtifactCard({ entry }: { entry: Extract<SolEntry, { kind: "artifact" }> }) {
   const runs = runsForSop(entry.sopId);
   const latest = runs[0];
   // Link the SOP's current version, not v1 — these SOPs have history.

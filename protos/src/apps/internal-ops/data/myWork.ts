@@ -1,25 +1,25 @@
-// My Work: the messages Stella has grouped for you, as the Stella home shows
+// My Work: the messages Sol has grouped for you, as the Sol home shows
 // them.
 //
-// Each group is Stella's own clustering of open messages from Messages —
+// Each group is Sol's own clustering of open messages from Messages —
 // alerts, SOP runs and notes — under a short name, with the one or two
 // responses she can act on for each message and a scripted result for each.
 // A message with no responses asks for an answer in the group's chat. Every
 // item is anchored to a real message, so acting on it here settles it in
 // Messages, and a message settled there leaves the group.
 //
-// Four of the items are the requests Stella already drafts responses for
-// (STELLA_INCOMING); their sections and responses are read from there rather
+// Four of the items are the requests Sol already drafts responses for
+// (SOL_INCOMING); their sections and responses are read from there rather
 // than written twice.
 
 import { AUTOLANE_READY_SHIFTS } from "./inboxNotes";
-import { STELLA_INCOMING, type StellaRequest } from "./stellaScript";
+import { SOL_INCOMING, type SolRequest } from "./solScript";
 
 export interface WorkAction {
   label: string;
   // What picking it does, in a sentence: the user's message in the transcript.
   description: string;
-  // The unit of work shown while Stella acts, and what she reports after.
+  // The unit of work shown while Sol acts, and what she reports after.
   status: string;
   reply: string;
   // For a note that asks for a yes or no: what picking this records on it.
@@ -29,7 +29,7 @@ export interface WorkAction {
 export interface WorkItem {
   // The InboxMessage this is about ("alert:…", "note:…", "sop:…").
   messageId: string;
-  // The card's title: the question Stella is asking, short.
+  // The card's title: the question Sol is asking, short.
   title: string;
   // Her opening line when the item is opened in a conversation.
   ask: string;
@@ -56,9 +56,9 @@ export interface WorkGroup {
   // Which of the card palettes it draws in.
   palette: number;
   items: WorkItem[];
-  // What Stella says to typed input in the group's conversation.
+  // What Sol says to typed input in the group's conversation.
   typedReply: string;
-  // For a group whose messages all take the same single response: Stella's
+  // For a group whose messages all take the same single response: Sol's
   // account of them in a few sentences, and what she is doing while she
   // acts on all of them. Its card shows this in place of the rows, with one
   // button for the response; the rows are in the group's conversation.
@@ -67,7 +67,7 @@ export interface WorkGroup {
 }
 
 function fromRequest(id: string, title: string, refresh: WorkItem["refresh"]): WorkItem {
-  const req = STELLA_INCOMING.find((r) => r.id === id) as StellaRequest;
+  const req = SOL_INCOMING.find((r) => r.id === id) as SolRequest;
   return {
     messageId: req.alertId ? `alert:${req.alertId}` : `note:${req.noteId}`,
     title,
@@ -81,7 +81,7 @@ function fromRequest(id: string, title: string, refresh: WorkItem["refresh"]): W
 const stillOpen = (note: string): WorkItem["refresh"] => ({ outcome: "open", note });
 const cleared = (note: string): WorkItem["refresh"] => ({ outcome: "cleared", note });
 
-// Ranked by how much they ask of you: what's blocking Stella first, then the
+// Ranked by how much they ask of you: what's blocking Sol first, then the
 // one-press decisions, then the groups that need more thought.
 export const WORK_GROUPS: WorkGroup[] = [
   {
@@ -103,11 +103,11 @@ export const WORK_GROUPS: WorkGroup[] = [
             body: "Prices, fees and agreements for Yerba Madre are confirmed in their Slack channel. Without access I can't verify the 16 requests that cite them, so they sit unanswered.",
           },
         ],
-        record: { label: "Yerba Madre", detail: "Prices, fees or agreements Stella couldn't verify" },
+        record: { label: "Yerba Madre", detail: "Prices, fees or agreements Sol couldn't verify" },
         actions: [
           {
             label: "Restore Access",
-            description: "Ask the Yerba Madre workspace admin to restore Stella's Slack access",
+            description: "Ask the Yerba Madre workspace admin to restore Sol's Slack access",
             status: "Requesting Slack access",
             reply: "Requested access to the Yerba Madre Slack workspace through the workspace admin. Once it's granted I'll rerun the 16 checks and clear the ones that verify.",
           },
@@ -128,7 +128,7 @@ export const WORK_GROUPS: WorkGroup[] = [
         actions: [
           {
             label: "Grant Access",
-            description: "Grant Stella read access to the Autolane Austin shift charges",
+            description: "Grant Sol read access to the Autolane Austin shift charges",
             status: "Granting access",
             reply: "Granted. I can read the Autolane Austin shift charges now, and I'll finalize October 19–20 once they check out.",
           },
@@ -470,7 +470,7 @@ export const WORK_GROUPS: WorkGroup[] = [
         refresh: cleared("Acknowledged by Christina LaFon at 11:52 AM today."),
       },
       {
-        messageId: "note:note-stella-tracking",
+        messageId: "note:note-sol-tracking",
         title: "Three popups this week depend on untracked parcels",
         ask: "Three Chewy popups this week depend on parcels that have no tracking number.",
         sections: [
@@ -495,7 +495,7 @@ export const WORK_GROUPS: WorkGroup[] = [
     items: [
       fromRequest("req-pm-storage", "Start storage billing for PHX Energy?", stillOpen("Still no storage work order on PHX Energy | Phoenix, AZ.")),
       {
-        messageId: "note:note-stella-staffing",
+        messageId: "note:note-sol-staffing",
         title: "Approve next week's staffing plan?",
         ask: "Next week's Promobile staffing plan is drafted and waiting on your approval.",
         sections: [
@@ -677,7 +677,7 @@ export const WORK_GROUPS: WorkGroup[] = [
 ];
 
 // The title as one line, for a conversation's name.
-// How many groups the Stella sidebar and home show before pointing at the
+// How many groups the Sol sidebar and home show before pointing at the
 // digest, which lists them all.
 export const MY_WORK_PREVIEW = 5;
 
@@ -692,7 +692,7 @@ export function workGroupById(id: string | null | undefined): WorkGroup | undefi
   return id ? WORK_GROUPS.find((g) => g.id === id) : undefined;
 }
 
-// The group and item a message belongs to, if Stella has grouped it.
+// The group and item a message belongs to, if Sol has grouped it.
 export function workItemFor(messageId: string): { group: WorkGroup; item: WorkItem } | undefined {
   for (const group of WORK_GROUPS) {
     const item = group.items.find((i) => i.messageId === messageId);

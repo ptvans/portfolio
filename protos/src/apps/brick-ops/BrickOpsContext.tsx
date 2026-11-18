@@ -25,7 +25,7 @@ import {
 
 export type Entry =
   | { id: string; kind: "day"; text: string }
-  | { id: string; kind: "stella"; text: string }
+  | { id: string; kind: "sol"; text: string }
   | { id: string; kind: "user"; text: string }
   | { id: string; kind: "status"; text: string; done: boolean }
   | { id: string; kind: "suggestion" }
@@ -85,11 +85,11 @@ function initialEntries(): Entry[] {
     { id: nextId(), kind: "day", text: "Today 9:41 AM" },
     {
       id: nextId(),
-      kind: "stella",
+      kind: "sol",
       text: `Morning, Thom. You've ${LEARNED_SOP.pattern} by hand ${LEARNED_SOP.timesSeen} times since ${LEARNED_SOP.since}, so I wrote it up as an Automation.`,
     },
     { id: nextId(), kind: "suggestion" },
-    { id: nextId(), kind: "stella", text: "And here's the top thing that needs you." },
+    { id: nextId(), kind: "sol", text: "And here's the top thing that needs you." },
     { id: nextId(), kind: "attention", messageId: ATTENTION[0].messageId },
   ];
 }
@@ -141,7 +141,7 @@ export function BrickOpsProvider({ children }: { children: ReactNode }) {
       setEntries((prev) =>
         prev.map((e) => (e.id === statusId && e.kind === "status" ? { ...e, done: true } : e)),
       );
-      push({ id: nextId(), kind: "stella", text: reply });
+      push({ id: nextId(), kind: "sol", text: reply });
       setBusy(false);
       after?.();
     });
@@ -155,11 +155,11 @@ export function BrickOpsProvider({ children }: { children: ReactNode }) {
       if (waiting) return prev;
       const next = nextOpen({ entries: prev, settled: nextSettled, skipped: nextSkipped });
       if (!next) {
-        return [...prev, { id: nextId(), kind: "stella", text: "That's the top of the list cleared. Everything else is in Needs Your Attention." }];
+        return [...prev, { id: nextId(), kind: "sol", text: "That's the top of the list cleared. Everything else is in Needs Your Attention." }];
       }
       return [
         ...prev,
-        { id: nextId(), kind: "stella", text: "Next up:" },
+        { id: nextId(), kind: "sol", text: "Next up:" },
         { id: nextId(), kind: "attention", messageId: next.messageId },
       ];
     });
@@ -206,7 +206,7 @@ export function BrickOpsProvider({ children }: { children: ReactNode }) {
     const nextSkipped = new Set(skipped);
     nextSkipped.delete(messageId);
     setSkipped(nextSkipped);
-    push({ id: nextId(), kind: "stella", text: "Here it is." }, { id: nextId(), kind: "attention", messageId });
+    push({ id: nextId(), kind: "sol", text: "Here it is." }, { id: nextId(), kind: "attention", messageId });
   };
 
   const dismissSuggestion = () => {
@@ -217,7 +217,7 @@ export function BrickOpsProvider({ children }: { children: ReactNode }) {
     later(REPLY_MS, () => {
       push({
         id: nextId(),
-        kind: "stella",
+        kind: "sol",
         text: "No problem. I'll keep the draft, and bring it back only if you hold more of these by hand.",
       });
       setBusy(false);
@@ -247,7 +247,7 @@ export function BrickOpsProvider({ children }: { children: ReactNode }) {
     to({ id: nextId(), kind: "user", text: t });
     setBusy(true);
     later(REPLY_MS, () => {
-      to({ id: nextId(), kind: "stella", text: OFF_SCRIPT_REPLY });
+      to({ id: nextId(), kind: "sol", text: OFF_SCRIPT_REPLY });
       setBusy(false);
     });
   };
@@ -259,7 +259,7 @@ export function BrickOpsProvider({ children }: { children: ReactNode }) {
       {
         id,
         title: null,
-        entries: [{ id: nextId(), kind: "stella", text: "What's on your mind? This stays out of the main chat." }],
+        entries: [{ id: nextId(), kind: "sol", text: "What's on your mind? This stays out of the main chat." }],
       },
       ...prev,
     ]);

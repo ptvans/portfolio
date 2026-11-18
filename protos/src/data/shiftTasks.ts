@@ -402,7 +402,7 @@ function buildShiftData() {
             taskId,
             actionKindId: `ak-al-${lane.taskKindId.replace("task-kind-al-", "")}-reschedule`,
             createdAt: `${addDays(date, -3)}T16:40:00${UTC_OFFSET}`,
-            createdBy: "Christina Roman",
+            createdBy: "Carla Ronan",
             changes: { time: `${window.time} → ${startTime}` },
           });
         }
@@ -413,7 +413,7 @@ function buildShiftData() {
             taskId,
             actionKindId: `ak-al-${lane.taskKindId.replace("task-kind-al-", "")}-cancel`,
             createdAt: `${addDays(date, -2)}T09:15:00${UTC_OFFSET}`,
-            createdBy: "Christina Roman",
+            createdBy: "Carla Ronan",
             changes: { status: "cancelled" },
           });
         }

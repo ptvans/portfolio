@@ -1,4 +1,4 @@
-// A SOP written in a Stella chat. These aren't in the SOP library data; they
+// A SOP written in a Sol chat. These aren't in the SOP library data; they
 // exist in the chat that wrote them, so this page reads the SOP from there and
 // shows it the way the SOP page in Brick does: its attributes, the raw prompt
 // it was written from, and the instructions its agent runs. A reload clears
@@ -9,14 +9,14 @@ import { Link, useParams } from "react-router-dom";
 import { EmptyState } from "../../../components/EmptyState";
 import { Breadcrumbs } from "../components/alerts/alertUi";
 import { MessageTypeBadge } from "../components/messages/messageUi";
-import { SopDraftStatus } from "../components/stella/SopDraftCard";
-import { useStella } from "../context/StellaContext";
+import { SopDraftStatus } from "../components/sol/SopDraftCard";
+import { useSol } from "../context/SolContext";
 
 const CRUMBS = [{ label: "Automations", to: "/internal-ops/sops/list" }];
 
 export function CreatedSop() {
   const { draftId } = useParams<{ draftId: string }>();
-  const { draftById, select } = useStella();
+  const { draftById, select } = useSol();
   const found = draftId ? draftById(draftId) : undefined;
 
   if (!found) {
@@ -26,7 +26,7 @@ export function CreatedSop() {
         <EmptyState
           icon={ListChecks}
           title="Automation not found"
-          description="Automations written in a Stella chat last until the page reloads. Run the chat again to write it."
+          description="Automations written in a Sol chat last until the page reloads. Run the chat again to write it."
         />
       </div>
     );

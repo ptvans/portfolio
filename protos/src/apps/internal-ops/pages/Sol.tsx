@@ -1,6 +1,6 @@
-// The Stella page: the dedicated chat surface for the agent.
+// The Sol page: the dedicated chat surface for the agent.
 //
-// Left: new chat, then My Work — the groups of messages Stella has put
+// Left: new chat, then My Work — the groups of messages Sol has put
 // together for you, until you respond to one — above the conversations
 // you've had with her (pinned first, then the ones open now, then earlier
 // ones). Middle: the home (greeting, shortcuts, the box, and the My Work
@@ -14,24 +14,24 @@ import { ChevronUp, CornerDownRight, House, Plus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { getBrand } from "../../../data";
-import { SopDraftCard } from "../components/stella/SopDraftCard";
-import { SopViewer, type SopSection } from "../components/stella/SopViewer";
-import { StellaComposer } from "../components/stella/StellaComposer";
-import { StellaDigest } from "../components/stella/StellaDigest";
-import { StellaHome } from "../components/stella/StellaHome";
-import { SESSION_DOTS, WAITING_LINE, sessionIndicator } from "../components/stella/statusDots";
-import { StellaTranscript } from "../components/stella/StellaTranscript";
-import { HandRaisedIcon } from "../components/stella/HandRaisedIcon";
-import { WorkGroupTitle, WorkRowTitle } from "../components/stella/WorkGroupCard";
+import { SopDraftCard } from "../components/sol/SopDraftCard";
+import { SopViewer, type SopSection } from "../components/sol/SopViewer";
+import { SolComposer } from "../components/sol/SolComposer";
+import { SolDigest } from "../components/sol/SolDigest";
+import { SolHome } from "../components/sol/SolHome";
+import { SESSION_DOTS, WAITING_LINE, sessionIndicator } from "../components/sol/statusDots";
+import { SolTranscript } from "../components/sol/SolTranscript";
+import { HandRaisedIcon } from "../components/sol/HandRaisedIcon";
+import { WorkGroupTitle, WorkRowTitle } from "../components/sol/WorkGroupCard";
 import { MY_WORK_PREVIEW, workGroupById, workGroupTitle } from "../data/myWork";
-import { isBlank, isViewOnly, useStella, type StellaSession } from "../context/StellaContext";
-import type { SopRef } from "../data/stellaScript";
+import { isBlank, isViewOnly, useSol, type SolSession } from "../context/SolContext";
+import type { SopRef } from "../data/solScript";
 
 // The page draws one of these in its main card: the home (a blank chat), an
 // open conversation, the My Work digest at /internal-ops/my-work, or its
 // Resolved view at /internal-ops/my-work/resolved. The sidebar is the same
 // for all of them.
-export function Stella({ view = "chat" }: { view?: "chat" | "digest" | "resolved" }) {
+export function Sol({ view = "chat" }: { view?: "chat" | "digest" | "resolved" }) {
   // The digest and its Resolved view share the same layout.
   const digest = view === "digest" || view === "resolved";
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ export function Stella({ view = "chat" }: { view?: "chat" | "digest" | "resolved
     goHome,
     homeTarget,
     clearHomeTarget,
-  } = useStella();
+  } = useSol();
   const [params, setParams] = useSearchParams();
   const [myWorkOpen, setMyWorkOpen] = useState(true);
   // A task that writes SOPs shows them in the rail instead of its progress:
@@ -115,7 +115,7 @@ export function Stella({ view = "chat" }: { view?: "chat" | "digest" | "resolved
   // Already on it: back to the top of the page, and for New Chat the cursor
   // goes in the box.
   const toTop = (focus: boolean) => {
-    const home = document.getElementById("stella-home");
+    const home = document.getElementById("sol-home");
     home?.scrollTo({ top: 0, behavior: "smooth" });
     if (focus) home?.querySelector("textarea")?.focus({ preventScroll: true });
   };
@@ -178,8 +178,8 @@ export function Stella({ view = "chat" }: { view?: "chat" | "digest" | "resolved
             <button
               type="button"
               onClick={() => (onLanding ? toTop(false) : toLanding())}
-              aria-label="Stella home"
-              title="Stella home"
+              aria-label="Sol home"
+              title="Sol home"
               className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-md text-slate-500 transition-colors hover:bg-slate-200/60 hover:text-slate-700"
             >
               <House className="h-[18px] w-[18px]" strokeWidth={1.75} />
@@ -274,11 +274,11 @@ export function Stella({ view = "chat" }: { view?: "chat" | "digest" | "resolved
           )}
 
           {digest ? (
-            <StellaDigest resolved={view === "resolved"} />
+            <SolDigest resolved={view === "resolved"} />
           ) : blank ? (
-            <StellaHome />
+            <SolHome />
           ) : active.live ? (
-            <StellaTranscript entries={active.entries} onAnswer={answer} busy={active.busy} />
+            <SolTranscript entries={active.entries} onAnswer={answer} busy={active.busy} />
           ) : (
             <div className="flex min-h-0 flex-1 items-center justify-center px-6">
               <p className="max-w-sm text-center text-base text-slate-400">
@@ -292,7 +292,7 @@ export function Stella({ view = "chat" }: { view?: "chat" | "digest" | "resolved
               composer is for an open chat. */}
           {!blank && !digest && (
           <div className="shrink-0">
-            <StellaComposer
+            <SolComposer
               onSend={(text) => {
                 send(text, undefined, undefined, modifying ?? undefined);
                 setModifying(null);
@@ -305,7 +305,7 @@ export function Stella({ view = "chat" }: { view?: "chat" | "digest" | "resolved
               onBrandChange={active.live ? setBrand : undefined}
               // A group's conversation stays on the brand the group is about.
               brandLocked={Boolean(active.groupId)}
-              placeholder="Ask Stella..."
+              placeholder="Ask Sol..."
             />
           </div>
           )}
@@ -383,7 +383,7 @@ function SessionGroup({
   onSelect,
 }: {
   label: string;
-  sessions: StellaSession[];
+  sessions: SolSession[];
   activeId: string;
   onSelect: (id: string) => void;
 }) {

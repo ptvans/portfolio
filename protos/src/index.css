@@ -369,19 +369,19 @@ summary {
   box-shadow: 0 0 10px 3px rgba(34, 197, 94, 0.6);
 }
 
-/* Stella's mark: the artwork has no shadow, so a soft one in a dark
+/* Sol's mark: the artwork has no shadow, so a soft one in a dark
    purple-blue-black is added here. */
-.stella-icon {
-  --stella-shadow: drop-shadow(0 1px 2px rgba(24, 16, 64, 0.35));
-  filter: var(--stella-shadow);
+.sol-icon {
+  --sol-shadow: drop-shadow(0 1px 2px rgba(24, 16, 64, 0.35));
+  filter: var(--sol-shadow);
 }
 
 /* The large avatar is big enough to carry a wider, softer shadow. */
-.stella-icon--xl {
-  --stella-shadow: drop-shadow(0 4px 10px rgba(24, 16, 64, 0.32));
+.sol-icon--xl {
+  --sol-shadow: drop-shadow(0 4px 10px rgba(24, 16, 64, 0.32));
 }
 
-/* A My Work row in the Stella sidebar: a 2px dashed underline in the group's
+/* A My Work row in the Sol sidebar: a 2px dashed underline in the group's
    colour, with the gradient drifting left to right along the dashes so the
    rows read as live rather than as more history. The gradient (--work-line)
    starts and ends on the same colour and is two rows wide, so shifting it by
@@ -412,7 +412,7 @@ summary {
   }
 }
 
-/* A Stella work group's tinted band (WorkGroupCard): its light gradient, or in
+/* A Sol work group's tinted band (WorkGroupCard): its light gradient, or in
    dark mode a wash of the group's dot colour. */
 .group-wash {
   background: var(--wash);

@@ -1,5 +1,5 @@
-// Needs Your Attention Digest: every group of messages Stella has put together for you,
-// in the Stella page's main card. The same cards, responses and chats as
+// Needs Your Attention Digest: every group of messages Sol has put together for you,
+// in the Sol page's main card. The same cards, responses and chats as
 // the home, which shows only the first few; no box for a new chat here.
 //
 // Its Resolved view is the record of what has been answered: each group
@@ -9,7 +9,7 @@
 
 import { CheckCheck, ChevronLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-import { isSettled, useStella } from "../../context/StellaContext";
+import { isSettled, useSol } from "../../context/SolContext";
 import { SESSION_DOTS } from "./statusDots";
 import { WorkGroupCard } from "./WorkGroupCard";
 
@@ -20,8 +20,8 @@ function groupCount(n: number) {
   return `${n} ${n === 1 ? "group" : "groups"}`;
 }
 
-export function StellaDigest({ resolved = false }: { resolved?: boolean }) {
-  const { groups, inMyWork, resolvedGroups, openItems, itemState } = useStella();
+export function SolDigest({ resolved = false }: { resolved?: boolean }) {
+  const { groups, inMyWork, resolvedGroups, openItems, itemState } = useSol();
   const open = groups.filter(inMyWork);
   // Moved groups first, most recent on top, then the ones still in My Work
   // that have something resolved; each with just its resolved messages.

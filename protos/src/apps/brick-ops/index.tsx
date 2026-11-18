@@ -1,5 +1,5 @@
 // Brick Ops: the Internal Ops persona on a phone. Home is a chat with the
-// agent (Stella on the web; users name it themselves here, Brock to start),
+// agent (Sol on the web; users name it themselves here, Brock to start),
 // after Meta's Muse. The requests it needs a person for live in Needs Your
 // Attention.
 //

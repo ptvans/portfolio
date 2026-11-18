@@ -10,8 +10,8 @@
   },
   "team": "Ops",
   "sopType": "external",
-  "owner": "Moises (NO lead, Robot Chicago)",
-  "escalationContact": "Moises, who takes it to Robot",
+  "owner": "Mateo (NO lead, Robot Chicago)",
+  "escalationContact": "Mateo, who takes it to Robot",
   "trigger": "End of service, when bots begin coming back under pilot control.",
   "purpose": "Robot judges us on what the public sees. A resident photographed roughly a dozen bots lined up on a public sidewalk at night and posted it, tagging Robot, a community account and the 43rd Ward alderman. That lineup happened at the end of the night, which makes undeployment the higher-risk half: bots arriving faster than one person can take them in is exactly how a sidewalk fills up. Pilot undeployment only; van and truck retrieval is a different, undocumented process.",
   "doneWhen": "Every bot is inside a private secure area with the correct overnight power state set, and nothing is sitting in public.",
@@ -29,7 +29,7 @@
       "id": "rally-ready",
       "kind": "decision",
       "title": "Start sending bots to this rally point?",
-      "owner": "Moises / NO crew on the ground",
+      "owner": "Mateo / NO crew on the ground",
       "trigger": "Service ends and bots begin coming back under pilot control.",
       "work": "Before any bot heads back, check all: the receiver has arrived or will be there before the first bots land; there is a private secure area at that rally point to take bots into; every rally point you are sending to right now has its own receiver, or you are doing one rally point at a time. Never undeploy the whole market at once, and never let bots accumulate at a rally point with nobody there to take them in.",
       "actors": [
@@ -58,9 +58,9 @@
     {
       "id": "hold-bots",
       "title": "Hold the bots and undeploy one rally point at a time",
-      "owner": "Moises / NO crew",
+      "owner": "Mateo / NO crew",
       "trigger": "A rally point has no receiver, no secure area, or receivers are spread too thin.",
-      "work": "Hold the bots where they are. Undeploy one rally point at a time instead. If the secure area for the night falls through entirely, stop undeployment and ping Moises before any bot heads back.",
+      "work": "Hold the bots where they are. Undeploy one rally point at a time instead. If the secure area for the night falls through entirely, stop undeployment and ping Mateo before any bot heads back.",
       "actors": [
         "network_operator"
       ],
@@ -73,10 +73,10 @@
     {
       "id": "ask-moises",
       "kind": "escalation",
-      "title": "Ping Moises about the rally point",
-      "owner": "Moises (NO lead, Robot Chicago)",
+      "title": "Ping Mateo about the rally point",
+      "owner": "Mateo (NO lead, Robot Chicago)",
       "trigger": "You cannot tell whether a rally point is ready to receive.",
-      "work": "Ping Moises with the rally point, the receiver's ETA, and how many bots are waiting to come back. A late or no-show receiver means holding the bots on route, not sending them in.",
+      "work": "Ping Mateo with the rally point, the receiver's ETA, and how many bots are waiting to come back. A late or no-show receiver means holding the bots on route, not sending them in.",
       "where": "Slack DM",
       "next": [
         {
@@ -87,7 +87,7 @@
     {
       "id": "take-in",
       "title": "Bring each bot into the private secure area as it arrives",
-      "owner": "Moises / NO crew",
+      "owner": "Mateo / NO crew",
       "trigger": "A cleared rally point is receiving bots.",
       "work": "Take bots in as they land; do not let them sit at the rally point. Never leave a bot out overnight, and never let bots line up along a sidewalk or building while they wait to be taken in, even for a few minutes. A line of bots is the photo. If bots stack up faster than they can be taken in, stop sending and clear what is outside first. A bot that grounds mid-route in public goes into the nearest private secure area, not the curb.",
       "actors": [
@@ -108,7 +108,7 @@
     {
       "id": "clean-prep",
       "title": "Clean, swap and prep after the bots are inside",
-      "owner": "Moises / NO crew",
+      "owner": "Mateo / NO crew",
       "trigger": "Bots are inside the secure area.",
       "work": "Do the night's cleaning, battery swaps and prep once bots are in the secure area, indoor or outdoor. Never prep or swap in view of the public. Anything skipped tonight gets caught by the morning clean-and-swap step of the Deployment Automation.",
       "actors": [
@@ -129,9 +129,9 @@
       "id": "power-state",
       "kind": "decision",
       "title": "Set the overnight power state",
-      "owner": "Moises / NO crew",
+      "owner": "Mateo / NO crew",
       "trigger": "Bots are cleaned and prepped for the night.",
-      "work": "Bots spending the night outdoors stay powered on, even in a secured private lot, so they keep pinging and the camera feed stays up. Bots spending the night in a locked indoor facility get powered off. Whether this applies to bots left at merchants in leave-out markets is TBD; confirm with Moises.",
+      "work": "Bots spending the night outdoors stay powered on, even in a secured private lot, so they keep pinging and the camera feed stays up. Bots spending the night in a locked indoor facility get powered off. Whether this applies to bots left at merchants in leave-out markets is TBD; confirm with Mateo.",
       "actors": [
         "network_operator"
       ],
@@ -150,7 +150,7 @@
     {
       "id": "grounded-bots",
       "title": "Move grounded bots into the secure area, don't stage them for pickup",
-      "owner": "Moises / NO crew",
+      "owner": "Mateo / NO crew",
       "trigger": "A bot is grounded and waiting on the pickup team.",
       "work": "A grounded bot waiting on pickup goes into the private secure area; the pickup driver retrieves it from there. Do not leave it on the sidewalk for a quick grab. Grounded bots used to be left out front for the pickup team to swing by; that stopped. The actual time limit is TBD for the owner to fill in. This also applies to bots grounded during the morning health check.",
       "actors": [

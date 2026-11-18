@@ -1,6 +1,6 @@
-// The box you talk to Stella in.
+// The box you talk to Sol in.
 //
-// Used full width at the bottom of an open chat, compact on the Stella home,
+// Used full width at the bottom of an open chat, compact on the Sol home,
 // slim under each My Work group, and in the Messages pane.
 
 import { ArrowUp, AudioLines, Check, Lock, Pencil, Plus, X } from "lucide-react";
@@ -8,13 +8,13 @@ import { getBrand } from "../../../../data";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { VoiceLevelMeter } from "../../../../components/VoiceLevelMeter";
 import { useSpeechRecognition } from "../../../../lib/useSpeechRecognition";
-import type { SopRef } from "../../data/stellaScript";
+import type { SopRef } from "../../data/solScript";
 import { BrandSelect } from "./BrandSelect";
 
-export function StellaComposer({
+export function SolComposer({
   onSend,
   disabled = false,
-  placeholder = "Ask Stella…",
+  placeholder = "Ask Sol…",
   // A one-press reply the script is expecting next.
   suggestion,
   // Fixed starting points, shown under the box on the dashboard.
@@ -159,7 +159,7 @@ export function StellaComposer({
                 }}
                 rows={1}
                 disabled={disabled}
-                placeholder={disabled ? "Stella is working…" : placeholder}
+                placeholder={disabled ? "Sol is working…" : placeholder}
                 className="min-w-0 flex-1 resize-none bg-transparent py-1 text-sm text-slate-800 outline-none placeholder:text-slate-400 disabled:cursor-not-allowed"
               />
               {!draft.trim() && voice.supported ? (
@@ -221,7 +221,7 @@ export function StellaComposer({
                 disabled={disabled}
                 placeholder={
                   disabled
-                    ? "Stella is working…"
+                    ? "Sol is working…"
                     : sopRef
                       ? `How should ${sopRef.label.toLowerCase()} change?`
                       : voice.error === "denied"

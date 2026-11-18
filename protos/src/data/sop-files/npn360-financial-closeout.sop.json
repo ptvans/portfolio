@@ -10,7 +10,7 @@
   },
   "team": "Finance",
   "sopType": "internal",
-  "owner": "Brandon H.",
+  "owner": "Blake H.",
   "escalationContact": "Finance lead",
   "trigger": "Daily, for every npn360 project with delivered work.",
   "purpose": "Delivered npn360 work only turns into revenue once its work orders are finalized and their brand charges and operator credits land on statements. This Automation finds delivered work that has stalled before closeout and makes sure someone owns getting it over the line.",
@@ -22,7 +22,7 @@
     {
       "id": "find-unfinalized",
       "title": "Find completed work orders that aren't finalized",
-      "owner": "Stella",
+      "owner": "Sol",
       "actor": "agent",
       "trigger": "The daily run starts.",
       "work": "List every completed npn360 project work order and flag the ones not yet finalized, grouped by project.",
@@ -36,7 +36,7 @@
     {
       "id": "check-statements",
       "title": "Check charges and credits against statements",
-      "owner": "Stella",
+      "owner": "Sol",
       "actor": "agent",
       "trigger": "Unfinalized work orders were found.",
       "work": "For each unfinalized work order, total the brand charges and operator credits that have not reached a statement.",
@@ -51,7 +51,7 @@
       "id": "blocker-documented",
       "kind": "decision",
       "title": "Is there a documented blocker or follow-up?",
-      "owner": "Stella",
+      "owner": "Sol",
       "actor": "agent",
       "trigger": "Open amounts are totalled.",
       "work": "Look for a documented closeout blocker or an assigned follow-up on the project and its orders.",
@@ -70,7 +70,7 @@
     {
       "id": "propose-follow-up",
       "title": "Ask approval to assign a dated follow-up",
-      "owner": "Brandon H.",
+      "owner": "Blake H.",
       "actor": "agent",
       "trigger": "Nothing documents why the project isn't closed out.",
       "work": "Write up what blocks closeout and ask the Automation owner to approve assigning a dated project follow-up to the project's ops lead. Change no records.",
@@ -87,7 +87,7 @@
     {
       "id": "done",
       "title": "Record the outcome",
-      "owner": "Stella",
+      "owner": "Sol",
       "actor": "agent",
       "trigger": "The project is closed out or has an owner.",
       "work": "Note on the project what was found and who owns the follow-up.",

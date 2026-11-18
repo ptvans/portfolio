@@ -1,11 +1,11 @@
 // What the inspection pane shows for each kind of message.
 //
-// An alert Stella has drafted responses for shows her request — the same
-// session the Stella page lists under Incoming, so a response picked here
+// An alert Sol has drafted responses for shows her request — the same
+// session the Sol page lists under Incoming, so a response picked here
 // settles it there too. Any other alert, and an SOP run that stopped, gets
 // what the record itself says and the actions that actually exist for it. A
 // thread is the conversation, with a reply box. A note (goal, project, audit,
-// coworker, Stella, or an SOP's request) is what it says, or Stella's
+// coworker, Sol, or an SOP's request) is what it says, or Sol's
 // write-up when it has one; a coworker's note can be replied to, and a note
 // that asks for a decision takes Approve or Decline.
 //
@@ -20,27 +20,27 @@ import { formatDateTime } from "../../../../lib/format";
 import { useAlerts } from "../../context/AlertsContext";
 import { useMessages, type Decision, type InboxMessage } from "../../context/MessagesContext";
 import { inboxNotes } from "../../data/inboxNotes";
-import { useStella } from "../../context/StellaContext";
+import { useSol } from "../../context/SolContext";
 import { workItemFor } from "../../data/myWork";
-import type { StellaEntry } from "../../data/stellaScript";
+import type { SolEntry } from "../../data/solScript";
 import { linkAlertText } from "../alerts/AlertCard";
 import { InspectionPane, PaneBadge, PaneSection } from "../InspectionPane";
-import { StellaComposer } from "../stella/StellaComposer";
-import { ActionsCard, StellaEntryView } from "../stella/StellaTranscript";
+import { SolComposer } from "../sol/SolComposer";
+import { ActionsCard, SolEntryView } from "../sol/SolTranscript";
 import { From, Meta, RaisedHistoryCard, ResolutionNote, ResolveButton, SnoozeButton, SnoozeNote, sourceSop } from "./MessageMeta";
 import { MessageTypeBadge } from "./messageUi";
 
-// Stella's honest answer to a question asked about a record she has no
+// Sol's honest answer to a question asked about a record she has no
 // script for. Nothing is pretended.
 const NO_SCRIPT_REPLY =
-  "I can't act on this one from here yet. Use the actions above, or open a chat with me in Stella and I'll tell you what I can run.";
+  "I can't act on this one from here yet. Use the actions above, or open a chat with me in Sol and I'll tell you what I can run.";
 
 export function MessageDetail({ message, onClose }: { message: InboxMessage; onClose: () => void }) {
   const { getRule } = useAlerts();
   const source = sourceSop(message, getRule);
   const [, rerender] = useState(0);
   const chat = paneChats.get(message.id) ?? [];
-  const pushChat = (id: string, entry: StellaEntry) => {
+  const pushChat = (id: string, entry: SolEntry) => {
     paneChats.set(id, [...(paneChats.get(id) ?? []), entry]);
     rerender((n) => n + 1);
   };
@@ -77,7 +77,7 @@ export function MessageDetail({ message, onClose }: { message: InboxMessage; onC
       {chat.length > 0 && (
         <div className="mt-6 flex flex-col gap-5">
           {chat.map((e, i) => (
-            <StellaEntryView key={i} entry={e} />
+            <SolEntryView key={i} entry={e} />
           ))}
         </div>
       )}
@@ -121,7 +121,7 @@ function Stack({ children }: { children: ReactNode }) {
 
 function AlertBody({ message }: { message: InboxMessage }) {
   const { alerts, getRule } = useAlerts();
-  const { itemState, actOn } = useStella();
+  const { itemState, actOn } = useSol();
   const { archive, unarchive } = useMessages();
   const navigate = useNavigate();
   const alert = alerts.find((a) => a.id === message.refId);
@@ -129,8 +129,8 @@ function AlertBody({ message }: { message: InboxMessage }) {
   const rule = getRule(alert.ruleId);
   const work = workItemFor(message.id);
 
-  // Stella's request: her write-up, which the pane's header opens, and the
-  // responses she can act on. Acting here is the same as on the Stella home.
+  // Sol's request: her write-up, which the pane's header opens, and the
+  // responses she can act on. Acting here is the same as on the Sol home.
   if (work && work.item.actions.length > 0) {
     const state = itemState(message.id);
     return (
@@ -255,7 +255,7 @@ function NoteBody({ message }: { message: InboxMessage }) {
   const replies = repliesFor(note.id);
 
   // How often the SOP has raised it comes first, then what to do about it;
-  // Stella's write-up and any replies read below, for whoever wants the why.
+  // Sol's write-up and any replies read below, for whoever wants the why.
   return (
     <Stack>
       {message.raised.length > 1 && (
@@ -324,7 +324,7 @@ const CHOICES: { choice: Decision["choice"]; label: string }[] = [
   { choice: "approved", label: "Approve" },
 ];
 
-// Approve or Decline what Stella asked for, with an optional note. Once
+// Approve or Decline what Sol asked for, with an optional note. Once
 // decided it says who chose what; resolving the message without deciding
 // closes it to new choices.
 function DecisionCard({ noteId, open }: { noteId: string; open: boolean }) {
@@ -402,27 +402,27 @@ function ThreadBody({ message }: { message: InboxMessage }) {
 }
 
 // ---------------------------------------------------------------------------
-// Asking Stella about a message
+// Asking Sol about a message
 // ---------------------------------------------------------------------------
 //
-// Questions about a message with a Stella session go into that session (and
+// Questions about a message with a Sol session go into that session (and
 // show in the body above, with the rest of it). Anything else is held here,
 // per message, for as long as the page is open.
 
-const paneChats = new Map<string, StellaEntry[]>();
+const paneChats = new Map<string, SolEntry[]>();
 
 function Footer({
   message,
   pushChat,
 }: {
   message: InboxMessage;
-  pushChat: (messageId: string, entry: StellaEntry) => void;
+  pushChat: (messageId: string, entry: SolEntry) => void;
 }) {
   const { reply, markRead } = useMessages();
 
   if (message.kind === "thread" || message.type === "coworker") {
     return (
-      <StellaComposer
+      <SolComposer
         brandId={message.brandId}
         placeholder={message.kind === "thread" ? "Reply to the thread…" : "Reply…"}
         onSend={(text) => {
@@ -434,9 +434,9 @@ function Footer({
   }
 
   return (
-    <StellaComposer
+    <SolComposer
       brandId={message.brandId}
-      placeholder="Ask Stella about this…"
+      placeholder="Ask Sol about this…"
       onSend={(text) => {
         const id = message.id;
         pushChat(id, { kind: "user", text, brandId: message.brandId });

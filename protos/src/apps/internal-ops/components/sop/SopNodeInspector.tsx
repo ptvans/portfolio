@@ -4,7 +4,7 @@
 // objects it created, errors), the four definition fields (work, owner, rules,
 // done when), autonomy, and its place in the graph (parents / children, which
 // are links). The owner is editable; the rest is read-only here and changes
-// through the document + Stella.
+// through the document + Sol.
 
 import { ArrowDown, ArrowUp, Check, ChevronDown, ChevronUp, Copy, UserRound, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
@@ -229,7 +229,7 @@ export function SopNodeInspector({
             <span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-brand-100 text-[11px] font-semibold text-brand-700">{node.autonomy}</span>
             {SOP_AUTONOMY_LABELS[node.autonomy]}
           </Field>
-          <Field label="Provenance">{node.provenance === "stated" ? "Stated by the operator" : "Inferred by Stella"}</Field>
+          <Field label="Provenance">{node.provenance === "stated" ? "Stated by the operator" : "Inferred by Sol"}</Field>
         </Section>
 
         <Section title="Info">

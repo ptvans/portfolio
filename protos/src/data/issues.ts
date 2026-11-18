@@ -198,7 +198,7 @@ export const issues: Issue[] = [
     driverNotes: null,
   },
 
-  // --- Moises ---
+  // --- Mateo ---
   {
     id: "iss-mo-1",
     type: "task_review",
@@ -210,7 +210,7 @@ export const issues: Issue[] = [
     title: "Supervise Vehicle",
     detail: "Autolane · shift complete, awaiting review",
     ownerFieldOperatorId: "fo-mo-1",
-    raisedByName: "Moises Delgado",
+    raisedByName: "Mateo Dalton",
     createdAt: "2026-10-13T12:05:00-05:00",
     scheduledAt: "2026-10-13T08:00:00-05:00",
     markedCompleteAt: "2026-10-13T12:05:00-05:00",
@@ -256,7 +256,7 @@ export const issues: Issue[] = [
     title: "Inventory ID",
     detail: "Vehicle VIN doesn't match dispatch record",
     ownerFieldOperatorId: "fo-mo-1",
-    raisedByName: "Moises Delgado",
+    raisedByName: "Mateo Dalton",
     createdAt: "2026-10-13T09:15:00-05:00",
     scheduledAt: null,
     markedCompleteAt: null,

@@ -1,18 +1,18 @@
-// Stella's mark: the iridescent orb that stands for the agent everywhere it
+// Sol's mark: the iridescent orb that stands for the agent everywhere it
 // appears (nav, chat, SOP steps). Three bitmaps, picked so each stays sharp at 2x:
 // 32px (up to 16px icons), 48px (up to 24px), 144px (chat avatars). The files
-// carry no shadow; the drop shadow is added in CSS (.stella-icon).
+// carry no shadow; the drop shadow is added in CSS (.sol-icon).
 //
-// `thinking` swaps the orb for the animated loader while Stella is
+// `thinking` swaps the orb for the animated loader while Sol is
 // working.
 // Size comes from `size` (px) or, when omitted, from `className` (h-4 w-4 …),
 // which lets it stand in anywhere a lucide icon is used.
 
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import thinkingLoader from "../../../../assets/dots-loader.lottie?url";
-import smSrc from "../../../../assets/stella-avatar-sm.png";
-import lgSrc from "../../../../assets/stella-avatar-lg.png";
-import xlSrc from "../../../../assets/stella-avatar-xl.png";
+import smSrc from "../../../../assets/sol-avatar-sm.png";
+import lgSrc from "../../../../assets/sol-avatar-lg.png";
+import xlSrc from "../../../../assets/sol-avatar-xl.png";
 
 // How much bigger the loader renders than the orb it stands in for.
 const LOTTIE_SCALE = 1.4;
@@ -21,7 +21,7 @@ function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-export function StellaIcon({
+export function SolIcon({
   size,
   thinking = false,
   className = "",
@@ -58,7 +58,7 @@ export function StellaIcon({
       width={size}
       height={size}
       style={size ? { width: size, height: size } : undefined}
-      className={`stella-icon inline-block shrink-0 select-none rounded-full object-contain ${size && size > 32 ? "stella-icon--xl" : ""} ${className}`}
+      className={`sol-icon inline-block shrink-0 select-none rounded-full object-contain ${size && size > 32 ? "sol-icon--xl" : ""} ${className}`}
     />
   );
 }

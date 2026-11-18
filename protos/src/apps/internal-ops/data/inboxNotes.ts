@@ -1,7 +1,7 @@
 // Messages that aren't alerts, SOP runs or brand/NO threads: goal check-ins,
 // project flags, task completion audits, notes from coworkers, and SOP
-// requests that carry Stella's own write-up. A note's type is what it is
-// about; most are written by Stella, which `from` says.
+// requests that carry Sol's own write-up. A note's type is what it is
+// about; most are written by Sol, which `from` says.
 // Seeded on the prototype's clock (MOCK_NOW_ISO is 2026-10-28 noon Pacific).
 
 import type { AlertSeverity } from "../../../types/domain";
@@ -14,7 +14,7 @@ export interface RaisedEntry {
   note: string;
 }
 
-// One part of Stella's write-up, under a grey heading. `[label](/path)` in the
+// One part of Sol's write-up, under a grey heading. `[label](/path)` in the
 // text becomes a link.
 export interface NoteSection {
   heading: string;
@@ -26,7 +26,7 @@ export interface InboxNote {
   type: NoteType;
   title: string;
   body: string;
-  // Who wrote it: a coworker's name, or "Stella".
+  // Who wrote it: a coworker's name, or "Sol".
   from: string;
   // What it is asking you for; null for an FYI.
   ask: string | null;
@@ -38,7 +38,7 @@ export interface InboxNote {
   forMe: boolean;
   // The SOP that raised it, for the pane's "From:" link.
   sopId?: string;
-  // Stella's write-up, shown in place of `body` when present.
+  // Sol's write-up, shown in place of `body` when present.
   sections?: NoteSection[];
   // Asks for a yes or no: the pane shows Decline and Approve.
   decision?: boolean;
@@ -63,8 +63,8 @@ export const inboxNotes: InboxNote[] = [
     id: "note-sop-npn360-closeout",
     type: "sop",
     title: "Approve North Riverside finance closeout follow-up for Jasmine",
-    body: "Stella asks to assign Jasmine a dated follow-up on North Riverside's financial closeout.",
-    from: "Stella",
+    body: "Sol asks to assign Jasmine a dated follow-up on North Riverside's financial closeout.",
+    from: "Sol",
     ask: null,
     severity: "high",
     at: "2026-10-28T11:45:00-07:00",
@@ -95,7 +95,7 @@ export const inboxNotes: InboxNote[] = [
     type: "goal",
     title: "Chewy on-time receiving is at 86%, under the 95% Q3 goal",
     body: "On-time receiving across Chewy's DEN and TPA popups slipped to 86% over the last 14 days. Three late inbound parcels account for most of the gap; without them the rate is 94%.",
-    from: "Stella",
+    from: "Sol",
     ask: "Need review of",
     severity: "high",
     at: "2026-10-28T08:30:00-07:00",
@@ -108,7 +108,7 @@ export const inboxNotes: InboxNote[] = [
     type: "goal",
     title: "Promobile tour stops hit 100% on-time load-in for October",
     body: "All 18 Promobile tour stops this month loaded in on time, ahead of the 97% goal. The streak started when the Chicago and LA hubs moved to day-before staging.",
-    from: "Stella",
+    from: "Sol",
     ask: null,
     severity: "low",
     at: "2026-10-27T17:00:00-07:00",
@@ -121,7 +121,7 @@ export const inboxNotes: InboxNote[] = [
     type: "project",
     title: "AG1 — Chicago Tour Stop has no network operator 4 days before load-in",
     body: "The project is accepted and starts Monday, but no network operator has accepted the load-in work order. Two Chicago operators were offered it yesterday and haven't answered.",
-    from: "Stella",
+    from: "Sol",
     ask: "Take action on",
     severity: "critical",
     at: "2026-10-28T09:10:00-07:00",
@@ -134,7 +134,7 @@ export const inboxNotes: InboxNote[] = [
     type: "project",
     title: "Olive Young warehousing has no statement of work",
     body: "Olive Young / Los Angeles / Warehousing started on October 13 without a statement of work on file, so its storage can't be billed against contracted rates.",
-    from: "Stella",
+    from: "Sol",
     ask: "Need more information for",
     severity: "medium",
     at: "2026-10-27T13:45:00-07:00",
@@ -147,7 +147,7 @@ export const inboxNotes: InboxNote[] = [
     type: "audit",
     title: "DEN-A load-out was closed without the required photos",
     body: "The task completion audit found the DEN-A Hound Hill load-out marked complete with no pallet or site photos. The Automation requires both before a load-out can close.",
-    from: "Stella",
+    from: "Sol",
     ask: "Need correction on",
     severity: "critical",
     at: "2026-10-28T10:20:00-07:00",
@@ -160,7 +160,7 @@ export const inboxNotes: InboxNote[] = [
     type: "audit",
     title: "Weekly audit: 41 of 42 Promobile tasks passed",
     body: "One Yerba Madre receiving task in Denver is missing a signed BOL. Everything else completed this week met its checklist.",
-    from: "Stella",
+    from: "Sol",
     ask: null,
     severity: "medium",
     at: "2026-10-26T07:00:00-07:00",
@@ -186,7 +186,7 @@ export const inboxNotes: InboxNote[] = [
     type: "coworker",
     title: "Base Power Houston North rollout plan is ready for comments",
     body: "Shared the battery install rollout plan for Houston North with the team. Looking for comments on the crew ramp before Friday.",
-    from: "Dana K.",
+    from: "Devon K.",
     ask: null,
     severity: "normal",
     at: "2026-10-27T16:20:00-07:00",
@@ -195,11 +195,11 @@ export const inboxNotes: InboxNote[] = [
     forMe: false,
   },
   {
-    id: "note-stella-tracking",
+    id: "note-sol-tracking",
     type: "project",
     title: "Three Chewy popups this week depend on parcels with no tracking",
     body: "DEN-A, DEN-B and TPA-B each have a receiving task whose parcels have no tracking number. If any of them are late there is no time to reorder before the event. I can ask the carrier for an ETA on each.",
-    from: "Stella",
+    from: "Sol",
     ask: null,
     severity: "critical",
     at: "2026-10-28T11:40:00-07:00",
@@ -208,11 +208,11 @@ export const inboxNotes: InboxNote[] = [
     forMe: true,
   },
   {
-    id: "note-stella-staffing",
+    id: "note-sol-staffing",
     type: "project",
     title: "Next week's Promobile staffing plan",
     body: "I drafted next week's staffing for the 12 Promobile tour stops from the accepted work orders: 31 shifts across 6 network operators. Two stops share a crew in Chicago on Tuesday.",
-    from: "Stella",
+    from: "Sol",
     ask: "Need approval on",
     severity: "medium",
     at: "2026-10-27T09:00:00-07:00",
@@ -223,14 +223,14 @@ export const inboxNotes: InboxNote[] = [
   // -------------------------------------------------------------------------
   // The My Work examples from Thom's Nov 5 mockups: Coco's zero-dollar days
   // and bot counts, two finalization holds, and two access requests. Each is
-  // an item in data/myWork.ts; Stella's write-up and responses live there.
+  // an item in data/myWork.ts; Sol's write-up and responses live there.
   // -------------------------------------------------------------------------
   {
     id: "note-coco-jc-oct22-zero",
     type: "sop",
     title: "Jersey City daily deployment on October 22 has $0 in per-bot charges",
     body: "14 bots logged out and back, no per-bot charge line. The rate card bills $18.00 per bot per day.",
-    from: "Stella",
+    from: "Sol",
     ask: "Need decision for",
     severity: "medium",
     at: "2026-10-15T09:10:00-07:00",
@@ -243,7 +243,7 @@ export const inboxNotes: InboxNote[] = [
     type: "sop",
     title: "Jersey City October 23 billed 11 bots deployed and 13 undeployed",
     body: "Two more bots came back than went out. The charges as billed assume two carried over from October 22.",
-    from: "Stella",
+    from: "Sol",
     ask: "Need decision for",
     severity: "medium",
     at: "2026-10-16T09:10:00-07:00",
@@ -256,7 +256,7 @@ export const inboxNotes: InboxNote[] = [
     type: "sop",
     title: "San Jose October 4 charges 20 bots; the deployment log shows 17",
     body: "The charge line and the log disagree by three bots.",
-    from: "Stella",
+    from: "Sol",
     ask: "Need decision for",
     severity: "medium",
     at: "2026-10-17T09:10:00-07:00",
@@ -269,7 +269,7 @@ export const inboxNotes: InboxNote[] = [
     type: "sop",
     title: "San Jose daily deployment on October 22 completed with no charges",
     body: "16 bots logged, no charge lines and no credit recorded.",
-    from: "Stella",
+    from: "Sol",
     ask: "Need review of",
     severity: "medium",
     at: "2026-10-15T09:20:00-07:00",
@@ -282,7 +282,7 @@ export const inboxNotes: InboxNote[] = [
     type: "sop",
     title: "Chicago October 21 ran on a holiday schedule; the contract has no holiday rate",
     body: "Nothing in the Robot contract says whether a holiday day bills at the standard rate.",
-    from: "Stella",
+    from: "Sol",
     ask: "Need review of",
     severity: "medium",
     at: "2026-10-14T09:10:00-07:00",
@@ -296,7 +296,7 @@ export const inboxNotes: InboxNote[] = [
     type: "sop",
     title: "Los Angeles October 24 charges 9 bots; the deployment log shows 12",
     body: "The charge line is three bots short of the log.",
-    from: "Stella",
+    from: "Sol",
     ask: "Need decision for",
     severity: "medium",
     at: "2026-10-18T09:10:00-07:00",
@@ -309,7 +309,7 @@ export const inboxNotes: InboxNote[] = [
     type: "sop",
     title: "Miami daily deployment on October 25 has $0 in per-bot charges",
     body: "10 bots logged out and back, no per-bot charge line.",
-    from: "Stella",
+    from: "Sol",
     ask: "Need decision for",
     severity: "medium",
     at: "2026-10-19T09:10:00-07:00",
@@ -322,7 +322,7 @@ export const inboxNotes: InboxNote[] = [
     type: "sop",
     title: "LTL shipment WI-CA 10/2 is ready to finalize on an estimated freight charge",
     body: "The carrier invoice hasn't arrived; the freight line is the quote.",
-    from: "Stella",
+    from: "Sol",
     ask: "Need decision for",
     severity: "medium",
     at: "2026-10-26T10:00:00-07:00",
@@ -335,7 +335,7 @@ export const inboxNotes: InboxNote[] = [
     type: "sop",
     title: "Nike-ADT LA Storage is due to bill before its new pallet-rate quote is approved",
     body: "Quote sent October 24, unsigned. Monthly storage bills on the 1st.",
-    from: "Stella",
+    from: "Sol",
     ask: "Need decision for",
     severity: "medium",
     at: "2026-10-26T10:30:00-07:00",
@@ -348,7 +348,7 @@ export const inboxNotes: InboxNote[] = [
     type: "sop",
     title: "Lost access to the Yerba Madre Slack workspace; 16 checks depend on it",
     body: "Prices, fees and agreements for Yerba Madre are confirmed in their Slack channel.",
-    from: "Stella",
+    from: "Sol",
     ask: "Take action on",
     severity: "critical",
     at: "2026-10-28T08:05:00-07:00",
@@ -360,8 +360,8 @@ export const inboxNotes: InboxNote[] = [
     id: "note-access-autolane-brick",
     type: "sop",
     title: "No Build access to Autolane Austin's October 19–20 shift charges",
-    body: "The shift charges are on records Stella can't read, so the two days can't be checked or billed.",
-    from: "Stella",
+    body: "The shift charges are on records Sol can't read, so the two days can't be checked or billed.",
+    from: "Sol",
     ask: "Take action on",
     severity: "critical",
     at: "2026-10-28T08:10:00-07:00",
@@ -374,7 +374,7 @@ export const inboxNotes: InboxNote[] = [
     type: "sop",
     title: `Autolane Austin October ${s.day} shift passed every finalization check`,
     body: `${s.hours} hours as scheduled, ${s.charge} at the rate card, nothing disputed.`,
-    from: "Stella",
+    from: "Sol",
     ask: "Need approval on",
     severity: "normal",
     at: `2026-10-27T10:0${i}:00-07:00`,

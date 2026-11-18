@@ -7,7 +7,7 @@
 //   no-alphafleet  Alpha Fleet (Jack Mkhsyan)              — Los Angeles / Hollywood
 //   no-roblas      Roblas Services LLC (Roberto Diaz)      — Fort Worth, TX
 //   no-tera        Tera Moving Services (Enrique Saavedra) — Houston, TX
-//   no-gcroman     G&C Roman (Christina Roman)             — Austin, TX
+//   no-gcroman     G&C Roman (Carla Ronan)             — Austin, TX
 //   no-elitephx    Elite Delivery Service - Phoenix (Sarah Maldonado) — Phoenix, AZ
 //
 // Operational shape is real: task and work-order kinds, per-day volumes, region

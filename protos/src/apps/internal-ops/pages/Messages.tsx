@@ -89,7 +89,7 @@ export function Messages() {
   });
 
   // What a link that named its messages called them (?from=), for the chip.
-  const [idsLabel] = useState(() => (params.get("from") === "stella" ? "Stella's incoming requests" : "Linked messages"));
+  const [idsLabel] = useState(() => (params.get("from") === "sol" ? "Sol's incoming requests" : "Linked messages"));
 
   const rows = useMemo(
     () => applyFilters(messages, filters).sort((a, b) => b.at.localeCompare(a.at)),

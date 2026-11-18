@@ -3,7 +3,7 @@
 // The document is what a person wrote. The gutter is what the agent read out
 // of it: for every section, the actions it will take and the tools it will
 // call to take them. This is the first phase of the process — composing the
-// SOP accurately — so the gutter is where the two meet. An action Stella
+// SOP accurately — so the gutter is where the two meet. An action Sol
 // inferred reads "detected" until a person confirms it, and an action the
 // prose asks for that Brick has no tool for reads "missing" and says why.
 

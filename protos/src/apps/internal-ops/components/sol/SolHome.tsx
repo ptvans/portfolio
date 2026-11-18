@@ -1,4 +1,4 @@
-// What the Stella page opens on: a greeting, the shortcuts, the box to talk
+// What the Sol page opens on: a greeting, the shortcuts, the box to talk
 // to her in, and beneath it My Work — the messages she has grouped for you,
 // each group with its responses and its own chat.
 
@@ -6,11 +6,11 @@ import { BellRing, ChevronDown, CornerDownRight, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { CURRENT_USER_NAME } from "../../context/AlertsContext";
-import { useStella } from "../../context/StellaContext";
+import { useSol } from "../../context/SolContext";
 import { MY_WORK_PREVIEW } from "../../data/myWork";
-import { STELLA_STARTERS } from "../../data/stellaScript";
-import { StellaComposer } from "./StellaComposer";
-import { StellaIcon } from "./StellaIcon";
+import { SOL_STARTERS } from "../../data/solScript";
+import { SolComposer } from "./SolComposer";
+import { SolIcon } from "./SolIcon";
 import { WorkGroupCard, WorkGroupTitle } from "./WorkGroupCard";
 
 // The two shortcuts shown inline; the rest of the starters sit behind the
@@ -19,10 +19,10 @@ const SHORTCUTS: { label: string; prompt: string }[] = [
   { label: "Create an alert", prompt: "I want to make an alert." },
   { label: "Work order report summary", prompt: "Summarize the status of work orders created this week." },
 ];
-const MORE_SHORTCUTS = STELLA_STARTERS.filter((s) => !SHORTCUTS.some((c) => c.prompt === s.prompt));
+const MORE_SHORTCUTS = SOL_STARTERS.filter((s) => !SHORTCUTS.some((c) => c.prompt === s.prompt));
 
-export function StellaHome() {
-  const { active, send, setBrand, groups, inMyWork, groupSession } = useStella();
+export function SolHome() {
+  const { active, send, setBrand, groups, inMyWork, groupSession } = useSol();
   const firstName = CURRENT_USER_NAME.split(" ")[0];
   // A group you have started a conversation with leaves the home: it lives
   // in that conversation, and on the digest.
@@ -34,24 +34,24 @@ export function StellaHome() {
   return (
     // The id lets the sidebar's New Chat and home buttons scroll this back
     // to the top and put the cursor in the box.
-    <div id="stella-home" className="thin-scrollbar min-h-0 flex-1 overflow-y-auto px-6 py-8">
+    <div id="sol-home" className="thin-scrollbar min-h-0 flex-1 overflow-y-auto px-6 py-8">
       <div className="mx-auto max-w-[27rem] sm:max-w-xl">
         <div className="flex items-center justify-center gap-3">
-          <StellaIcon size={28} />
+          <SolIcon size={28} />
           <h1 className="text-lg text-slate-700">Back again, {firstName}</h1>
         </div>
 
         <Shortcuts onPick={send} />
 
         <div className="mt-2">
-          <StellaComposer
+          <SolComposer
             compact
             autoFocus
             onSend={(text) => send(text)}
             disabled={active.busy}
             brandId={active.brandId}
             onBrandChange={setBrand}
-            placeholder="Ask Stella..."
+            placeholder="Ask Sol..."
           />
         </div>
 
@@ -78,10 +78,10 @@ export function StellaHome() {
   );
 }
 
-// Group conversations Stella has waited in for six hours or more, as alerts
+// Group conversations Sol has waited in for six hours or more, as alerts
 // above the groups: which group, how long, and the way back into it.
 function Reminders() {
-  const { reminders, dismissReminder, select } = useStella();
+  const { reminders, dismissReminder, select } = useSol();
   if (reminders.length === 0) return null;
   return (
     <div className="mt-7 space-y-2">
@@ -95,7 +95,7 @@ function Reminders() {
           >
             <BellRing className="h-4 w-4 shrink-0 text-amber-600" strokeWidth={2} aria-hidden />
             <p className="min-w-0 flex-1 truncate text-slate-600">
-              <span className="font-medium text-slate-800">Stella is waiting on your reply</span> · <WorkGroupTitle group={group} /> ·{" "}
+              <span className="font-medium text-slate-800">Sol is waiting on your reply</span> · <WorkGroupTitle group={group} /> ·{" "}
               <span className="text-slate-500">{hours}h</span>
             </p>
             <button

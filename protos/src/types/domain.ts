@@ -468,9 +468,9 @@ export interface LiveActivityEvent {
 
 export type SopStatus = "draft" | "active" | "paused" | "archived";
 
-// Who performs a step. Stella is the agent; the rest are humans.
+// Who performs a step. Sol is the agent; the rest are humans.
 export type SopActor =
-  | "stella"
+  | "sol"
   | "brick_operator"
   | "sop_owner"
   | "verifier_agent"
@@ -532,7 +532,7 @@ export interface SopEdge {
 }
 
 // What a step actually does when it executes: the action taken and the tool
-// called to take it. Stella detects these while reading the SOP document, so
+// called to take it. Sol detects these while reading the SOP document, so
 // they hang off the prose they were read out of — the gutter beside each
 // section of the document is where they are shown and confirmed.
 export type SopActionKind =
@@ -546,7 +546,7 @@ export type SopActionKind =
   | "decide";
 
 export type SopActionStatus =
-  // Stella read it out of the prose; nobody has checked it.
+  // Sol read it out of the prose; nobody has checked it.
   | "detected"
   // A person has signed it off as what the step really does.
   | "confirmed"

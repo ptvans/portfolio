@@ -157,7 +157,7 @@ function EntryView({ entry, onReview, onReply }: { entry: Entry; onReview: () =>
   switch (entry.kind) {
     case "day":
       return <p className="py-1 text-center text-sm text-white/40">{entry.text}</p>;
-    case "stella":
+    case "sol":
       return <Bubble>{entry.text}</Bubble>;
     case "user":
       return (

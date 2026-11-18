@@ -21,7 +21,7 @@ import { importedSops } from "./sopFiles";
 
 // People who can own an SOP step. Brick operators in v1 (PRD: Brand / NO users
 // take the owner role in later phases).
-export const SOP_OWNER_OPTIONS = ["Moises Reyes", "Joe Enzbigilis", "Kenny Ma", "Priya Natarajan"];
+export const SOP_OWNER_OPTIONS = ["Mateo Rivera", "Jordan Eskew", "Kenny Ma", "Priya Natarajan"];
 
 export const SOP_AUTONOMY_LABELS: Record<1 | 2 | 3 | 4, string> = {
   1: "Human does everything",
@@ -31,7 +31,7 @@ export const SOP_AUTONOMY_LABELS: Record<1 | 2 | 3 | 4, string> = {
 };
 
 export const SOP_ACTOR_LABELS: Record<SopNode["actors"][number], string> = {
-  stella: "Stella",
+  sol: "Sol",
   brick_operator: "Build operator",
   sop_owner: "Automation owner",
   verifier_agent: "Verifier agent",
@@ -46,7 +46,7 @@ export const SOP_ACTOR_LABELS: Record<SopNode["actors"][number], string> = {
 // ---------------------------------------------------------------------------
 
 const AL = "sop-al-weekly-shifts";
-const OWNER = "Moises Reyes";
+const OWNER = "Mateo Rivera";
 
 // The two hand-authored SOPs predate per-step action detection, so their nodes
 // declare no tool calls. Fill the field in once rather than repeating
@@ -62,7 +62,7 @@ const alNodes: SopNode[] = authored([
     summary: "Sunday night, for the Tue–Mon operating week.",
     work: "Start a run for the coming Tue–Mon operating week. The schedule for that week is expected in the shared Autolane Slack channel on Sunday night.",
     ownerName: OWNER,
-    actors: ["stella"],
+    actors: ["sol"],
     hardConstraints: [],
     learnedRules: [],
     successCriteria: "A run exists for the coming operating week.",
@@ -82,7 +82,7 @@ const alNodes: SopNode[] = authored([
     summary: "Send one polite reminder if it's late.",
     work: "Watch the shared Slack channel for the week's supervision schedule. If nothing has arrived by 8:00pm PT Sunday, send one short, friendly reminder. Only one. If it is still missing by 9:00am PT Monday, tell the owner.",
     ownerName: OWNER,
-    actors: ["stella"],
+    actors: ["sol"],
     hardConstraints: ["Send at most one reminder per week."],
     learnedRules: ["A schedule posted as an image counts as arrived; hand it to the reader step as-is."],
     successCriteria: "The schedule file or message is captured, or the owner has been told it is missing.",
@@ -102,7 +102,7 @@ const alNodes: SopNode[] = authored([
     summary: "Every site and day: shifts, supervisor counts, start and end times.",
     work: "For every site and day, capture which shifts run (Lunch, Dinner, Dinner Peak, or anything new), how many supervisors each needs, and start/end times. Read the notes at the bottom, that's where changes from last week are called out. Blank or a dash means no shift. Times are Central unless stated. The grid wins over the notes if they disagree, but flag the conflict.",
     ownerName: OWNER,
-    actors: ["stella"],
+    actors: ["sol"],
     hardConstraints: ["The grid wins over the notes when they disagree."],
     learnedRules: ["Blank or a dash means no shift.", "Times are Central unless stated."],
     successCriteria: "A shift list with one row per site, day and shift, each with a supervisor count and start/end time; every grid/notes conflict flagged.",
@@ -122,7 +122,7 @@ const alNodes: SopNode[] = authored([
     summary: "Look for supervision shifts already scheduled in that week.",
     work: "Look for supervision shifts already scheduled in that week's dates. Never create work orders for a week that already has them without a person deciding first. Duplicates reach the network operator as real staffing requests.",
     ownerName: OWNER,
-    actors: ["stella"],
+    actors: ["sol"],
     hardConstraints: ["Never create work orders for a week that already has them without a person deciding first."],
     learnedRules: [],
     successCriteria: "The week's dates were searched for existing Daily Supervision Shifts work orders and the result is recorded on the run.",
@@ -142,7 +142,7 @@ const alNodes: SopNode[] = authored([
     summary: "Five Autolane records must exist and be active.",
     work: "Confirm five Autolane records exist and are active: the brand, the \"Daily Supervision Shifts\" work order type, the \"Supervise Vehicle\" task type, the Austin assignment to the network operator, and the Tesla Model Y product. If a saved reference no longer matches, find the record by name. Never touch the sandbox brand or the demo operator.",
     ownerName: OWNER,
-    actors: ["stella"],
+    actors: ["sol"],
     hardConstraints: ["Never touch the sandbox brand or the demo operator."],
     learnedRules: ["If a saved reference no longer matches, find the record by name."],
     successCriteria: "All five records resolve to active System-of-Record entities.",
@@ -162,7 +162,7 @@ const alNodes: SopNode[] = authored([
     summary: "One work order per site per day; flag anything odd.",
     work: "Draft one work order per site per day, named like \"Cherrywood - Fri 8/28\". Each supervisor on each shift is one Supervise Vehicle task with that shift's start time and length. Non-standard dinner shifts get a note saying which shift they are. Every work order lists one Tesla Model Y. Use the Austin region timezone. Flag: notes contradicting the grid, a site appearing or disappearing, supervisor counts or times shifting mid-week, anything the notes call out.",
     ownerName: OWNER,
-    actors: ["stella"],
+    actors: ["sol"],
     hardConstraints: ["Drafts are proposals; nothing is created in Build at this step."],
     learnedRules: [
       "Name work orders \"<Site> - <Ddd M/D>\".",
@@ -206,7 +206,7 @@ const alNodes: SopNode[] = authored([
     summary: "Exactly what was approved. Nothing more.",
     work: "Create exactly what was approved. Nothing more. If some fail to save, redo only those, never one that already saved.",
     ownerName: OWNER,
-    actors: ["stella"],
+    actors: ["sol"],
     hardConstraints: ["Create only what was approved.", "Never re-create a work order that already saved."],
     learnedRules: [],
     successCriteria: "Every approved work order and task exists in Build once, with ids recorded on the run.",
@@ -243,11 +243,11 @@ const alNodes: SopNode[] = authored([
     trigger: "Verification matched the approved plan.",
     kind: "step",
     title: "Tell the network operator",
-    summary: "Three sentences or fewer. Stella drafts, owner sends.",
+    summary: "Three sentences or fewer. Sol drafts, owner sends.",
     work: "Three sentences or fewer, plain and high level, no em dashes. Cover the week's dates and sites, total shift count with peak shifts noted, anything they need to notice (no lunch shifts, a new site, peak times moved), and a prompt to review and assign supervisors in the portal.",
     ownerName: OWNER,
-    actors: ["stella", "sop_owner"],
-    hardConstraints: ["The owner sends the message; Stella only drafts."],
+    actors: ["sol", "sop_owner"],
+    hardConstraints: ["The owner sends the message; Sol only drafts."],
     learnedRules: ["Three sentences or fewer.", "No em dashes."],
     successCriteria: "The message is posted in the network operator's Slack channel by the owner.",
     verification: "human",
@@ -266,7 +266,7 @@ const alNodes: SopNode[] = authored([
     summary: "Anything unusual, with everything known so far.",
     work: "Send the owner everything known so far: an unreadable schedule, a new site, a new kind of shift, missing Autolane records in Build, or work orders that only partly saved. Resolving the escalation offers a one-click Automation change for the owner to approve.",
     ownerName: OWNER,
-    actors: ["stella", "sop_owner"],
+    actors: ["sol", "sop_owner"],
     hardConstraints: [],
     learnedRules: [],
     successCriteria: "The owner has acknowledged the escalation and the state-decision-outcome record is complete.",
@@ -286,7 +286,7 @@ const alNodes: SopNode[] = authored([
     summary: "Every shift exists in Build and the network operator knows.",
     work: "Every shift on the schedule exists in Build as a Daily Supervision Shifts work order with the right tasks, the records have been checked against the schedule, and the network operator has been told the week is ready.",
     ownerName: OWNER,
-    actors: ["stella"],
+    actors: ["sol"],
     hardConstraints: [],
     learnedRules: [],
     successCriteria: "All completion conditions hold; the run closes.",
@@ -323,13 +323,13 @@ const alBlocks: SopDocBlock[] = [
   {
     id: "al-b-intro",
     heading: "Why this Automation exists",
-    body: "Each week Autolane sends a supervision shift schedule. We turn it into work orders in Build so the network operator can staff them. Stella does the work; a person approves before anything is created.",
+    body: "Each week Autolane sends a supervision shift schedule. We turn it into work orders in Build so the network operator can staff them. Sol does the work; a person approves before anything is created.",
     nodeId: null,
   },
   {
     id: "al-b-1",
     heading: "Watch for the schedule",
-    body: `${alNodes[1].work}\n\n+ Added by Stella, Jul 27: A schedule posted as an image counts as arrived; hand it to the reader step as-is.`,
+    body: `${alNodes[1].work}\n\n+ Added by Sol, Jul 27: A schedule posted as an image counts as arrived; hand it to the reader step as-is.`,
     nodeId: "al-1",
   },
   { id: "al-b-2", heading: "Read the schedule into a shift list", body: alNodes[2].work, nodeId: "al-2" },
@@ -341,7 +341,7 @@ const alBlocks: SopDocBlock[] = [
   {
     id: "al-b-8",
     heading: "Someone else checks",
-    body: `${alNodes[8].work}\n\n+ Added by Stella, Aug 24: Spot-check 20% of work orders by hand while the verifier is still earning trust.`,
+    body: `${alNodes[8].work}\n\n+ Added by Sol, Aug 24: Spot-check 20% of work orders by hand while the verifier is still earning trust.`,
     nodeId: "al-8",
   },
   { id: "al-b-9", heading: "The weekly message", body: alNodes[9].work, nodeId: "al-9" },
@@ -410,8 +410,8 @@ export const autolaneWeeklyShiftsSop: Sop = {
     rule: "Every Sunday at 8:00 PM Central (6:00 PM Pacific, where the owner sits), ahead of the Tue–Mon operating week",
   },
   versions: [
-    { version: 1, publishedAt: "2026-07-02T11:05:00-07:00", publishedBy: "Moises Reyes", note: "Compiled from the Autolane weekly shifts Automation document.", snapshot: alV1 },
-    { version: 2, publishedAt: "2026-07-27T09:40:00-07:00", publishedBy: "Moises Reyes", note: "Codified from escalation: a schedule posted as an image counts as arrived.", snapshot: alV2 },
+    { version: 1, publishedAt: "2026-07-02T11:05:00-07:00", publishedBy: "Mateo Rivera", note: "Compiled from the Autolane weekly shifts Automation document.", snapshot: alV1 },
+    { version: 2, publishedAt: "2026-07-27T09:40:00-07:00", publishedBy: "Mateo Rivera", note: "Codified from escalation: a schedule posted as an image counts as arrived.", snapshot: alV2 },
     { version: 3, publishedAt: "2026-08-24T16:15:00-07:00", publishedBy: "Priya Natarajan", note: "Codified from escalation: retry only the work orders that failed to save; spot-check 20%." },
   ],
   nodes: alNodes,
@@ -428,7 +428,7 @@ export const autolaneWeeklyShiftsSop: Sop = {
 // docs/Executable SOP.pdf, so a second brand page has an SOP to show.
 // ---------------------------------------------------------------------------
 
-const BP_OWNER = "Joe Enzbigilis";
+const BP_OWNER = "Jordan Eskew";
 
 const bpNodes: SopNode[] = authored([
   {
@@ -439,7 +439,7 @@ const bpNodes: SopNode[] = authored([
     summary: "Base Power marks an order ready.",
     work: "An order is marked ready for fulfillment in the Base Power feed.",
     ownerName: BP_OWNER,
-    actors: ["stella"],
+    actors: ["sol"],
     hardConstraints: [],
     learnedRules: [],
     successCriteria: "A run exists for the order.",
@@ -459,7 +459,7 @@ const bpNodes: SopNode[] = authored([
     summary: "One delivery work order from the order.",
     work: "Create the delivery work order from the order: customer, address, agreed time window, and the kit list.",
     ownerName: BP_OWNER,
-    actors: ["stella"],
+    actors: ["sol"],
     hardConstraints: [],
     learnedRules: [],
     successCriteria: "A work order exists with a kit list and a delivery window.",
@@ -521,7 +521,7 @@ const bpNodes: SopNode[] = authored([
     ownerName: BP_OWNER,
     actors: ["network_operator"],
     hardConstraints: ["Never block the driveway without explicit customer instruction."],
-    learnedRules: ["Added by Stella after an escalation: customers may explicitly ask for driveway placement."],
+    learnedRules: ["Added by Sol after an escalation: customers may explicitly ask for driveway placement."],
     successCriteria: "Placement photo shows the driveway clear, or the customer's instruction is attached.",
     verification: "automated_plus_spot_check",
     where: "Field",
@@ -539,7 +539,7 @@ const bpNodes: SopNode[] = authored([
     summary: "Placement verified and the job closed.",
     work: "The crate is placed, the placement is verified, and the job is closed.",
     ownerName: BP_OWNER,
-    actors: ["stella"],
+    actors: ["sol"],
     hardConstraints: [],
     learnedRules: [],
     successCriteria: "All completion conditions hold.",
@@ -566,7 +566,7 @@ export const basePowerDeliverySop: Sop = {
   primitiveTags: ["Kit & Stage", "Deliver & Deploy"],
   workflowTags: ["Create work orders"],
   updatedAt: "2026-09-08T15:41:00-07:00",
-  versions: [{ version: 1, publishedAt: "2026-09-08T15:41:00-07:00", publishedBy: "Joe Enzbigilis", note: "Draft compiled from the Base Power delivery description." }],
+  versions: [{ version: 1, publishedAt: "2026-09-08T15:41:00-07:00", publishedBy: "Jordan Eskew", note: "Draft compiled from the Base Power delivery description." }],
   nodes: bpNodes,
   edges: [
     { id: "bpe-0", from: "bp-trigger", to: "bp-1" },
@@ -949,7 +949,7 @@ const handwrittenNodeRuns: SopNodeRun[] = [
     subtasksTriggered: 1,
     logs: [
       L("2026-09-06T21:44:00-07:00", "info", "Searching Daily Supervision Shifts work orders dated Sep 8 – Sep 14 for brand Autolane."),
-      L("2026-09-06T21:44:18-07:00", "warn", "Found 1 existing work order: \"Cherrywood - Tue 9/8\" (created manually Sep 4 by Moises). Not a full week; leaving for a person to decide."),
+      L("2026-09-06T21:44:18-07:00", "warn", "Found 1 existing work order: \"Cherrywood - Tue 9/8\" (created manually Sep 4 by Mateo). Not a full week; leaving for a person to decide."),
       L("2026-09-06T21:44:21-07:00", "info", "No duplicates for the remaining 20 site-days. Continuing."),
     ],
     objectsCreated: [],
@@ -989,7 +989,7 @@ const handwrittenNodeRuns: SopNodeRun[] = [
     runtimeSeconds: 4,
     subtasksTriggered: 1,
     logs: [
-      L("2026-09-07T10:20:36-07:00", "info", "Escalation sent to Moises Reyes in Slack with the run summary and the two setup findings."),
+      L("2026-09-07T10:20:36-07:00", "info", "Escalation sent to Mateo Rivera in Slack with the run summary and the two setup findings."),
       L("2026-09-07T10:20:40-07:00", "info", "Awaiting acknowledgement. Suggested Automation change: re-resolve inactive assignments by region name before failing."),
     ],
     objectsCreated: [{ kind: "Escalation", label: "Setup check failed for week of Sep 8", ref: "esc-al10-01" }],
@@ -1028,10 +1028,10 @@ const handwrittenNodeRuns: SopNodeRun[] = [
     runtimeSeconds: 1_140,
     subtasksTriggered: 0,
     logs: [
-      L("2026-08-31T09:12:00-07:00", "info", "Plan opened by Moises Reyes in the Review UI."),
+      L("2026-08-31T09:12:00-07:00", "info", "Plan opened by Mateo Rivera in the Review UI."),
       L("2026-08-31T09:31:00-07:00", "info", "Approved as drafted. Comment: \"Fri peak at South Congress confirmed with Dana.\""),
     ],
-    objectsCreated: [{ kind: "Approval", label: "Approved by Moises Reyes", ref: "appr-al09" }],
+    objectsCreated: [{ kind: "Approval", label: "Approved by Mateo Rivera", ref: "appr-al09" }],
     errors: [],
     issues: [],
   },
@@ -1084,7 +1084,7 @@ const handwrittenNodeRuns: SopNodeRun[] = [
     subtasksTriggered: 1,
     logs: [
       L("2026-08-31T09:36:00-07:00", "info", "Drafted: \"Autolane's week of Sep 1 to Sep 7 is ready across Cherrywood, Mueller and South Congress: 28 shifts, 6 of them dinner peaks. South Congress adds a Friday peak this week. Please review and assign supervisors in the portal.\""),
-      L("2026-08-31T10:21:00-07:00", "info", "Sent by Moises Reyes in #golojix-austin."),
+      L("2026-08-31T10:21:00-07:00", "info", "Sent by Mateo Rivera in #golojix-austin."),
     ],
     objectsCreated: [{ kind: "Slack message", label: "Weekly message in #golojix-austin", ref: "1756657260.0007" }],
     errors: [],
@@ -1212,8 +1212,8 @@ function generateCompletedRun(run: SopRun): SopNodeRun[] {
     },
     {
       id: id("6"), sopRunId: run.id, nodeId: "al-6", status: "succeeded", startedAt: reviewStart, runtimeSeconds: minutesBetween(reviewStart, approvedAt), subtasksTriggered: 0,
-      logs: [L(reviewStart, "info", "Plan opened by Moises Reyes in the Review UI."), L(approvedAt, "info", "Approved as drafted.")],
-      objectsCreated: [{ kind: "Approval", label: "Approved by Moises Reyes" }], errors: [], issues: [],
+      logs: [L(reviewStart, "info", "Plan opened by Mateo Rivera in the Review UI."), L(approvedAt, "info", "Approved as drafted.")],
+      objectsCreated: [{ kind: "Approval", label: "Approved by Mateo Rivera" }], errors: [], issues: [],
     },
     {
       id: id("7"), sopRunId: run.id, nodeId: "al-7", status: "succeeded", startedAt: createStart, runtimeSeconds: 60 + w.workOrders, subtasksTriggered: w.workOrders,
@@ -1237,7 +1237,7 @@ function generateCompletedRun(run: SopRun): SopNodeRun[] {
       id: id("9"), sopRunId: run.id, nodeId: "al-9", status: "succeeded", startedAt: messageStart, runtimeSeconds: minutesBetween(messageStart, sentAt), subtasksTriggered: 1,
       logs: [
         L(messageStart, "info", `Drafted the weekly message: ${w.shifts} shifts across the Austin sites, ${w.peaks} dinner peaks.`),
-        L(sentAt, "info", "Sent by Moises Reyes in #golojix-austin."),
+        L(sentAt, "info", "Sent by Mateo Rivera in #golojix-austin."),
       ],
       objectsCreated: [{ kind: "Slack message", label: "Weekly message in #golojix-austin" }], errors: [], issues: [],
     },
@@ -1256,7 +1256,7 @@ function generateCompletedRun(run: SopRun): SopNodeRun[] {
     runs.push({
       id: id("esc"), sopRunId: run.id, nodeId: "al-escalate", status: "succeeded", startedAt: escAt, runtimeSeconds: 3, subtasksTriggered: 1,
       logs: [
-        L(escAt, "warn", `Escalation sent to Moises Reyes: ${w.escalation.reason}`),
+        L(escAt, "warn", `Escalation sent to Mateo Rivera: ${w.escalation.reason}`),
         L(escAt, "info", `Resolved: ${w.escalation.resolution}`),
       ],
       objectsCreated: [{ kind: "Escalation", label: w.escalation.reason.split(".")[0] }],

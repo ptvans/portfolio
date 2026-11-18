@@ -1,4 +1,4 @@
-// The brand a Stella task is scoped to, picked from inside the chat input.
+// The brand a Sol task is scoped to, picked from inside the chat input.
 //
 // Single-select, unlike the header's BrandFilterControl: a task runs against
 // one brand or against all of them, never against three. "All brands" is the

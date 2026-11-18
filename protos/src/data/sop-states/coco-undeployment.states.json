@@ -98,7 +98,7 @@
       "id": "overnight-merchant",
       "label": "Overnight at the merchant",
       "kind": "resting",
-      "description": "Leave-out markets only. There is no undeployment run at all: the bot stays at its merchant, and swapping there is fine and expected. Whether the overnight power rule applies here is TBD, to confirm with Moises.",
+      "description": "Leave-out markets only. There is no undeployment run at all: the bot stays at its merchant, and swapping there is fine and expected. Whether the overnight power rule applies here is TBD, to confirm with Mateo.",
       "rule": "The 4-bot-per-merchant cap still holds"
     },
     {

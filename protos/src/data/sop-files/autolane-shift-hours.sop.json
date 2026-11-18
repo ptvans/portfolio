@@ -7,8 +7,8 @@
   "scope": { "brandId": "brand-autolane", "customer": "Autolane" },
   "team": "Ops",
   "sopType": "external",
-  "owner": "Audrey Brooke",
-  "escalationContact": "Audrey Brooke, then #autolane-austin-network-ops-internal",
+  "owner": "Alina Rowe",
+  "escalationContact": "Alina Rowe, then #autolane-austin-network-ops-internal",
   "trigger": "Runs every day at 04:00, 05:00, 16:00 and 20:00 UTC. The Chicago hour of the run decides what it does: main, fallback or early.",
   "schedule": {
     "summary": "Daily 12:00 AM, 11:00 AM, 3:00 PM, 11:00 PM CT",
@@ -22,7 +22,7 @@
     {
       "id": "scope",
       "title": "Scope and run window",
-      "owner": "Stella",
+      "owner": "Sol",
       "actor": "agent",
       "autonomy": 4,
       "trigger": "The scheduled run starts.",
@@ -32,7 +32,7 @@
     {
       "id": "read-hours",
       "title": "Read the hours already set",
-      "owner": "Stella",
+      "owner": "Sol",
       "actor": "agent",
       "autonomy": 4,
       "trigger": "The tasks in the window are listed.",
@@ -42,7 +42,7 @@
     {
       "id": "clock-times",
       "title": "Find the start and end times",
-      "owner": "Stella",
+      "owner": "Sol",
       "actor": "agent",
       "autonomy": 4,
       "trigger": "A task has no hours.",
@@ -52,7 +52,7 @@
     {
       "id": "write-hours",
       "title": "Calculate and write the hours",
-      "owner": "Stella",
+      "owner": "Sol",
       "actor": "agent",
       "autonomy": 3,
       "trigger": "Both usable times exist.",
@@ -65,7 +65,7 @@
     {
       "id": "slack-review",
       "title": "Send the Slack timekeeping exceptions",
-      "owner": "Stella",
+      "owner": "Sol",
       "actor": "agent",
       "autonomy": 3,
       "trigger": "A run at or after 16:00 UTC finishes the calculation attempt.",

@@ -35,7 +35,7 @@ export function SopInstructions({ sop, className = "", bodyClassName = "" }: { s
 }
 
 // A rule the agent learned shows as an annotation under the paragraph it
-// amends ("+ Added by Stella, Jul 27: …").
+// amends ("+ Added by Sol, Jul 27: …").
 function Paragraph({ text }: { text: string }) {
   const learned = text.match(/^\+\s*(Added by [^:]+):\s*([\s\S]*)$/);
   if (learned) {

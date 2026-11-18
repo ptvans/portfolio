@@ -1,4 +1,4 @@
-// A SOP Stella is writing, in full, in the rail beside the chat. Opened from
+// A SOP Sol is writing, in full, in the rail beside the chat. Opened from
 // a chevron on one of its cards, it takes the rail over so the SOP can be read
 // while the conversation goes on: it follows the chat, so an answer that
 // compiles the instructions or changes the schedule shows here as it lands.
@@ -11,7 +11,7 @@
 import { Pencil, TriangleAlert, X } from "lucide-react";
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import type { SopDraft, SopRef } from "../../data/stellaScript";
+import type { SopDraft, SopRef } from "../../data/solScript";
 import { MessageTypeBadge } from "../messages/messageUi";
 import { SopDraftStatus } from "./SopDraftCard";
 

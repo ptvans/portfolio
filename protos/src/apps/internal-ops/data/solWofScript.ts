@@ -1,7 +1,7 @@
 // Task 4 — turn the Work Order Finalization page into SOPs with the SOP builder
 //
 // Scripted from a real brick-ai session (exported Oct 28, 2026) on the same
-// Notion page the composer task reads. Stella hands the link to the SOP
+// Notion page the composer task reads. Sol hands the link to the SOP
 // builder, which reads the page against Brick data and decides it is three
 // SOPs, not one: a sweep that checks project work orders, a chase for overdue
 // network operator tasks, and the irreversible finalize step, which a person
@@ -16,11 +16,11 @@
 
 import { sops } from "../../../data";
 import { formatDateTime, MOCK_NOW_ISO } from "../../../lib/format";
-import type { SopDraft, SopProposal, StellaBeat, StellaEntry, StellaQuestion, StellaTask } from "./stellaScript";
+import type { SopDraft, SopProposal, SolBeat, SolEntry, SolQuestion, SolTask } from "./solScript";
 
-export const STELLA_WOF_URL =
+export const SOL_WOF_URL =
   "https://app.notion.com/p/Work-Order-Finalization-Project-Based-Customers-3dc71cfae62e811a9452c418d4132e3a?source=copy_link";
-export const STELLA_WOF_PROMPT = `Create an Automation from ${STELLA_WOF_URL}`;
+export const SOL_WOF_PROMPT = `Create an Automation from ${SOL_WOF_URL}`;
 
 const page = sops.find((s) => s.id === "sop-work-order-finalization-project-based");
 // One step of the page, as "Title: what it says".
@@ -48,13 +48,13 @@ const SWEEP_STEPS = [
 const sweep: SopProposal = {
   name: SWEEP,
   summary:
-    "Runs on a schedule over unfinalized work orders whose project is set and whose Brand is not a test Brand; confirm whether readyToFinalize limits this selection; Stella acts.",
+    "Runs on a schedule over unfinalized work orders whose project is set and whose Brand is not a test Brand; confirm whether readyToFinalize limits this selection; Sol acts.",
   steps: SWEEP_STEPS,
 };
 const chase: SopProposal = {
   name: CHASE,
   summary:
-    "Runs on a schedule and picks up unfinalized work orders with at least one task past its date that is neither completed nor cancelled; exclude tasks already covered by a recorded active chase; Stella acts.",
+    "Runs on a schedule and picks up unfinalized work orders with at least one task past its date that is neither completed nor cancelled; exclude tasks already covered by a recorded active chase; Sol acts.",
   steps: ["Step 3: Chase the operator on any open task"],
 };
 const finalize: SopProposal = {
@@ -72,15 +72,15 @@ const finalize: SopProposal = {
 const NEEDED = "Needed to save";
 const AM = "Account owner (AM)";
 
-const q = (question: Omit<StellaQuestion, "tag">): StellaQuestion => ({ tag: NEEDED, ...question });
+const q = (question: Omit<SolQuestion, "tag">): SolQuestion => ({ tag: NEEDED, ...question });
 
 function card(
   id: string,
   heading: string,
   answersTitle: string,
-  questions: StellaQuestion[],
+  questions: SolQuestion[],
   extra: { sop?: SopProposal; intro?: string; submitLabel?: string } = {},
-): Extract<StellaEntry, { kind: "questions" }> {
+): Extract<SolEntry, { kind: "questions" }> {
   return { kind: "questions", id, heading, answersTitle, questions, submitLabel: extra.submitLabel ?? "Send answers", sop: extra.sop, intro: extra.intro, picks: null };
 }
 
@@ -104,7 +104,7 @@ const sweepFirst = card("q-sweep-1", SWEEP_HEADING, SWEEP_ANSWERS, [
     key: "cadence.finalization-sweep",
     text: "How often should the finalization sweep run?",
     quote: "[TBD - exact cadence]",
-    consequence: "Stella cannot schedule the sweep.",
+    consequence: "Sol cannot schedule the sweep.",
     options: [
       { label: "Daily", value: "Daily" },
       { label: "Weekdays", value: "Weekdays" },
@@ -112,7 +112,7 @@ const sweepFirst = card("q-sweep-1", SWEEP_HEADING, SWEEP_ANSWERS, [
   }),
   q({
     key: "ready-gate.finalization-sweep",
-    text: "Should Stella independently require every task to be completed, rather than treating readyToFinalize as proof, including when the work order is cancelled?",
+    text: "Should Sol independently require every task to be completed, rather than treating readyToFinalize as proof, including when the work order is cancelled?",
     quote: "Every task is complete. Nothing in progress, nothing overdue.",
     consequence: "Ready work orders include open tasks and cancelled work orders.",
     options: [
@@ -161,7 +161,7 @@ const sweepSecond = card("q-sweep-2", SWEEP_HEADING, SWEEP_ANSWERS, [
   }),
   q({
     key: "zero-charge.finalization-sweep",
-    text: "How should Stella decide whether a completed $0 task legitimately needs no charge?",
+    text: "How should Sol decide whether a completed $0 task legitimately needs no charge?",
     quote: "Certain tasks, like Acknowledgement, reasonably carry no charges",
     consequence: "Otherwise legitimate no-charge tasks are treated as missing revenue.",
     options: [
@@ -211,9 +211,9 @@ const chaseFirst = card("q-chase-1", CHASE_HEADING, CHASE_ANSWERS, [
   }),
   q({
     key: "no-reply-timeout.overdue-task-chase",
-    text: "How long after a recorded NO request should Stella wait before escalating no reply to the account owner (AM)?",
+    text: "How long after a recorded NO request should Sol wait before escalating no reply to the account owner (AM)?",
     quote: "[TBD - escalation path and how long to wait]",
-    consequence: "Stella cannot determine when an unanswered chase needs attention.",
+    consequence: "Sol cannot determine when an unanswered chase needs attention.",
     options: [
       { label: "1 day", value: "1 day" },
       { label: "3 days", value: "3 days" },
@@ -223,9 +223,9 @@ const chaseFirst = card("q-chase-1", CHASE_HEADING, CHASE_ANSWERS, [
   }),
   q({
     key: "channel-visibility.overdue-task-chase",
-    text: "Should Stella send an NO chase in a Brand-visible channel or an internal/operator-only channel?",
+    text: "Should Sol send an NO chase in a Brand-visible channel or an internal/operator-only channel?",
     quote: "Is it odd that we nag the NO in a channel that's visible to the brand?",
-    consequence: "The unresolved comment changes where Stella sends the request.",
+    consequence: "The unresolved comment changes where Sol sends the request.",
     options: [
       {
         label: "Use an internal/operator-only channel when one is available.",
@@ -239,7 +239,7 @@ const chaseFirst = card("q-chase-1", CHASE_HEADING, CHASE_ANSWERS, [
   sop: {
     ...chase,
     summary:
-      "Runs on a schedule and picks up unfinalized work orders with at least one task whose date has passed and which is neither completed nor cancelled; Stella acts.",
+      "Runs on a schedule and picks up unfinalized work orders with at least one task whose date has passed and which is neither completed nor cancelled; Sol acts.",
     steps: ["Step 3: Chase an overdue NO task"],
   },
 });
@@ -258,7 +258,7 @@ const chaseSecond = card("q-chase-2", CHASE_HEADING, CHASE_ANSWERS, [
   }),
   q({
     key: "no-reply-escalation.overdue-task-chase",
-    text: "After the no-reply limit you answered, to whom should Stella send the task link and recorded chase?",
+    text: "After the no-reply limit you answered, to whom should Sol send the task link and recorded chase?",
     quote: "[TBD - escalation path and how long to wait]",
     consequence: "The no-reply path cannot finish.",
     options: [
@@ -269,7 +269,7 @@ const chaseSecond = card("q-chase-2", CHASE_HEADING, CHASE_ANSWERS, [
   }),
   q({
     key: "channel-fallback.overdue-task-chase",
-    text: "If no internal or operator-only channel is available, how should Stella route the NO chase?",
+    text: "If no internal or operator-only channel is available, how should Sol route the NO chase?",
     quote: "Post in a channel, not a DM.",
     consequence: "The answered visibility rule leaves some tasks without a safe route.",
     options: [
@@ -283,7 +283,7 @@ const chaseSecond = card("q-chase-2", CHASE_HEADING, CHASE_ANSWERS, [
   sop: {
     ...chase,
     summary:
-      "Runs on a schedule and picks up unfinalized work orders containing a dated task whose date has passed and which is neither completed nor cancelled; Stella acts.",
+      "Runs on a schedule and picks up unfinalized work orders containing a dated task whose date has passed and which is neither completed nor cancelled; Sol acts.",
     steps: ["Step 3: Chase an overdue NO task"],
   },
 });
@@ -400,18 +400,18 @@ const SAVE_ORDER = [
 const ANSWERS = /^(Answers for|Decisions:)/;
 const ANSWER_NUDGE = "Pick an answer for each question in the card above, then send them.";
 
-const checking = (status: string, entry: StellaEntry & { kind: "questions" }, text?: string): StellaBeat[] => [
+const checking = (status: string, entry: SolEntry & { kind: "questions" }, text?: string): SolBeat[] => [
   { after: 300, status, holds: 1400 },
   ...(text ? [{ after: 1800, entry: { kind: "agent" as const, text } }] : []),
   { after: text ? 2200 : 1800, entry },
 ];
 
-export const wofTask: StellaTask = {
+export const wofTask: SolTask = {
   id: "wof-sops",
   title: "Create Automations: Work Order Finalization",
   brandId: null,
   chip: "Notion → Automations",
-  chipPrompt: STELLA_WOF_PROMPT,
+  chipPrompt: SOL_WOF_PROMPT,
   route: /\bcreate (an? )?sops? from\b/i,
   progress: [
     { label: "Read the page", detail: "Check it against Build data and split it into Automations" },
@@ -426,7 +426,7 @@ export const wofTask: StellaTask = {
   turns: [
     // ---- 1. The link -----------------------------------------------------
     {
-      suggestion: STELLA_WOF_PROMPT,
+      suggestion: SOL_WOF_PROMPT,
       match: /notion\.(com|so)|3dc71cfae62e81/i,
       nudge: "Paste the Notion link to the Automation page and I'll hand it to the Automation builder.",
       completes: 0,
@@ -493,7 +493,7 @@ export const wofTask: StellaTask = {
             kind: "agent",
             heading: "Not in any Automation",
             text:
-              "• Dropped step 1 (Open the brand on the finalization page): portal navigation adds no check; Stella reads work order records directly.\n• Step 4 (Check how the brand's rates are set up) is a brand variable, not a step: the page identifies rate setup as a brand variable; its default/custom/rate-sheet classification is not a reliable Build field.",
+              "• Dropped step 1 (Open the brand on the finalization page): portal navigation adds no check; Sol reads work order records directly.\n• Step 4 (Check how the brand's rates are set up) is a brand variable, not a step: the page identifies rate setup as a brand variable; its default/custom/rate-sheet classification is not a reliable Build field.",
           },
         },
         {
@@ -502,7 +502,7 @@ export const wofTask: StellaTask = {
             kind: "agent",
             heading: "What the data showed",
             text:
-              "• “NEVER finalize a work order that still has an in-progress or overdue task. Finalization cannot be undone, so that task's charge is gone.” (step 2): could not be checked; not recorded in the fixture.\n• “Every task is complete. Nothing in progress, nothing overdue.” (step 9): could not be checked; not recorded in the fixture.\n• “Finalize each one that clears the checklist below.” (step 9): could not be checked; not recorded in the fixture.\n• The proposed default/custom/brand-rate-sheet test cannot determine pricing: Build pricing uses charge configs per task kind and their versions; the available rate sheets are for NOs.\n• The event-ops band does not cover the work order kinds present in the Build-wide sample.\n• The reviewer's Acknowledgement example makes an unconditional completed-task charge rule unsafe.\n\nOutside Build, left out: the network operator's own tracker (steps 6, 7). Stella has no connection to it, so the Automation runs on Build records and connected apps and says so.",
+              "• “NEVER finalize a work order that still has an in-progress or overdue task. Finalization cannot be undone, so that task's charge is gone.” (step 2): could not be checked; not recorded in the fixture.\n• “Every task is complete. Nothing in progress, nothing overdue.” (step 9): could not be checked; not recorded in the fixture.\n• “Finalize each one that clears the checklist below.” (step 9): could not be checked; not recorded in the fixture.\n• The proposed default/custom/brand-rate-sheet test cannot determine pricing: Build pricing uses charge configs per task kind and their versions; the available rate sheets are for NOs.\n• The event-ops band does not cover the work order kinds present in the Build-wide sample.\n• The reviewer's Acknowledgement example makes an unconditional completed-task charge rule unsafe.\n\nOutside Build, left out: the network operator's own tracker (steps 6, 7). Sol has no connection to it, so the Automation runs on Build records and connected apps and says so.",
           },
         },
         {
@@ -595,9 +595,9 @@ export const wofTask: StellaTask = {
         const count = saved.length === 1 ? "1 Automation" : `${saved.length} Automations`;
         const when = (key: string) => schedule(answers[`cadence.${key}`]) ?? "Daily at 16:00 UTC";
         const sameWhen = new Set(saved.map((s) => when(s.key))).size === 1;
-        const beats: StellaBeat[] = [
+        const beats: SolBeat[] = [
           { after: 300, status: "Saving and scheduling", holds: 1800 },
-          ...[...saved, ...skipped].map<StellaBeat>((s, i) => ({
+          ...[...saved, ...skipped].map<SolBeat>((s, i) => ({
             after: 2100 + i * 400,
             entry: {
               kind: "tool",
@@ -632,7 +632,7 @@ export const wofTask: StellaTask = {
           });
           at += 400;
         }
-        beats.push({ after: at, status: "This conversation is back with Stella", holds: 600 });
+        beats.push({ after: at, status: "This conversation is back with Sol", holds: 600 });
         const names = saved.map((s) => `• ${s.name}`).join("\n");
         beats.push({
           after: at + 900,
@@ -694,7 +694,7 @@ export const wofTask: StellaTask = {
         id: "draft-finalization-sweep",
         name: SWEEP,
         status: status("finalization-sweep", sweepDone),
-        attributes: attributes("finalization-sweep", "Stella"),
+        attributes: attributes("finalization-sweep", "Sol"),
         raw: ["expand-tasks", "check-margin", "check-charges", "search-context", "ping-am"].map(pageStep),
         compiled: sweepDone
           ? [
@@ -704,7 +704,7 @@ export const wofTask: StellaTask = {
               `Margin is (Brand debits − operator payouts) ÷ Brand debits. Event operations: ${a("margin-band.finalization-sweep")} Storage, kitting, shipping and receiving, will call and ad hoc: ${a("other-margin-bands.finalization-sweep")} ${a("zero-revenue.finalization-sweep")}`,
               `Charges: ${a("pricing-record.finalization-sweep")} For a completed $0 task: ${a("zero-charge.finalization-sweep")}`,
               "For anything flagged, search the Brand's Slack channels, email and Granola notes for evidence, then send the account owner (AM) the work order, the task, who completed it and the evidence, and ask whether a charge is needed. Never add a charge yourself.",
-              "A work order that clears every check gets a finalization proposal for Finalize Approved Work Order. Stella never finalizes.",
+              "A work order that clears every check gets a finalization proposal for Finalize Approved Work Order. Sol never finalizes.",
             ]
           : null,
       },
@@ -712,7 +712,7 @@ export const wofTask: StellaTask = {
         id: "draft-overdue-task-chase",
         name: CHASE,
         status: status("overdue-task-chase", chaseDone),
-        attributes: attributes("overdue-task-chase", "Stella"),
+        attributes: attributes("overdue-task-chase", "Sol"),
         raw: [pageStep("chase-operator")],
         compiled: chaseDone
           ? [
@@ -736,7 +736,7 @@ export const wofTask: StellaTask = {
               "Intent: Finalize a work order only after a person has re-verified it. Finalization is irreversible, so a person confirms each one.",
               `Selection: unfinalized work orders proposed as clean by ${SWEEP} and routed for approval.`,
               "Before finalizing, recheck the current gates: every task completed, margin inside its band, every $0 task explained, and any manual charge the account owner asked for added. If anything changed since the proposal, send it back to the sweep instead.",
-              `Who finalizes: ${a("authority.finalize-approved-work-order")} Stella prepares the work order and the evidence; she never clicks Finalize.`,
+              `Who finalizes: ${a("authority.finalize-approved-work-order")} Sol prepares the work order and the evidence; she never clicks Finalize.`,
               `If Finalize locks an incorrect charge: ${a("recovery.finalize-approved-work-order")} Include the work-order link and the error.`,
             ]
           : null,

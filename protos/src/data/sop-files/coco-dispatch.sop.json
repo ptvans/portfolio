@@ -10,7 +10,7 @@
   },
   "team": "Ops",
   "sopType": "external",
-  "owner": "Bryan Hanley",
+  "owner": "Brent Halloran",
   "escalationContact": "Dispatch lead",
   "trigger": "The deployment window opens for the market. The shift has three phases: deployment in the morning, field operations all day, undeployment at night.",
   "purpose": "Robot pays for Usable Supply Hours, the time robots are parked at a merchant and able to take orders. A robot at 15% battery, holding food, stuck, or parked at the wrong merchant earns zero USH. Dispatch is the loop that keeps the fleet healthy and parked where it can take orders. A bad dispatcher does not just miss tasks, they burn USH by deploying to the wrong restaurant or pulling a robot off an active delivery. Scope: Robot, all markets, Build dispatch team.",
@@ -83,7 +83,7 @@
       "title": "Can this robot take a trip?",
       "owner": "Dispatch lead",
       "trigger": "Before every deploy or undeploy trip.",
-      "work": "Check the robot's health in MRO before any trip. Check all three: health shows healthy in MRO, battery is 20% or above, and it is not grounded. Unhealthy robots block the trip, and Mission Control rejects it automatically. Stella proposes, the dispatcher approves.",
+      "work": "Check the robot's health in MRO before any trip. Check all three: health shows healthy in MRO, battery is 20% or above, and it is not grounded. Unhealthy robots block the trip, and Mission Control rejects it automatically. Sol proposes, the dispatcher approves.",
       "where": "MRO",
       "when": "Before every deploy or undeploy",
       "verification": "automated",
@@ -156,7 +156,7 @@
       "work": "In Mission Control, apply the low-battery filter, a fixed cutoff around 35%. Then scan the rest manually and pull the lowest 10 robots above the cutoff. Sort lowest to highest. Low battery does not generate a task on its own: if you do not build this list, nobody swaps the battery. Do not wait for robots to go low. The fleet depletes at roughly the same rate, so if one is low they all are, and you spend the night chasing unhealthy robots while USH bleeds across the fleet. Swapping ahead also evens out charging and means fewer swaps at undeployment.",
       "actor": "agent",
       "actors": [
-        "stella"
+        "sol"
       ],
       "where": "Mission Control",
       "rules": [
@@ -362,7 +362,7 @@
       "title": "Can this robot be ungrounded now?",
       "owner": "Dispatch lead",
       "trigger": "A repair ticket has closed on a grounded robot.",
-      "work": "Check all: the grounding type is not modem failure or another type flagged for engineer review; the robot is not on a trip; and the repair ticket in the Work Order Tool is resolved. Ungrounding means changing state twice in MRO, grounded to ready to deploy to parked. Ready to deploy means at an MRO or in a van and not accepting orders; parked means in the field and accepting orders. Stella proposes, the dispatcher approves.",
+      "work": "Check all: the grounding type is not modem failure or another type flagged for engineer review; the robot is not on a trip; and the repair ticket in the Work Order Tool is resolved. Ungrounding means changing state twice in MRO, grounded to ready to deploy to parked. Ready to deploy means at an MRO or in a van and not accepting orders; parked means in the field and accepting orders. Sol proposes, the dispatcher approves.",
       "where": "MRO, Work Order Tool",
       "rules": [
         "Never change a robot's state while it is on a trip.",
@@ -484,7 +484,7 @@
       "work": "Watch trip status in Mission Control, refreshing manually because it never auto-refreshes. Flag any robot that stalls, stops short or misses its destination. A clean night with zero pickups is rare; expect a few.",
       "actor": "agent",
       "actors": [
-        "stella"
+        "sol"
       ],
       "where": "Mission Control",
       "autonomy": 3,

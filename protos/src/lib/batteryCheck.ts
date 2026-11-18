@@ -11,7 +11,7 @@ import {
 import { parseTimeToMinutes } from "../data/shifts";
 
 // ---------------------------------------------------------------------------
-// Battery usage by location — what Stella estimates from the check-out /
+// Battery usage by location — what Sol estimates from the check-out /
 // check-in logs. Rates are % of battery per shift hour.
 
 export interface LocationUsage {

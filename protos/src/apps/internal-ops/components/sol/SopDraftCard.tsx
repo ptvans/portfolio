@@ -1,13 +1,13 @@
-// A SOP Stella is writing, previewed in the rail beside the chat: two small
+// A SOP Sol is writing, previewed in the rail beside the chat: two small
 // blocks — its attributes and the raw prompt it came from. The instructions
-// Stella compiles that prompt into, which are what the SOP's agent runs, are
+// Sol compiles that prompt into, which are what the SOP's agent runs, are
 // in the viewer only. The prompt is clamped, and the secondary attributes
 // hidden; a chevron opens the SOP in full in the viewer, at that block.
 
 import { ChevronDown, TriangleAlert } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import type { SopDraft } from "../../data/stellaScript";
+import type { SopDraft } from "../../data/solScript";
 import { MessageTypeBadge } from "../messages/messageUi";
 import type { SopSection } from "./SopViewer";
 

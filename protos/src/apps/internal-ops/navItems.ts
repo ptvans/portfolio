@@ -1,17 +1,17 @@
 import { Briefcase, Package, Settings2, Zap } from "lucide-react";
-import { StellaIcon } from "./components/stella/StellaIcon";
+import { SolIcon } from "./components/sol/SolIcon";
 import type { NavItem } from "../../components/layout/AppShell";
 
-// The header nav shows Stella — the home — with her orb, and everything else
+// The header nav shows Sol — the home — with her orb, and everything else
 // as a word. A section with sub-pages opens a dropdown of them. The icons
 // stay on the items for the sidebar layout's collapsed rail.
 //
-// Order: Stella, then what she raises for you (Automation), then the day's
+// Order: Sol, then what she raises for you (Automation), then the day's
 // work, the stock and fleets it moves, and last the setup of who Brick works
 // with.
 export const internalOpsNavItems: NavItem[] = [
-  { label: "Stella", to: "/internal-ops", icon: StellaIcon, end: true },
-  // What Stella runs on its own. The menu lists Needs Your Attention (the
+  { label: "Sol", to: "/internal-ops", icon: SolIcon, end: true },
+  // What Sol runs on its own. The menu lists Needs Your Attention (the
   // messages her automations raised, at /sops); Automations Setup — the SOPs
   // (step-by-step documents and, as SOPs of type Alert, prompts she keeps
   // evaluating) and Goals (targets she tracks) — is reached from that page,

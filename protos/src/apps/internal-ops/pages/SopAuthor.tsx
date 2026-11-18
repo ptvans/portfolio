@@ -1,6 +1,6 @@
 // SOP authoring page — a focused, full-window workspace in three columns:
 //
-//   1. Stella chat: authors and modifies the document and its nodes. Version
+//   1. Sol chat: authors and modifies the document and its nodes. Version
 //      view only; the run view is a read-only record and has no chat.
 //   2. The middle pane, which holds one of two things. By default the document
 //      editor: the SOP as prose, one block per step, each block's detected
@@ -14,7 +14,7 @@
 // and inspector describe what each node did in that run and the document is
 // read-only (three columns); or per published version
 // (sops/:id/versions/:version), where the SOP is shown as defined at that
-// version with no runtime analytics and can be edited with Stella's help (four
+// version with no runtime analytics and can be edited with Sol's help (four
 // columns). Either way the document shown is the one that version carried.
 // Edits are held here until Save publishes the next version.
 
@@ -28,7 +28,7 @@ import { attachmentFromFile, SopDocumentEditor } from "../components/sop/SopDocu
 import { SopGraph } from "../components/sop/SopGraph";
 import { SopNodeInspector } from "../components/sop/SopNodeInspector";
 import { SopStateInspector } from "../components/sop/SopStateInspector";
-import { StellaChat } from "../components/sop/StellaChat";
+import { SolChat } from "../components/sop/SolChat";
 import { formatDateTimeShort, formatDuration, RUN_STATUS_LABEL, RUN_STATUS_STYLE, runHealth } from "../components/sop/sopFormat";
 import { useSops } from "../context/SopContext";
 import { Workflow } from "lucide-react";
@@ -137,12 +137,12 @@ export function SopAuthor() {
   // The version view is for reading and authoring the document, so the
   // inspector stays closed until a node or block is picked.
   const [inspectorOpen, setInspectorOpen] = useState(!versionMode);
-  // The Stella column folds into a narrow tray so the document and graph can
+  // The Sol column folds into a narrow tray so the document and graph can
   // take the width. It starts collapsed so the graph gets the room; it stays
   // mounted while collapsed, so the conversation survives; Modify w/ prompt
   // reopens it.
   const [chatOpen, setChatOpen] = useState(false);
-  // The document's right gutter: the actions and tool calls Stella read out of
+  // The document's right gutter: the actions and tool calls Sol read out of
   // each section. On by default wherever a SOP has any, because composing the
   // SOP accurately is what the gutter is for.
   const [gutterOpen, setGutterOpen] = useState(true);
@@ -196,7 +196,7 @@ export function SopAuthor() {
     }
   };
 
-  // ---- Stella ---------------------------------------------------------------
+  // ---- Sol ---------------------------------------------------------------
   const [attachedBlockId, setAttachedBlockId] = useState<string | null>(null);
   const [focusSignal, setFocusSignal] = useState(0);
   const attachedBlock = blocks.find((b) => b.id === attachedBlockId) ?? null;
@@ -207,11 +207,11 @@ export function SopAuthor() {
     setFocusSignal((n) => n + 1);
   };
 
-  const applyStellaEdit = (blockId: string, prompt: string) => {
+  const applySolEdit = (blockId: string, prompt: string) => {
     const stamp = new Date().toLocaleString("en-US", { weekday: "short", hour: "numeric", minute: "2-digit" });
     const sentence = prompt.replace(/\s+/g, " ").trim().replace(/[.]*$/, ".");
     setBlocks((prev) =>
-      prev.map((b) => (b.id === blockId ? { ...b, body: `${b.body.trimEnd()}\n\n+ Added by Stella, ${stamp}: ${sentence}` } : b)),
+      prev.map((b) => (b.id === blockId ? { ...b, body: `${b.body.trimEnd()}\n\n+ Added by Sol, ${stamp}: ${sentence}` } : b)),
     );
     setSelectedBlockId(blockId);
   };
@@ -262,24 +262,24 @@ export function SopAuthor() {
               : "grid-cols-[minmax(0,1fr)]"
         }`}
       >
-        {/* ---------------- 1. Stella (version view only) ---------------- */}
+        {/* ---------------- 1. Sol (version view only) ---------------- */}
         {versionMode && (
           <aside className="min-h-0 border-r border-slate-200 bg-white">
             {/* Hidden rather than unmounted while collapsed: the chat log and
                 any half-typed prompt stay put. */}
             <div className={chatOpen ? "h-full" : "hidden"}>
-              <StellaChat
+              <SolChat
                 key={`v${viewVersion}`}
                 sop={sop}
                 version={sopVersion}
                 attachedBlock={attachedBlock}
                 onDetachBlock={() => setAttachedBlockId(null)}
-                onApplyEdit={applyStellaEdit}
+                onApplyEdit={applySolEdit}
                 focusSignal={focusSignal}
                 onCollapse={() => setChatOpen(false)}
               />
             </div>
-            {!chatOpen && <StellaTray onExpand={() => setChatOpen(true)} attached={attachedBlock !== null} />}
+            {!chatOpen && <SolTray onExpand={() => setChatOpen(true)} attached={attachedBlock !== null} />}
           </aside>
         )}
 
@@ -400,7 +400,7 @@ export function SopAuthor() {
             <div className="relative min-h-0 flex-1 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
               {viewSop.nodes.length === 0 ? (
                 <div className="flex h-full items-center justify-center">
-                  <EmptyState icon={Workflow} title="No nodes yet" description="Stella compiles the graph from the document when you save." />
+                  <EmptyState icon={Workflow} title="No nodes yet" description="Sol compiles the graph from the document when you save." />
                 </div>
               ) : lens === "states" && stateGraph ? (
                 <SopGraph
@@ -703,15 +703,15 @@ function ExecutorLegend() {
   );
 }
 
-// The collapsed Stella column: a narrow tray with a chat icon that opens it.
+// The collapsed Sol column: a narrow tray with a chat icon that opens it.
 // A dot on the icon marks a block waiting to be sent.
-function StellaTray({ onExpand, attached }: { onExpand: () => void; attached: boolean }) {
+function SolTray({ onExpand, attached }: { onExpand: () => void; attached: boolean }) {
   return (
     <button
       type="button"
       onClick={onExpand}
-      aria-label="Open Stella chat"
-      title="Open Stella chat"
+      aria-label="Open Sol chat"
+      title="Open Sol chat"
       className="group flex h-full w-full flex-col items-center gap-3 px-2 py-3 text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-600"
     >
       <span className="relative">

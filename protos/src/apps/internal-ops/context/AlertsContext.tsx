@@ -20,9 +20,9 @@ interface AlertsState {
   // Both accept one id or several (bulk dismiss from the Alerts list).
   dismiss: (alertIds: string | string[]) => void;
   undoDismiss: (alertIds: string | string[]) => void;
-  // Settled by acting on it (a response picked in Stella), not dismissed.
+  // Settled by acting on it (a response picked in Sol), not dismissed.
   resolve: (alertId: string) => void;
-  // Takes a resolve back (an undo in Stella): the alert is active again.
+  // Takes a resolve back (an undo in Sol): the alert is active again.
   reopen: (alertId: string) => void;
   createRule: (draft: RuleDraft, status: AlertRuleStatus) => string;
   updateRule: (id: string, draft: RuleDraft, status?: AlertRuleStatus) => void;

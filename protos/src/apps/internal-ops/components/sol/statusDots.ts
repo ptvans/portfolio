@@ -1,17 +1,17 @@
-// The dot at the right of a row in the Stella sidebar, by what the
-// conversation needs from you: Stella is waiting on an answer, or she has
+// The dot at the right of a row in the Sol sidebar, by what the
+// conversation needs from you: Sol is waiting on an answer, or she has
 // written since you last looked. A conversation that needs nothing has no
 // dot. The digest uses the waiting dot for its group count, since every
 // group there is waiting on you.
 export const SESSION_DOTS = {
-  waiting: { color: "#f5a623", label: "Stella needs your response" },
+  waiting: { color: "#f5a623", label: "Sol needs your response" },
   unread: { color: "var(--color-brand-500)", label: "New activity" },
 } as const;
 
 export type SessionDot = keyof typeof SESSION_DOTS;
 
 // The drifting dashed underline under a row says what the conversation is
-// doing: a short pulse of the waiting colour while Stella is waiting on you,
+// doing: a short pulse of the waiting colour while Sol is waiting on you,
 // of the accent while she is thinking. The rest of the line is transparent,
 // so only the pulse is seen tracing along under the title.
 export const WAITING_LINE = "linear-gradient(90deg, transparent 0%, transparent 44%, #f5a623 50%, transparent 56%, transparent 100%)";

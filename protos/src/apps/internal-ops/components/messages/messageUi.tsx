@@ -11,7 +11,7 @@ export function messageWhen(iso: string) {
 }
 
 // The seven message types, in the order the badge sheet lists them. A type
-// is what the message is about, not who sent it: Stella writes most of them.
+// is what the message is about, not who sent it: Sol writes most of them.
 export const MESSAGE_TYPES: MessageType[] = ["sop", "goal", "project", "audit", "coworker", "no", "brand"];
 
 // Each type's badge: a white glyph on a filled circle.

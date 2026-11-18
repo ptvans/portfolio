@@ -30,7 +30,7 @@ interface AssetsState {
   policy: BatteryPolicy;
   setPolicy: (patch: Partial<BatteryPolicy>) => void;
 
-  // Stella's usage estimate
+  // Sol's usage estimate
   usage: LocationUsage[];
   rateByLocation: Record<string, number>;
   estimateRanAt: string;

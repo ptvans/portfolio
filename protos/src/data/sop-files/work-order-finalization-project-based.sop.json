@@ -106,7 +106,7 @@
       "verification": "human",
       "actions": [
         {
-          "tool": "stella.sort_work_orders",
+          "tool": "sol.sort_work_orders",
           "label": "Sort each work order into all-complete or has-an-open-task",
           "kind": "decide",
           "status": "detected",
@@ -214,7 +214,7 @@
           "gap": "Only event ops has a band in the document (negative to roughly 60%). Bands for every other work type are marked TBD."
         },
         {
-          "tool": "stella.flag_margin",
+          "tool": "sol.flag_margin",
           "label": "Flag any margin outside the band, high or low",
           "kind": "decide",
           "status": "detected",
@@ -246,7 +246,7 @@
           "args": "work_order_id"
         },
         {
-          "tool": "stella.find_zero_charge",
+          "tool": "sol.find_zero_charge",
           "label": "Pick out tasks sitting at $0 and the tasks that might cover them",
           "kind": "decide",
           "status": "detected",
@@ -277,7 +277,7 @@
       "verification": "human",
       "actions": [
         {
-          "tool": "stella.collect_flags",
+          "tool": "sol.collect_flags",
           "label": "Decide whether this work order carries any flags",
           "kind": "decide",
           "status": "detected",
@@ -303,7 +303,7 @@
       "work": "Search outside Portal for anything that explains, confirms or fills the gap: the brand's Slack channels, email for the brand and the account manager, and Granola notes from calls with the brand or internal calls about the event. Look for a scope change, a comped item, a count the operator posted, a rate the AM agreed to, or an instruction that the work was out of scope. Operator trackers are worth checking whenever a task is missing a quantity.",
       "actor": "agent",
       "actors": [
-        "stella"
+        "sol"
       ],
       "where": "Slack, email, Granola",
       "when": "Before pinging the account manager",
@@ -333,7 +333,7 @@
           "gap": "Granola is not wired into Build. The document asks for it, so the step is written as if it were; today a person reads the notes."
         },
         {
-          "tool": "stella.summarize_evidence",
+          "tool": "sol.summarize_evidence",
           "label": "Attach a source and link to each flag, or write “nothing found”",
           "kind": "write",
           "status": "detected",
@@ -384,12 +384,12 @@
       "title": "Is this work order safe to finalize?",
       "owner": "Account manager",
       "trigger": "A work order has been through the task, margin and charge checks.",
-      "work": "Check all four: every task is complete with nothing in progress or overdue; margin is inside the band for this work type; every $0 task is explained or the AM confirmed no charge is needed; and any manual charge the AM asked for has been added. Stella proposes, the account manager approves.",
+      "work": "Check all four: every task is complete with nothing in progress or overdue; margin is inside the band for this work type; every $0 task is explained or the AM confirmed no charge is needed; and any manual charge the AM asked for has been added. Sol proposes, the account manager approves.",
       "verification": "human",
       "autonomy": 2,
       "actions": [
         {
-          "tool": "stella.finalization_checklist",
+          "tool": "sol.finalization_checklist",
           "label": "Run all four checks and propose a verdict",
           "kind": "decide",
           "status": "detected",
@@ -486,7 +486,7 @@
       "work": "Work through the rest of the brand's completed work orders one at a time, then move to the next brand in the sweep.",
       "actions": [
         {
-          "tool": "stella.next_work_order",
+          "tool": "sol.next_work_order",
           "label": "Take the next completed work order, or move to the next brand",
           "kind": "decide",
           "status": "detected",

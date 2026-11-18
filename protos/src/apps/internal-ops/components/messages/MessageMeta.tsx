@@ -2,7 +2,7 @@
 // about, who owns it, how many times its SOP has raised it, the SOP it came
 // from, and the ways to settle it (ignore with a reason, or resolve until the
 // SOP finds it fixed). The Messages pane lays these out in its header; a
-// Stella chat opened from the message shows them together as a card under
+// Sol chat opened from the message shows them together as a card under
 // her opening line.
 
 import { BellOff, Check, ChevronDown, CircleCheck, ExternalLink, EyeOff, History, User } from "lucide-react";

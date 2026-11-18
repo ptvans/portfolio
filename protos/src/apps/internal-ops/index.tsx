@@ -5,7 +5,7 @@ import { AlertsProvider } from "./context/AlertsContext";
 import { BrandFilterProvider } from "./context/BrandFilterContext";
 import { MessagesProvider } from "./context/MessagesContext";
 import { SopProvider } from "./context/SopContext";
-import { StellaProvider } from "./context/StellaContext";
+import { SolProvider } from "./context/SolContext";
 import { internalOpsNavItems } from "./navItems";
 import { Assets } from "./pages/Assets";
 import { Inventory } from "./pages/Inventory";
@@ -28,9 +28,9 @@ import { SopDetail } from "./pages/SopDetail";
 import { SopRequests } from "./pages/SopRequests";
 import { Sops } from "./pages/Sops";
 import { SopsBrand } from "./pages/SopsBrand";
-import { Stella } from "./pages/Stella";
+import { Sol } from "./pages/Sol";
 
-// The brand filter header is shown on every page except the home (Stella)
+// The brand filter header is shown on every page except the home (Sol)
 // and the Brands section (which are inherently not brand-scoped).
 //
 // The brand filter is switched off for now (BRAND_FILTER_ENABLED); flip it back
@@ -39,7 +39,7 @@ const BRAND_FILTER_ENABLED = false;
 
 function showBrandFilter(pathname: string): boolean {
   if (!BRAND_FILTER_ENABLED) return false;
-  if (pathname === "/internal-ops" || pathname === "/internal-ops/") return false; // Stella home
+  if (pathname === "/internal-ops" || pathname === "/internal-ops/") return false; // Sol home
   if (pathname.startsWith("/internal-ops/brands")) return false; // Brands + Brand detail
   if (pathname.startsWith("/internal-ops/sops")) return false; // SOPs are scoped on their own
   return true;
@@ -70,14 +70,14 @@ function InternalOpsShell() {
       }
     >
       <Routes>
-        {/* Stella is the home: what needs you, and the box to ask her in. */}
-        <Route path="/" element={<Stella />} />
+        {/* Sol is the home: what needs you, and the box to ask her in. */}
+        <Route path="/" element={<Sol />} />
         {/* Her old address still lands, with its query (?ask=, ?new). */}
-        <Route path="stella" element={<StellaRedirect />} />
-        {/* Every My Work group, in the Stella page; the home and sidebar
+        <Route path="sol" element={<SolRedirect />} />
+        {/* Every My Work group, in the Sol page; the home and sidebar
             show the first few. */}
-        <Route path="my-work" element={<Stella view="digest" />} />
-        <Route path="my-work/resolved" element={<Stella view="resolved" />} />
+        <Route path="my-work" element={<Sol view="digest" />} />
+        <Route path="my-work/resolved" element={<Sol view="resolved" />} />
         <Route path="projects" element={<ProjectsDashboard />} />
         <Route path="projects/list" element={<ProjectsIndex />} />
         <Route path="projects/:id" element={<ProjectDetail />} />
@@ -92,7 +92,7 @@ function InternalOpsShell() {
         <Route path="sops/list" element={<Sops />} />
         {/* The by-brand pages: a static segment, so it wins over sops/:id. */}
         <Route path="sops/brands/:brandId" element={<SopsBrand />} />
-        {/* SOPs written in a Stella chat, read from the chat. */}
+        {/* SOPs written in a Sol chat, read from the chat. */}
         <Route path="sops/created/:draftId" element={<CreatedSop />} />
         <Route path="sops/:id" element={<SopDetail />} />
         <Route path="sops/:id/runs/:runId" element={<SopAuthor />} />
@@ -119,8 +119,8 @@ function InternalOpsShell() {
   );
 }
 
-// …/stella?… → the home, query kept.
-function StellaRedirect() {
+// …/sol?… → the home, query kept.
+function SolRedirect() {
   const { search } = useLocation();
   return <Navigate to={`/internal-ops${search}`} replace />;
 }
@@ -152,9 +152,9 @@ export default function InternalOpsApp() {
       <SopProvider>
         <AlertsProvider>
           <MessagesProvider>
-            <StellaProvider>
+            <SolProvider>
               <InternalOpsShell />
-            </StellaProvider>
+            </SolProvider>
           </MessagesProvider>
         </AlertsProvider>
       </SopProvider>

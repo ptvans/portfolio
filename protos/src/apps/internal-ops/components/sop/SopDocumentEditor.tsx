@@ -2,7 +2,7 @@
 //
 // The operator authors the SOP as prose, one block per step. Each block with a
 // compiled node can be selected (the graph and inspector follow) and handed to
-// Stella with "Modify w/ prompt". Edits are held by the page until Save, which
+// Sol with "Modify w/ prompt". Edits are held by the page until Save, which
 // publishes the next SOP version.
 //
 // In `readOnly` mode (the run view) the document is the record of what ran:
@@ -25,7 +25,7 @@ import {
   Wrench,
   X,
 } from "lucide-react";
-import { StellaIcon } from "../stella/StellaIcon";
+import { SolIcon } from "../sol/SolIcon";
 import { useLayoutEffect, useRef, useState, type ChangeEvent } from "react";
 import { attachmentKindFor } from "../../../../data/shiftRequirements";
 import type { SopAction, SopAttachment, SopDocBlock, SopNode, SopNodeHealth } from "../../../../types/domain";
@@ -102,7 +102,7 @@ export function SopDocumentEditor({
     e.target.value = "";
   };
 
-  // Across the whole document, so the header can say how much of it Stella is
+  // Across the whole document, so the header can say how much of it Sol is
   // still guessing at and where Brick has no tool.
   const allActions = Object.values(actionsByNode ?? {}).flat();
   const totals = actionCounts(allActions);
@@ -168,7 +168,7 @@ export function SopDocumentEditor({
 
       <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-4 pt-3">
         {blocks.length === 0 && (
-          <p className="px-3 py-6 text-sm text-slate-400">No steps yet. Describe the process to Stella, or start typing below.</p>
+          <p className="px-3 py-6 text-sm text-slate-400">No steps yet. Describe the process to Sol, or start typing below.</p>
         )}
         {blocks.map((block) => (
           <Block
@@ -373,17 +373,17 @@ function Block({
   );
 }
 
-// Who runs the step: a person, or Stella.
+// Who runs the step: a person, or Sol.
 function ExecutorChip({ executor }: { executor: SopExecutor }) {
-  const Icon = { stella: StellaIcon, operator: UserRound, automation: Cog, external: Building2 }[executor];
+  const Icon = { sol: SolIcon, operator: UserRound, automation: Cog, external: Building2 }[executor];
   const tone = {
-    stella: "bg-violet-100 text-violet-700",
+    sol: "bg-violet-100 text-violet-700",
     operator: "bg-amber-100 text-amber-800",
     automation: "bg-sky-100 text-sky-700",
     external: "bg-slate-100 text-slate-600",
   }[executor];
   const title = {
-    stella: "Executed by an AI agent",
+    sol: "Executed by an AI agent",
     operator: "Executed by a person",
     automation: "Executed by a scheduled job or bot",
     external: "Executed by an outside party",

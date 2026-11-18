@@ -80,21 +80,21 @@ export const SOP_STATUS_STYLE: Record<string, string> = {
   archived: "bg-slate-100 text-slate-500",
 };
 
-// Who executes a step: Stella when the primary actor is an agent (Stella or the
-// verifier), a person otherwise. Mixed steps ("Stella drafts, owner sends")
+// Who executes a step: Sol when the primary actor is an agent (Sol or the
+// verifier), a person otherwise. Mixed steps ("Sol drafts, owner sends")
 // follow their first-listed actor.
-export type SopExecutor = "stella" | "operator" | "automation" | "external";
+export type SopExecutor = "sol" | "operator" | "automation" | "external";
 
 export function executorFor(node: SopNode): SopExecutor {
   const primary = node.actors[0];
-  if (primary === "stella" || primary === "verifier_agent") return "stella";
+  if (primary === "sol" || primary === "verifier_agent") return "sol";
   if (primary === "automation") return "automation";
   if (primary === "external") return "external";
   return "operator";
 }
 
 export const EXECUTOR_LABEL: Record<SopExecutor, string> = {
-  stella: "Stella",
+  sol: "Sol",
   operator: "Operator",
   automation: "Automation",
   external: "External",
@@ -102,7 +102,7 @@ export const EXECUTOR_LABEL: Record<SopExecutor, string> = {
 
 // Who runs the step, as a sentence for the version graph card.
 export const EXECUTOR_SENTENCE: Record<SopExecutor, string> = {
-  stella: "An agent runs this step",
+  sol: "An agent runs this step",
   operator: "A person runs this step",
   automation: "Automation runs this step",
   external: "An outside party runs this step",

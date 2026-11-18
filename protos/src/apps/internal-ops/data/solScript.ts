@@ -1,7 +1,7 @@
-// The scripted Stella tasks.
+// The scripted Sol tasks.
 //
 // In production these are the agent loop — read the source, decide, call the
-// tools, report. Here each one is a script, the same way StellaChat on the SOP
+// tools, report. Here each one is a script, the same way SolChat on the SOP
 // authoring page is a script: the beats are fixed, the timings are fake, and
 // every number in them is read off the real compiled data so the prototype
 // never claims something the rest of the app contradicts.
@@ -9,18 +9,18 @@
 // A session starts with no task. The first message routes to one of the tasks
 // below by its `route` pattern, and from then on the session walks that task's
 // turns. A turn waits for the user; when they send something, `match` decides
-// whether it moves the task on, and if it doesn't, Stella says so and stays
+// whether it moves the task on, and if it doesn't, Sol says so and stays
 // put. Each beat is one entry in the transcript, played after its own delay.
 
 import { runsForSop, sops } from "../../../data";
 import { formatDateTime, MOCK_NOW_ISO } from "../../../lib/format";
-import { wofTask } from "./stellaWofScript";
+import { wofTask } from "./solWofScript";
 
 // ---------------------------------------------------------------------------
 // Transcript entries
 // ---------------------------------------------------------------------------
 
-export type StellaEntry =
+export type SolEntry =
   // `sopRef` is the part of a SOP the message asks to change, picked in the
   // SOP viewer with Modify.
   | { kind: "user"; text: string; brandId?: string | null; sopRef?: SopRef }
@@ -34,12 +34,12 @@ export type StellaEntry =
   | { kind: "tool"; tool: string; args: string; result: string; ok: boolean }
   // What the task produced, with the three ways into it.
   | { kind: "artifact"; sopId: string; title: string; summary: string; status: string }
-  // The responses Stella offers on an incoming request. `chosen` is null until
+  // The responses Sol offers on an incoming request. `chosen` is null until
   // one is picked; after that the card stays as the record of the decision.
   | { kind: "choice"; options: { label: string; description: string }[]; chosen: number | null }
   // The SOPs a source document should become, each with the steps it keeps.
   | { kind: "proposals"; sops: SopProposal[] }
-  // Questions Stella needs answered before she can write a SOP, each with
+  // Questions Sol needs answered before she can write a SOP, each with
   // options to pick from. `picks` is null until the answers are sent; after
   // that the card stays as the record of what was picked.
   | {
@@ -48,7 +48,7 @@ export type StellaEntry =
       heading: string;
       intro?: string;
       sop?: SopProposal;
-      questions: StellaQuestion[];
+      questions: SolQuestion[];
       // The first line of the message the answers are sent as.
       answersTitle: string;
       submitLabel: string;
@@ -60,7 +60,7 @@ export type StellaEntry =
   // conversation they were brought in.
   | { kind: "work"; groupId: string; messageIds: string[] }
   // The one response every message of a group takes, offered once for all
-  // of them: the button under Stella's summary of such a group.
+  // of them: the button under Sol's summary of such a group.
   | { kind: "workAll"; groupId: string };
 
 // A part of a SOP a message is about: a whole section, or one paragraph of
@@ -82,7 +82,7 @@ export interface SopProposal {
   note?: string;
 }
 
-export interface StellaQuestion {
+export interface SolQuestion {
   // How the answer is recorded: "owner.finalization-sweep".
   key: string;
   text: string;
@@ -95,7 +95,7 @@ export interface StellaQuestion {
   // A neutral line in place of a consequence.
   note?: string;
   options: { label: string; value: string }[];
-  // The option Stella recommends, by index. The card starts on it.
+  // The option Sol recommends, by index. The card starts on it.
   suggested?: number;
   // What the card starts on when nothing is suggested.
   preset?: number;
@@ -103,20 +103,20 @@ export interface StellaQuestion {
 
 // The message a questions card sends: its title, then one `key: value` line
 // per question.
-export function formatAnswers(entry: Extract<StellaEntry, { kind: "questions" }>, picks: Record<string, number>) {
+export function formatAnswers(entry: Extract<SolEntry, { kind: "questions" }>, picks: Record<string, number>) {
   return [entry.answersTitle, ...entry.questions.map((q) => `${q.key}: ${q.options[picks[q.key]]?.value ?? ""}`)].join("\n");
 }
 
 // One entry appended to the transcript after `after` ms. A status is special:
 // it opens with a running clock and closes `holds` ms later.
-export type StellaBeat =
-  | { after: number; entry: Exclude<StellaEntry, { kind: "status" }> }
+export type SolBeat =
+  | { after: number; entry: Exclude<SolEntry, { kind: "status" }> }
   | { after: number; status: string; holds: number };
 
 // What the user has answered so far in a session, by question key.
-export type StellaAnswers = Record<string, string>;
+export type SolAnswers = Record<string, string>;
 
-export interface StellaTurn {
+export interface SolTurn {
   // Shown as a chip under the composer: one press sends it. None while a
   // card in the conversation is what the user answers.
   suggestion?: string;
@@ -124,7 +124,7 @@ export interface StellaTurn {
   match?: RegExp;
   nudge?: string;
   // Fixed, or built from what the user has answered so far.
-  beats: StellaBeat[] | ((answers: StellaAnswers) => StellaBeat[]);
+  beats: SolBeat[] | ((answers: SolAnswers) => SolBeat[]);
   // The progress step this turn completes, by index.
   completes: number;
 }
@@ -167,7 +167,7 @@ export function withEdits(draft: SopDraft, edits: SopEdits): SopDraft {
   return Object.keys(marks).length ? { ...draft, raw, compiled, edits: marks } : draft;
 }
 
-export interface StellaTask {
+export interface SolTask {
   id: string;
   title: string;
   // The brand the task runs against; null means Brick-wide.
@@ -180,10 +180,10 @@ export interface StellaTask {
   progress: { label: string; detail: string }[];
   // Shown in the progress rail once every turn has run.
   doneNote: string;
-  turns: StellaTurn[];
+  turns: SolTurn[];
   // The SOPs the task writes, as they stand once `turnsDone` turns have run
   // with these answers.
-  drafts?: (turnsDone: number, answers: StellaAnswers) => SopDraft[];
+  drafts?: (turnsDone: number, answers: SolAnswers) => SopDraft[];
 }
 
 // ---------------------------------------------------------------------------
@@ -193,7 +193,7 @@ export interface StellaTask {
 const SOP_ID = "sop-work-order-finalization-project-based";
 
 // Read the shape of the SOP out of the compiled data rather than restating it,
-// so edits to the file flow into what Stella says about it.
+// so edits to the file flow into what Sol says about it.
 const sop = sops.find((s) => s.id === SOP_ID);
 const steps = sop?.nodes.filter((n) => n.kind === "step" || n.kind === "decision") ?? [];
 const decisions = steps.filter((n) => n.kind === "decision");
@@ -202,14 +202,14 @@ const missing = actions.filter((a) => a.status === "missing");
 const byKind = (kind: string) => actions.filter((a) => a.kind === kind).length;
 const systems = [...new Set(actions.map((a) => a.tool.split(".")[0]))];
 
-export const STELLA_SOP_URL = "https://app.notion.com/p/3dc71cfae62e811a9452c418d4132e3a";
+export const SOL_SOP_URL = "https://app.notion.com/p/3dc71cfae62e811a9452c418d4132e3a";
 
-const createSopTask: StellaTask = {
+const createSopTask: SolTask = {
   id: "create-sop",
   title: "Create Automation: Finalization for Project-based work orders",
   brandId: null,
   chip: "Create Automation",
-  chipPrompt: STELLA_SOP_URL,
+  chipPrompt: SOL_SOP_URL,
   route: /notion\.(com|so)|3dc71cfae62e81|\bsop\b/i,
   progress: [
     { label: "Read the source document", detail: "Fetch the Notion page and its properties" },
@@ -221,7 +221,7 @@ const createSopTask: StellaTask = {
   turns: [
     // ---- 1. The link -----------------------------------------------------
     {
-      suggestion: STELLA_SOP_URL,
+      suggestion: SOL_SOP_URL,
       match: /notion\.(com|so)|3dc71cfae62e81/i,
       nudge: "I need the Notion link to the Automation page to start. Paste the URL from the Automation Hub and I'll open it.",
       completes: 0,
@@ -268,7 +268,7 @@ const createSopTask: StellaTask = {
           after: 2500,
           entry: {
             kind: "tool",
-            tool: "stella.compile_steps",
+            tool: "sol.compile_steps",
             args: "source=notion:3dc71cfae62e81…",
             result: `${steps.length} steps · ${sop?.edges.length ?? 19} edges · ${decisions.length} decisions · 1 loop back to the finalization check`,
             ok: true,
@@ -305,7 +305,7 @@ const createSopTask: StellaTask = {
           after: 3400,
           entry: {
             kind: "tool",
-            tool: "stella.detect_actions",
+            tool: "sol.detect_actions",
             args: `sop=${SOP_ID}`,
             result: `${actions.length} actions across ${steps.length} steps · ${byKind("read")} read, ${byKind("write")} write, ${byKind("notify")} notify, ${byKind("decide")} decide`,
             ok: true,
@@ -315,7 +315,7 @@ const createSopTask: StellaTask = {
           after: 3900,
           entry: {
             kind: "tool",
-            tool: "stella.resolve_tools",
+            tool: "sol.resolve_tools",
             args: `actions=${actions.length}`,
             result: `${actions.length - missing.length} resolved · ${missing.length} with no tool behind them`,
             ok: false,
@@ -397,7 +397,7 @@ const alSop = sops.find((s) => s.id === AL_ID);
 const alSteps = alSop?.nodes.filter((n) => n.kind === "step" || n.kind === "decision") ?? [];
 const alRuns = runsForSop(AL_ID);
 
-const scheduleShiftsTask: StellaTask = {
+const scheduleShiftsTask: SolTask = {
   id: "schedule-shifts",
   title: "Schedule shifts: Autolane, week of Sep 15–21",
   brandId: "brand-autolane",
@@ -410,7 +410,7 @@ const scheduleShiftsTask: StellaTask = {
     { label: "Draft the week", detail: "One work order per site-day, a task per supervisor slot" },
     { label: "Approve and create", detail: "The owner approves, then create and verify" },
   ],
-  doneNote: "Task complete. 17 work orders are live for Cherrywood and Mueller; Austin's 9 shifts are still with Moises.",
+  doneNote: "Task complete. 17 work orders are live for Cherrywood and Mueller; Austin's 9 shifts are still with Mateo.",
   turns: [
     // ---- 1. Read the schedule -------------------------------------------
     {
@@ -435,7 +435,7 @@ const scheduleShiftsTask: StellaTask = {
           after: 2600,
           entry: {
             kind: "tool",
-            tool: "stella.parse_schedule",
+            tool: "sol.parse_schedule",
             args: "file=schedule-wk-sep15.png",
             result: "3 sites × 7 days · 27 shifts · 31 supervisor slots · times Central",
             ok: true,
@@ -446,7 +446,7 @@ const scheduleShiftsTask: StellaTask = {
           entry: {
             kind: "agent",
             text:
-              "The grid arrived on time this week. Cherrywood, Mueller and South Congress; Lunch, Dinner and Dinner Peak; 27 shifts and 31 supervisor slots across the Tue–Mon week.\n\nOne conflict: the notes at the bottom say “no lunch at Mueller this week”, but the grid shows Lunch at Mueller on Wed 9/16 with one supervisor. The Automation makes the grid win — that is a hard constraint, not something I get to weigh — so I have taken the Lunch shift and flagged the contradiction for Moises rather than dropping it quietly.\n\nNext: existing work orders for that week, then the five Autolane records the draft depends on.",
+              "The grid arrived on time this week. Cherrywood, Mueller and South Congress; Lunch, Dinner and Dinner Peak; 27 shifts and 31 supervisor slots across the Tue–Mon week.\n\nOne conflict: the notes at the bottom say “no lunch at Mueller this week”, but the grid shows Lunch at Mueller on Wed 9/16 with one supervisor. The Automation makes the grid win — that is a hard constraint, not something I get to weigh — so I have taken the Lunch shift and flagged the contradiction for Mateo rather than dropping it quietly.\n\nNext: existing work orders for that week, then the five Autolane records the draft depends on.",
           },
         },
       ],
@@ -464,7 +464,7 @@ const scheduleShiftsTask: StellaTask = {
             kind: "tool",
             tool: "brickos.work_orders.search",
             args: "brand=autolane, kind=daily-supervision-shifts, dates=2026-09-15..21",
-            result: "1 existing: “Cherrywood – Tue 9/15”, created manually Sep 11 by Moises",
+            result: "1 existing: “Cherrywood – Tue 9/15”, created manually Sep 11 by Mateo",
             ok: true,
           },
         },
@@ -483,7 +483,7 @@ const scheduleShiftsTask: StellaTask = {
           entry: {
             kind: "agent",
             text:
-              "Same wall the Sep 8 run hit, and it has not been cleared since.\n\n• The product reference moved again — `prod_4c1e9a` is gone, re-resolved by name to `prod_7b20d3` “Tesla Model Y (2026)”. Saved reference updated; that one is self-healing.\n• The Austin assignment to the network operator is **inactive**, ended Sep 1. Nothing active resolves by name either.\n\nThe Automation says confirm setup is live before anything is drafted, so I am not drafting Austin. There is also that one manually created Cherrywood work order for Tue 9/15 — not a full week, so I have left it alone rather than deciding for you.\n\nI can draft Cherrywood and Mueller now and escalate Austin to Moises, or hold the whole week until the assignment is sorted.",
+              "Same wall the Sep 8 run hit, and it has not been cleared since.\n\n• The product reference moved again — `prod_4c1e9a` is gone, re-resolved by name to `prod_7b20d3` “Tesla Model Y (2026)”. Saved reference updated; that one is self-healing.\n• The Austin assignment to the network operator is **inactive**, ended Sep 1. Nothing active resolves by name either.\n\nThe Automation says confirm setup is live before anything is drafted, so I am not drafting Austin. There is also that one manually created Cherrywood work order for Tue 9/15 — not a full week, so I have left it alone rather than deciding for you.\n\nI can draft Cherrywood and Mueller now and escalate Austin to Mateo, or hold the whole week until the assignment is sorted.",
           },
         },
       ],
@@ -499,7 +499,7 @@ const scheduleShiftsTask: StellaTask = {
           after: 2500,
           entry: {
             kind: "tool",
-            tool: "stella.draft_work_orders",
+            tool: "sol.draft_work_orders",
             args: "sites=Cherrywood,Mueller · skip=Cherrywood Tue 9/15",
             result: "17 work orders · 21 supervisor tasks · Austin held back (9 shifts)",
             ok: true,
@@ -510,7 +510,7 @@ const scheduleShiftsTask: StellaTask = {
           entry: {
             kind: "tool",
             tool: "slack.messages.post",
-            args: "to=Moises Reyes, subject=Austin assignment inactive",
+            args: "to=Mateo Rivera, subject=Austin assignment inactive",
             result: "Escalation posted with both findings and the held-back shifts",
             ok: true,
           },
@@ -520,7 +520,7 @@ const scheduleShiftsTask: StellaTask = {
           entry: {
             kind: "agent",
             text:
-              "Drafted 17 work orders and 21 supervisor tasks for Cherrywood and Mueller, named to the week's convention and skipping the Cherrywood Tue 9/15 one that already exists. Austin's 9 shifts are held back and the escalation is with Moises.\n\nNothing is created yet. Approval is the gate on this Automation — that step is L1, the owner approves and I do not get to skip it. Review the draft and tell me to create it.",
+              "Drafted 17 work orders and 21 supervisor tasks for Cherrywood and Mueller, named to the week's convention and skipping the Cherrywood Tue 9/15 one that already exists. Austin's 9 shifts are held back and the escalation is with Mateo.\n\nNothing is created yet. Approval is the gate on this Automation — that step is L1, the owner approves and I do not get to skip it. Review the draft and tell me to create it.",
           },
         },
       ],
@@ -597,9 +597,9 @@ const scheduleShiftsTask: StellaTask = {
 // Task 3 — write SOPs from a plain-language request
 //
 // One request, two SOPs. The margin review and the $0 check look at different
-// records (work orders, tasks) and end in different decisions, so Stella
+// records (work orders, tasks) and end in different decisions, so Sol
 // splits them rather than compiling one SOP that does both. Each SOP's raw
-// prompt is its slice of the user's description; Stella translates that into
+// prompt is its slice of the user's description; Sol translates that into
 // the compiled instructions the SOP's agent runs on every scheduled run.
 // Neither writes anything — they propose and ask.
 // ---------------------------------------------------------------------------
@@ -607,7 +607,7 @@ const scheduleShiftsTask: StellaTask = {
 const MARGIN_RAW =
   "Review today’s completed, unfinalized work orders for unusual margins, using relevant Slack and Granola context before recommending a next step. Exclude Stack and test brands.";
 const ZERO_RAW = "Flag any completed task whose charges net to $0 and get my approval before it goes out on an invoice.";
-export const STELLA_FINANCE_PROMPT = `${MARGIN_RAW} Also flag any completed task whose charges net to $0 and get my approval before it goes out on an invoice.`;
+export const SOL_FINANCE_PROMPT = `${MARGIN_RAW} Also flag any completed task whose charges net to $0 and get my approval before it goes out on an invoice.`;
 
 const FINANCE_OWNER = "kenny@getthom.com";
 const FINANCE_SCHEDULE = "Weekdays at 5:00 PM PT";
@@ -628,12 +628,12 @@ const ZERO_COMPILED = [
   "Skip a task that was already approved at $0.00. Avoid repeating the task name, work order and completion date in prose when they already appear in the heading.",
 ];
 
-const financeTask: StellaTask = {
+const financeTask: SolTask = {
   id: "finance-sops",
   title: "Create Automations: Financial Correctness",
   brandId: null,
   chip: "Write Automations",
-  chipPrompt: STELLA_FINANCE_PROMPT,
+  chipPrompt: SOL_FINANCE_PROMPT,
   route: /unusual margins?|unfinali[sz]ed|nets? to \$0|financial correctness/i,
   progress: [
     { label: "Read the request", detail: "Split it into Automations and find what it leaves open" },
@@ -645,7 +645,7 @@ const financeTask: StellaTask = {
   turns: [
     // ---- 1. The request --------------------------------------------------
     {
-      suggestion: STELLA_FINANCE_PROMPT,
+      suggestion: SOL_FINANCE_PROMPT,
       match: /unusual margins?|unfinali[sz]ed|nets? to \$0|financial correctness/i,
       nudge: "Tell me what the Automation should check and I'll draft it — for example, which work orders to review and what counts as a problem.",
       completes: 0,
@@ -655,7 +655,7 @@ const financeTask: StellaTask = {
           after: 2100,
           entry: {
             kind: "tool",
-            tool: "stella.parse_intent",
+            tool: "sol.parse_intent",
             args: "prompt=“Review today’s completed, unfinalized…”",
             result: "2 intents · subjects: work_order, task · 1 exclusion (Stack, test brands)",
             ok: true,
@@ -693,7 +693,7 @@ const financeTask: StellaTask = {
           after: 2700,
           entry: {
             kind: "tool",
-            tool: "stella.compile_sop",
+            tool: "sol.compile_sop",
             args: "name=Financial Correctness, subject=work_order",
             result: `Intent + ${MARGIN_COMPILED.length - 1} instructions · sources: Slack, Granola · no automatic writes`,
             ok: true,
@@ -703,7 +703,7 @@ const financeTask: StellaTask = {
           after: 3200,
           entry: {
             kind: "tool",
-            tool: "stella.compile_sop",
+            tool: "sol.compile_sop",
             args: "name=Zero-Dollar Task Approval, subject=task",
             result: `Intent + ${ZERO_COMPILED.length - 1} instructions · approval before invoicing · no automatic writes`,
             ok: true,
@@ -834,32 +834,32 @@ const financeTask: StellaTask = {
 // The finance task and the SOP builder (“Create a SOP from <link>”) come
 // before the Notion composer, whose pattern also catches the word "SOP" and
 // the link: a bare link still goes to the composer.
-export const STELLA_TASKS: StellaTask[] = [financeTask, wofTask, createSopTask, scheduleShiftsTask];
+export const SOL_TASKS: SolTask[] = [financeTask, wofTask, createSopTask, scheduleShiftsTask];
 
-export function taskById(id: string | null): StellaTask | undefined {
-  return id ? STELLA_TASKS.find((t) => t.id === id) : undefined;
+export function taskById(id: string | null): SolTask | undefined {
+  return id ? SOL_TASKS.find((t) => t.id === id) : undefined;
 }
 
 // What the first message routes to. Order matters only where two patterns
 // could both match; the SOP task is checked first because a Notion link is the
 // least ambiguous thing anyone can send.
-export function routeToTask(text: string): StellaTask | undefined {
-  return STELLA_TASKS.find((t) => t.route.test(text));
+export function routeToTask(text: string): SolTask | undefined {
+  return SOL_TASKS.find((t) => t.route.test(text));
 }
 
 // A test message for the "thinking" loader: say "thinking" in any chat and
-// Stella works for a long stretch, so the animation can be watched through
+// Sol works for a long stretch, so the animation can be watched through
 // more than one cycle. It is not a task — it does not route, advance a turn or
 // change the session.
-export const STELLA_THINKING_TRIGGER = /^\s*thinking\s*$/i;
-export const STELLA_THINKING_BEATS = {
+export const SOL_THINKING_TRIGGER = /^\s*thinking\s*$/i;
+export const SOL_THINKING_BEATS = {
   label: "Thinking it through",
   // How long the loader stays up (ms).
   holds: 15000,
   reply: "That was the long one. The loader stays up for fifteen seconds on this message so you can watch the whole animation through a few cycles. Nothing was run.",
 };
 
-// What Stella does with a change asked of one part of a SOP (Modify in the
+// What Sol does with a change asked of one part of a SOP (Modify in the
 // SOP viewer). The script understands one kind of change, a figure swapped for
 // another ("25% instead of 30%", "from 30% to 25%"), and makes it in the
 // paragraph picked, or in every paragraph of a section picked whole. Anything
@@ -905,12 +905,12 @@ export function rewriteSopPart(text: string, draft: SopDraft | undefined, ref: S
   };
 }
 
-export const STELLA_NEW_TITLE = "New task";
+export const SOL_NEW_TITLE = "New task";
 
 // What an empty chat offers. The first four are the scripted tasks; the rest are
-// the questions people ask most, which Stella answers honestly with what she
-// can actually run (STELLA_NO_ROUTE) rather than pretending to.
-export const STELLA_STARTERS: { label: string; prompt: string }[] = [
+// the questions people ask most, which Sol answers honestly with what she
+// can actually run (SOL_NO_ROUTE) rather than pretending to.
+export const SOL_STARTERS: { label: string; prompt: string }[] = [
   { label: "Write Automations from a plain-language description.", prompt: financeTask.chipPrompt },
   { label: "Create Automations from the Work Order Finalization page.", prompt: wofTask.chipPrompt },
   { label: "Compose an Automation from its Notion page.", prompt: createSopTask.chipPrompt },
@@ -924,21 +924,21 @@ export const STELLA_STARTERS: { label: string; prompt: string }[] = [
   ].map((q) => ({ label: q, prompt: q })),
 ];
 
-export const STELLA_NO_ROUTE =
+export const SOL_NO_ROUTE =
   "I can't run that one yet. The four I can run end to end are writing Automations from a description of what you want checked, creating Automations from the Work Order Finalization page, composing an Automation from its Notion page, and scheduling a week of supervision shifts. Start a new chat and pick one from the suggestions.";
 
 // ---------------------------------------------------------------------------
-// Incoming — requests Stella raises herself
+// Incoming — requests Sol raises herself
 // ---------------------------------------------------------------------------
 //
 // The other direction: an alert fired or an SOP stopped for a decision,
-// Stella read it, and she needs a person to decide before she acts. Each
+// Sol read it, and she needs a person to decide before she acts. Each
 // request is anchored to a real alert in data/alerts.ts or a note in
 // data/inboxNotes.ts, and what she says about it is what that record says.
 // Picking a response settles the request and the message it came from;
 // nothing is written anywhere, the same as the rest of the prototype.
 
-export interface StellaRequest {
+export interface SolRequest {
   id: string;
   // The sidebar row and the chat header.
   title: string;
@@ -951,7 +951,7 @@ export interface StellaRequest {
   options: {
     label: string;
     description: string;
-    // The unit of work shown while Stella acts on it, and what she reports.
+    // The unit of work shown while Sol acts on it, and what she reports.
     status: string;
     reply: string;
     // For a note that asks for a yes or no: what picking this records on it.
@@ -961,7 +961,7 @@ export interface StellaRequest {
   nudge: string;
 }
 
-export const STELLA_INCOMING: StellaRequest[] = [
+export const SOL_INCOMING: SolRequest[] = [
   {
     id: "req-npn-closeout",
     title: "Approve North Riverside finance closeout follow-up for Jasmine",
@@ -1090,16 +1090,16 @@ export const STELLA_INCOMING: StellaRequest[] = [
   },
 ];
 
-export function requestById(id: string | null): StellaRequest | undefined {
-  return id ? STELLA_INCOMING.find((r) => r.id === id) : undefined;
+export function requestById(id: string | null): SolRequest | undefined {
+  return id ? SOL_INCOMING.find((r) => r.id === id) : undefined;
 }
 
 // A request's conversation as it opens: the ask with its alert, each section,
 // then the responses to pick from.
-export function requestEntries(req: StellaRequest): StellaEntry[] {
+export function requestEntries(req: SolRequest): SolEntry[] {
   return [
     { kind: "agent", text: req.ask, alertId: req.alertId, noteId: req.noteId },
-    ...req.sections.map<StellaEntry>((s) => ({ kind: "agent", heading: s.heading, text: s.body })),
+    ...req.sections.map<SolEntry>((s) => ({ kind: "agent", heading: s.heading, text: s.body })),
     { kind: "choice", options: req.options.map(({ label, description }) => ({ label, description })), chosen: null },
   ];
 }
@@ -1113,11 +1113,11 @@ export interface SeedSession {
   when: string;
   brandId: string | null;
   pinned?: boolean;
-  // Stella has written in it since you last opened it.
+  // Sol has written in it since you last opened it.
   unread?: boolean;
 }
 
-export const STELLA_HISTORY: SeedSession[] = [
+export const SOL_HISTORY: SeedSession[] = [
   { id: "ses-hub-drift", title: "Which Automations drifted from the Notion Hub?", status: "idle", when: "Last week", brandId: null, pinned: true },
   { id: "ses-coco-dispatch", title: "Robot Dispatch: reconcile v3 against the Hub", status: "done", when: "Yesterday", brandId: "brand-coco", unread: true },
   { id: "ses-margin-sweep", title: "Why did Promobile Sep 11 stop at the AM ping?", status: "waiting", when: "Yesterday", brandId: "brand-promobile" },

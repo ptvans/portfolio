@@ -1,4 +1,4 @@
-// Goals Stella tracks for the Internal Ops prototype: a target on an ops
+// Goals Sol tracks for the Internal Ops prototype: a target on an ops
 // metric, per brand or Brick-wide, that she checks in on (the "Goal" messages
 // in the inbox come from these). Seed data; the Goals page reads it.
 
@@ -7,7 +7,7 @@ export type GoalStatus = "on_track" | "at_risk" | "behind" | "achieved";
 export interface Goal {
   id: string;
   name: string;
-  // The metric and the target, as Stella states them.
+  // The metric and the target, as Sol states them.
   metric: string;
   target: string;
   current: string;
@@ -15,7 +15,7 @@ export interface Goal {
   brandId: string | null; // null = Brick-wide
   ownerName: string;
   period: string;
-  // How often Stella checks in.
+  // How often Sol checks in.
   cadence: string;
   updatedAt: string;
 }

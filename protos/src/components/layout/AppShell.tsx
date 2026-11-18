@@ -90,7 +90,7 @@ export function AppShell({
   // page has the full window. The page itself provides the way back out.
   chromeless?: boolean;
   // Keeps the nav rail but drops the main area's padding and page scroll, for
-  // pages that lay out their own columns to the full height (e.g. Stella).
+  // pages that lay out their own columns to the full height (e.g. Sol).
   fullBleed?: boolean;
   // "header" lays the nav out as tabs across the top bar instead of a left rail.
   navPlacement?: "sidebar" | "header";

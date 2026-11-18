@@ -1,4 +1,4 @@
-// A My Work group on the Stella home: Stella's name for the group on a tinted
+// A My Work group on the Sol home: Sol's name for the group on a tinted
 // band, the brand it is about, and one row per message with the responses
 // she can act on. Under the card, the group's chat — invisible until the card
 // is hovered or it has focus — which opens the group's conversation.
@@ -12,13 +12,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BrandChip } from "../../../../components/BrandChip";
 import { getBrand, getProject, getWorkOrder } from "../../../../data";
 import { useMessages, type InboxMessage } from "../../context/MessagesContext";
-import { DISMISS_REASONS, isSettled, useStella, type DismissReason, type WorkItemState } from "../../context/StellaContext";
-import type { StellaEntry } from "../../data/stellaScript";
+import { DISMISS_REASONS, isSettled, useSol, type DismissReason, type WorkItemState } from "../../context/SolContext";
+import type { SolEntry } from "../../data/solScript";
 import { WORK_CARD_LIMIT, type WorkGroup, type WorkItem } from "../../data/myWork";
 import { messageWhen } from "../messages/messageUi";
 import { SeverityIcon } from "../messages/SeverityIcon";
-import { StellaComposer } from "./StellaComposer";
-import { StellaIcon } from "./StellaIcon";
+import { SolComposer } from "./SolComposer";
+import { SolIcon } from "./SolIcon";
 
 // The tints a group can draw in: the band across the top of its card (a
 // translucent wash, so it sits lightly on the card) and the dot that stands
@@ -90,7 +90,7 @@ export function WorkGroupCard({
   resolvable = false,
   // In a conversation, a group whose messages all take the same response
   // shows the first of them and keeps the rest behind "View N more": they
-  // read alike, and Stella's summary under the card covers them.
+  // read alike, and Sol's summary under the card covers them.
   condense = false,
 }: {
   group: WorkGroup;
@@ -101,7 +101,7 @@ export function WorkGroupCard({
   condense?: boolean;
 }) {
   const { openItems, itemState, actOn, undoItem, dismissItem, feedbackOn, openGroup, sendToGroup, groupSession, goHome, groupSettled, resolveGroup } =
-    useStella();
+    useSol();
   const { getMessage } = useMessages();
   const brand = group.brandId ? getBrand(group.brandId) : undefined;
   const palette = paletteFor(group);
@@ -140,11 +140,11 @@ export function WorkGroupCard({
         onDismiss={(reason) => dismissItem(group.id, item.messageId, reason)}
         onFeedback={() => {
           feedbackOn(group.id, item.messageId);
-          toStella();
+          toSol();
         }}
         onChat={() => {
           openGroup(group.id, item.messageId);
-          toStella();
+          toSol();
         }}
       />
     );
@@ -153,7 +153,7 @@ export function WorkGroupCard({
   // for all of them under the card.
   const shared = sharedAction(capped ? visible : items, itemState);
   // A group whose messages all take the same one response is drawn as a
-  // summary on the home and the digest: Stella's account of them and one
+  // summary on the home and the digest: Sol's account of them and one
   // button, with the rows left to its conversation. That holds until any of
   // them is answered; after that the card is the usual one.
   const response = items[0]?.actions[0];
@@ -169,10 +169,10 @@ export function WorkGroupCard({
   const acting = items.some((i) => itemState(i.messageId).busy);
   const lead = items[0] ? getMessage(items[0].messageId) : undefined;
   // The card is also drawn on the digest page; a conversation started from
-  // there opens on the Stella home, where conversations live.
+  // there opens on the Sol home, where conversations live.
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const toStella = () => {
+  const toSol = () => {
     if (!/^\/internal-ops\/?$/.test(pathname)) navigate("/internal-ops");
   };
 
@@ -184,9 +184,9 @@ export function WorkGroupCard({
           type="button"
           onClick={() => {
             goHome(group.id);
-            toStella();
+            toSol();
           }}
-          title="Show this group on the Stella home"
+          title="Show this group on the Sol home"
           className="group-wash mb-2 ml-3 inline-flex max-w-full items-center gap-1.5 rounded-md px-2.5 py-1 text-left text-sm leading-snug transition-[filter] hover:brightness-[0.97]"
           style={washStyle(palette)}
         >
@@ -232,7 +232,7 @@ export function WorkGroupCard({
                   type="button"
                   onClick={() => {
                     openGroup(group.id);
-                    toStella();
+                    toSol();
                   }}
                   className="group/details inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 hover:text-brand-700"
                 >
@@ -241,7 +241,7 @@ export function WorkGroupCard({
                 </button>
                 {acting ? (
                   <span className="flex items-center gap-2 text-sm">
-                    <StellaIcon size={16} thinking />
+                    <SolIcon size={16} thinking />
                     <span className="italic text-brand-600">{group.summary.acting}…</span>
                   </span>
                 ) : (
@@ -281,7 +281,7 @@ export function WorkGroupCard({
                 type="button"
                 onClick={() => {
                   openGroup(group.id);
-                  toStella();
+                  toSol();
                 }}
                 className="group/all flex w-full items-center justify-center gap-2 py-2.5 text-sm font-medium text-brand-600 hover:text-brand-700"
               >
@@ -339,7 +339,7 @@ export function WorkGroupCard({
             type="button"
             onClick={() => {
               openGroup(group.id);
-              toStella();
+              toSol();
             }}
             className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-slate-300 bg-white px-3 py-1 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
           >
@@ -349,9 +349,9 @@ export function WorkGroupCard({
       )}
       {withChat && !conversation && (
         <div className="mt-2 opacity-0 transition-opacity duration-200 focus-within:opacity-100 group-hover/card:opacity-100 has-[[data-draft]]:opacity-100">
-          <StellaComposer slim placeholder="Ask…" disabled={busy} onSend={(text) => {
+          <SolComposer slim placeholder="Ask…" disabled={busy} onSend={(text) => {
               sendToGroup(group.id, text);
-              toStella();
+              toSol();
             }}
           />
         </div>
@@ -390,7 +390,7 @@ function sharedAction(items: WorkItem[], stateOf: (messageId: string) => WorkIte
 }
 
 // One message: the question, the record it is about, and the responses. The
-// dismiss menu shows on hover; the chevron opens Stella's write-up.
+// dismiss menu shows on hover; the chevron opens Sol's write-up.
 function WorkItemRow({
   item,
   message,
@@ -492,7 +492,7 @@ function WorkItemRow({
             <div className="flex min-w-0 flex-1 items-center gap-2 text-sm">
               {state.busy ? (
                 <>
-                  <StellaIcon size={16} thinking />
+                  <SolIcon size={16} thinking />
                   <span className="italic text-brand-600">{picked.status}…</span>
                 </>
               ) : (
@@ -543,7 +543,7 @@ function WorkItemRow({
             type="button"
             onClick={onChat}
             aria-label="Open a conversation about this"
-            title="Talk to Stella about this"
+            title="Talk to Sol about this"
             className="shrink-0 rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
           >
             <MessageCircle className="h-4 w-4" strokeWidth={1.75} />
@@ -643,8 +643,8 @@ function recordLabel(message: InboxMessage) {
 // A `work` entry in a conversation: the messages brought in, as their cards.
 // In one message's own conversation the group is a breadcrumb above the
 // card rather than a band across it.
-export function WorkEntry({ entry }: { entry: Extract<StellaEntry, { kind: "work" }> }) {
-  const { groups, active } = useStella();
+export function WorkEntry({ entry }: { entry: Extract<SolEntry, { kind: "work" }> }) {
+  const { groups, active } = useSol();
   const group = groups.find((g) => g.id === entry.groupId);
   if (!group) return null;
   return (
@@ -653,12 +653,12 @@ export function WorkEntry({ entry }: { entry: Extract<StellaEntry, { kind: "work
 }
 
 // A `workAll` entry: one press that gives every message of the group its
-// shared response, under Stella's summary of them. It counts only what is
+// shared response, under Sol's summary of them. It counts only what is
 // still unanswered. Pressing it turns it into your message in the
 // transcript, so it is only ever drawn as a button; with nothing left to
 // answer it isn't drawn at all.
-export function WorkAllEntry({ entry }: { entry: Extract<StellaEntry, { kind: "workAll" }> }) {
-  const { groups, itemState, actOnAll } = useStella();
+export function WorkAllEntry({ entry }: { entry: Extract<SolEntry, { kind: "workAll" }> }) {
+  const { groups, itemState, actOnAll } = useSol();
   const group = groups.find((g) => g.id === entry.groupId);
   const response = group?.items[0]?.actions[0];
   if (!group || !response) return null;
@@ -673,7 +673,7 @@ export function WorkAllEntry({ entry }: { entry: Extract<StellaEntry, { kind: "w
   const acting = group.items.some((i) => itemState(i.messageId).busy);
 
   return (
-    // Indented to sit under Stella's text, past her icon.
+    // Indented to sit under Sol's text, past her icon.
     <div className="ml-[34px]">
       <button
         type="button"

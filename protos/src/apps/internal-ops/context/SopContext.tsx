@@ -19,7 +19,7 @@ interface SopContextValue {
   setNodeOwner: (sopId: string, nodeId: string, ownerName: string) => void;
   // Activates, pauses, archives or re-drafts an SOP, from the SOP page.
   setStatus: (sopId: string, status: Sop["status"]) => void;
-  // Signs off one of the tool calls Stella detected for a step, so the gutter
+  // Signs off one of the tool calls Sol detected for a step, so the gutter
   // stops reading as a guess. "missing" actions cannot be confirmed: the tool
   // does not exist, and clicking through would hide a real gap.
   confirmAction: (sopId: string, nodeId: string, actionId: string) => void;
@@ -114,7 +114,7 @@ export function SopProvider({ children }: { children: ReactNode }) {
       purpose: "",
       version: 1,
       status: "draft",
-      ownerName: "Moises Reyes",
+      ownerName: "Mateo Rivera",
       trigger: "",
       completion: "",
       primitiveTags: [],

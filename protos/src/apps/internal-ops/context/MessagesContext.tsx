@@ -9,9 +9,9 @@
 //   • notes — goal check-ins, project flags, task completion audits and
 //     notes from coworkers.
 // Each message has one of seven types, the business object it is about,
-// which picks its badge in the list. Who wrote it (Stella, a coworker, a
+// which picks its badge in the list. Who wrote it (Sol, a coworker, a
 // brand) is not a type: alerts and SOP-run messages are typed SOP, since an
-// SOP raised them, and a note Stella wrote about a project is a project note.
+// SOP raised them, and a note Sol wrote about a project is a project note.
 //
 // Alert state stays in AlertsContext. This context holds what is new to the
 // unified surface: which threads have been read, which SOP messages and
@@ -33,7 +33,7 @@ import {
 import { MOCK_NOW_ISO } from "../../../lib/format";
 import type { AlertSeverity, Message } from "../../../types/domain";
 import { inboxNotes, type RaisedEntry } from "../data/inboxNotes";
-import { STELLA_INCOMING } from "../data/stellaScript";
+import { SOL_INCOMING } from "../data/solScript";
 import { CURRENT_USER_NAME, useAlerts } from "./AlertsContext";
 
 export type MessageKind = "alert" | "sop" | "thread" | "note";
@@ -50,7 +50,7 @@ export interface InboxMessage {
   id: string;
   kind: MessageKind;
   refId: string;
-  // What Stella is asking for ("Need decision for"), for messages still open.
+  // What Sol is asking for ("Need decision for"), for messages still open.
   // Null for threads and anything already settled.
   ask: string | null;
   title: string;
@@ -91,7 +91,7 @@ export interface MessageFilters {
   networkOperator: string[];
   project: string[];
   workOrder: string[];
-  // An exact set of messages, from a link that names them (Stella's
+  // An exact set of messages, from a link that names them (Sol's
   // Incoming). Not a facet: it narrows everything else and has no counts.
   ids: string[];
   q: string;
@@ -116,7 +116,7 @@ export const EMPTY_FILTERS: MessageFilters = {
 };
 
 // Where the Messages page opens: your open messages that are critical or
-// high. The Stella page counts this view for its link here.
+// high. The Sol page counts this view for its link here.
 export const DEFAULT_FILTERS: MessageFilters = {
   ...EMPTY_FILTERS,
   owner: "me",
@@ -171,7 +171,7 @@ interface MessagesState {
   resolve: (id: string, reason: string) => void;
   resolutionFor: (id: string) => Resolution | undefined;
   // Takes back a resolve, and for a note its decision: the message is open
-  // again, as it was before. Used by undo on a Stella response.
+  // again, as it was before. Used by undo on a Sol response.
   unresolve: (id: string) => void;
   // Snoozes a message until its SOP finds the condition fixed, or wakes it.
   snooze: (id: string) => void;
@@ -518,9 +518,9 @@ export function useMessages() {
   return ctx;
 }
 
-// Alerts Stella has drafted responses for ask for a decision; the rest ask
+// Alerts Sol has drafted responses for ask for a decision; the rest ask
 // for action or a look, by how urgent the rule says they are.
-const ALERTS_WITH_RESPONSES = new Set(STELLA_INCOMING.map((r) => r.alertId));
+const ALERTS_WITH_RESPONSES = new Set(SOL_INCOMING.map((r) => r.alertId));
 
 function alertAsk(severity: AlertSeverity, alertId: string) {
   if (ALERTS_WITH_RESPONSES.has(alertId)) return "Need decision for";
@@ -531,7 +531,7 @@ function alertAsk(severity: AlertSeverity, alertId: string) {
 // Topics
 // ---------------------------------------------------------------------------
 //
-// Stand-ins for the topics Stella clusters messages into. A message lands in
+// Stand-ins for the topics Sol clusters messages into. A message lands in
 // the first topic whose pattern its title or body matches.
 
 export interface Topic {

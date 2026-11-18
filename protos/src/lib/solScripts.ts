@@ -1,30 +1,30 @@
-// Scripted Stella demos (mobile and NO web chats), keyed by Network Operator id: the
+// Scripted Sol demos (mobile and NO web chats), keyed by Network Operator id: the
 // selected account's scripts are the ones the chat offers (one suggestion chip
 // each) and plays.
 //
 // A script starts when the user's first message matches `match` (the suggested
-// `prompt` always does). Stella then plays `beats` in order. A beat with `wait`
+// `prompt` always does). Sol then plays `beats` in order. A beat with `wait`
 // pauses the script until the user answers: any text for "text", an uploaded
 // photo for "photo". A beat with `complete` closes `taskId` (with the uploaded
 // photo attached) as it is sent. `card` shows the compact task card with that
 // status snapshot beneath the message.
 
-export interface StellaBeat {
+export interface SolBeat {
   text: string;
   card?: "not_started" | "completed";
   wait?: "text" | "photo";
   complete?: boolean;
 }
 
-export interface StellaScript {
+export interface SolScript {
   prompt: string;
   match: RegExp;
   taskId: string;
   historyTitle: string;
-  beats: StellaBeat[];
+  beats: SolBeat[];
 }
 
-export const STELLA_SCRIPTS: Record<string, StellaScript[]> = {
+export const SOL_SCRIPTS: Record<string, SolScript[]> = {
   "no-onehourmaids": [
     // Dropoff · Ivy Nakashima · 935 W Diversey Pkwy
     {

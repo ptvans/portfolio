@@ -1,6 +1,6 @@
 // The SOPs tab of Automations Setup: every SOP, in one list — the Standard
-// SOPs (documents Stella runs step by step) and the Alerts (an SOP of type
-// Alert: a prompt Stella keeps evaluating, which raises a message when it
+// SOPs (documents Sol runs step by step) and the Alerts (an SOP of type
+// Alert: a prompt Sol keeps evaluating, which raises a message when it
 // matches), searched and sorted together. Each brand's own page lists both
 // at /sops/brands/:brandId.
 

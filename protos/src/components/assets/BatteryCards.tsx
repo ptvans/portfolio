@@ -1,6 +1,6 @@
 import { Minus, Plus, RefreshCw } from "lucide-react";
 import type { ReactNode } from "react";
-import { StellaIcon } from "../../apps/internal-ops/components/stella/StellaIcon";
+import { SolIcon } from "../../apps/internal-ops/components/sol/SolIcon";
 import { TRACKING_STARTED, getAssetType, stakeholders, type Asset } from "../../data/assets";
 import { bufferFor, type LocationUsage } from "../../lib/batteryCheck";
 import { useAssets } from "../../state/AssetsContext";
@@ -9,7 +9,7 @@ import { useAssets } from "../../state/AssetsContext";
 const CHARGE_LIMIT = 90;
 import { SectionCard, suppliesStatus } from "./AssetBits";
 
-// Stella's battery-usage estimate, split by location.
+// Sol's battery-usage estimate, split by location.
 export function UsageByLocationCard({ brandId }: { brandId: string }) {
   const { usage, policy, estimateRanAt, estimating, rerunEstimate } = useAssets();
   const withData = usage.filter((u) => u.samples > 0 && u.location.brandId === brandId);
@@ -23,13 +23,13 @@ export function UsageByLocationCard({ brandId }: { brandId: string }) {
     <SectionCard
       title={
         <span className="inline-flex items-center gap-2">
-          <StellaIcon size={18} thinking={estimating} /> Battery use by location
+          <SolIcon size={18} thinking={estimating} /> Battery use by location
         </span>
       }
       subtitle={
         estimating
-          ? "Stella is re-reading the check-out / check-in logs…"
-          : `Stella's estimate from ${totalSamples} check-out / check-in pairs since ${TRACKING_STARTED} · updated ${estimateRanAt}`
+          ? "Sol is re-reading the check-out / check-in logs…"
+          : `Sol's estimate from ${totalSamples} check-out / check-in pairs since ${TRACKING_STARTED} · updated ${estimateRanAt}`
       }
       actions={
         <button
@@ -95,7 +95,7 @@ export function UsageByLocationCard({ brandId }: { brandId: string }) {
           </div>
           {nearest && farthest && nearest !== farthest && (
             <div className="flex gap-2.5 border-t border-slate-100 bg-slate-50/60 px-5 py-3 text-sm text-slate-700">
-              <StellaIcon size={16} className="mt-0.5" />
+              <SolIcon size={16} className="mt-0.5" />
               <p>
                 The far-out stores burn about {(farthest.ratePctPerHr / nearest.ratePctPerHr).toFixed(1)}× the battery of{" "}
                 {nearest.location.label.replace("Tso · ", "")}. A 5-hour {farthest.location.label.replace("Tso · ", "")} shift needs{" "}

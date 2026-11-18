@@ -34,7 +34,7 @@ export function PreShiftCheck() {
     <div className="grid items-start gap-4 2xl:grid-cols-[minmax(0,1fr)_320px]">
       <SectionCard
         title={`Pre-assignment battery check · Tonight, ${FLEET_CLOCK.dateLabel}`}
-        subtitle={`Ran ${FLEET_CLOCK.nowLabel}, before assignments post at ${policy.postAssignmentsAt}. Projects each vehicle's battery at end of shift from Stella's per-location usage, against a ${policy.bufferPct}% buffer (${policy.nearBaseBufferPct}% for stores within ${policy.nearBaseMiles} mi of the garage).`}
+        subtitle={`Ran ${FLEET_CLOCK.nowLabel}, before assignments post at ${policy.postAssignmentsAt}. Projects each vehicle's battery at end of shift from Sol's per-location usage, against a ${policy.bufferPct}% buffer (${policy.nearBaseBufferPct}% for stores within ${policy.nearBaseMiles} mi of the garage).`}
         actions={
           posted ? (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">

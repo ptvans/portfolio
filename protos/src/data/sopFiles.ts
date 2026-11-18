@@ -73,7 +73,7 @@ export interface SopFile {
 
 const ACTORS_FOR: Record<SopFileActor, SopActor[]> = {
   person: ["brick_operator"],
-  agent: ["stella"],
+  agent: ["sol"],
   automation: ["automation"],
   external: ["external"],
 };
