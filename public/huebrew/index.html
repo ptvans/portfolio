@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+	<title>ColorBrewer: Color Advice for Maps</title>
+	<meta name="description" content="ColorBrewer: choose colorblind-safe, print-friendly color schemes for maps and data visualization, previewed on a live choropleth map.">
+	<meta name="theme-color" content="#333333">
+	<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+	<link rel="stylesheet" href="style.css">
+	<script src="colorbrewer_schemes.js" defer></script>
+	<script src="cmyk.js" defer></script>
+	<script src="colorbrewer.js" defer></script>
+</head>
+<body>
+	<header class="site-header">
+		<div class="brand">
+			<h1>COLOR<span>BREWER</span> 2.0</h1>
+			<p>color advice for cartography</p>
+		</div>
+		<nav aria-label="About">
+			<button type="button" class="link" data-learn="howtouse">How to use</button>
+			<button type="button" class="link" data-learn="downloads">Downloads</button>
+			<button type="button" class="link" data-learn="credits">Credits</button>
+		</nav>
+	</header>
+
+	<main class="app">
+		<section class="map-panel" aria-label="Map preview">
+			<div id="map-container" class="loading">
+				<div id="counties" class="svg-layer"></div>
+				<div id="overlays" class="svg-layer" aria-hidden="true"></div>
+				<div id="probe" role="status" hidden></div>
+			</div>
+		</section>
+
+		<section class="controls" aria-label="Scheme options">
+			<div class="group">
+				<div class="group-head">
+					<label for="num-classes">Number of data classes</label>
+					<button type="button" class="info" data-learn="number" aria-label="Learn more about the number of data classes">i</button>
+				</div>
+				<select id="num-classes">
+					<option>3</option><option>4</option><option>5</option><option>6</option>
+					<option>7</option><option>8</option><option>9</option><option>10</option>
+					<option>11</option><option>12</option>
+				</select>
+			</div>
+
+			<fieldset class="group">
+				<div class="group-head">
+					<legend>Nature of your data</legend>
+					<button type="button" class="info" data-learn="schemes" aria-label="Learn more about scheme types">i</button>
+				</div>
+				<div class="segmented" id="scheme-type">
+					<label><input type="radio" name="scheme-type" value="sequential" checked><span>Sequential</span></label>
+					<label><input type="radio" name="scheme-type" value="diverging"><span>Diverging</span></label>
+					<label><input type="radio" name="scheme-type" value="qualitative"><span>Qualitative</span></label>
+				</div>
+			</fieldset>
+
+			<div class="group">
+				<div class="group-head"><h2>Pick a color scheme</h2></div>
+				<div class="ramp-groups">
+					<div class="ramp-group">
+						<h3 id="multi-label">Multi-hue</h3>
+						<div id="ramps" class="ramps" role="radiogroup" aria-labelledby="multi-label"></div>
+					</div>
+					<div class="ramp-group" id="single-group">
+						<h3 id="single-label">Single hue</h3>
+						<div id="singlehue" class="ramps" role="radiogroup" aria-labelledby="single-label"></div>
+					</div>
+				</div>
+				<p id="no-match" class="note" hidden>No color schemes match these criteria. Choose fewer data classes, a different data type, or fewer filters.</p>
+			</div>
+
+			<fieldset class="group">
+				<div class="group-head">
+					<legend>Only show</legend>
+					<button type="button" class="info" data-learn="usability" aria-label="Learn more about the usability filters">i</button>
+				</div>
+				<div class="checks" id="filters">
+					<label><input type="checkbox" id="blindcheck"> colorblind safe</label>
+					<label><input type="checkbox" id="printcheck"> print friendly</label>
+					<label><input type="checkbox" id="copycheck"> photocopy safe</label>
+				</div>
+			</fieldset>
+		</section>
+
+		<section class="options" aria-label="Map options">
+			<details class="group map-options" open>
+				<summary>Map context &amp; background</summary>
+				<div class="group-head sub">
+					<span>Context layers</span>
+					<button type="button" class="info" data-learn="context" aria-label="Learn more about map context">i</button>
+				</div>
+				<div class="checks">
+					<label class="with-color"><span><input type="checkbox" id="roadscheck"> roads</span><input type="color" id="road-color" value="#ff3333" aria-label="Road color"></label>
+					<label class="with-color"><span><input type="checkbox" id="citiescheck"> cities</span><input type="color" id="city-color" value="#000000" aria-label="City color"></label>
+					<label class="with-color"><span><input type="checkbox" id="borderscheck" checked> borders</span><input type="color" id="border-color" value="#000000" aria-label="Border color"></label>
+				</div>
+				<div class="group-head sub"><span>Background</span></div>
+				<div class="checks">
+					<label class="with-color"><span><input type="radio" name="background" value="solid" checked> solid color</span><input type="color" id="bg-color" value="#ffffff" aria-label="Background color"></label>
+					<label><input type="radio" name="background" value="terrain"> terrain</label>
+				</div>
+				<label class="range">
+					<span>Color transparency <output id="transparency-out">0%</output></span>
+					<input type="range" id="transparency" min="0" max="90" step="5" value="0">
+				</label>
+			</details>
+		</section>
+
+		<section class="palette" aria-label="Selected scheme">
+			<div class="palette-head">
+				<h2 id="scheme-name">BuGn</h2>
+				<div class="segmented small" id="color-system" role="radiogroup" aria-label="Color format">
+					<label><input type="radio" name="color-system" value="hex" checked><span>HEX</span></label>
+					<label><input type="radio" name="color-system" value="rgb"><span>RGB</span></label>
+					<label><input type="radio" name="color-system" value="cmyk"><span>CMYK</span></label>
+					<label><input type="radio" name="color-system" value="hsl"><span>HSL</span></label>
+					<label><input type="radio" name="color-system" value="hcl" title="CIE LCh: hue, chroma, luminance"><span>HCL</span></label>
+				</div>
+			</div>
+			<ul id="scores" class="scores"></ul>
+			<ol id="swatches" class="swatches" aria-label="Colors in this scheme"></ol>
+			<p class="hint">Tap a color to copy it.</p>
+
+			<div class="export">
+				<h2>Export</h2>
+				<div class="field">
+					<label for="permalink">Permalink</label>
+					<div class="copy-row"><input type="text" id="permalink" readonly><button type="button" class="copy" data-copy="permalink">Copy</button></div>
+				</div>
+				<div class="field">
+					<label for="export-js">JavaScript array</label>
+					<div class="copy-row"><input type="text" id="export-js" readonly><button type="button" class="copy" data-copy="export-js">Copy</button></div>
+				</div>
+				<div class="field">
+					<label for="export-css">CSS classes</label>
+					<div class="copy-row"><input type="text" id="export-css" readonly><button type="button" class="copy" data-copy="export-css">Copy</button></div>
+				</div>
+				<div class="downloads">
+					<a id="ase" href="#" download>Adobe swatches (.ase)</a>
+					<a id="gpl" href="#" download>GIMP / Inkscape (.gpl)</a>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<p>&copy; Cynthia Brewer, Mark Harrower and The Pennsylvania State University. Original web tool by <a href="https://www.axismaps.com/">Axis Maps</a> (<a href="https://colorbrewer2.org/">colorbrewer2.org</a>).</p>
+		<p><a href="https://github.com/ptvans/huebrew">Source code</a> · Apache License 2.0</p>
+	</footer>
+
+	<dialog id="learnmore" aria-labelledby="learnmore-title">
+		<div class="dialog-head">
+			<h2 id="learnmore-title"></h2>
+			<button type="button" id="close" aria-label="Close">&times;</button>
+		</div>
+		<div id="learnmore-content"></div>
+	</dialog>
+
+	<div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

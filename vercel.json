@@ -5,7 +5,8 @@
   "buildCommand": "npm run build",
   "outputDirectory": "build",
   "redirects": [
-    { "source": "/protos", "destination": "/protos/", "permanent": true }
+    { "source": "/protos", "destination": "/protos/", "permanent": true },
+    { "source": "/huebrew", "destination": "/huebrew/", "permanent": true }
   ],
   "headers": [
     {

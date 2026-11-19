@@ -12,6 +12,12 @@ still need the steps below.
   committed** in `public/protos/` (run `npm run build:protos` after changing
   them), so neither host builds `protos/` — it just ships as static files at
   `/protos/`.
+- ColorBrewer lives in its own repo, [ptvans/huebrew](https://github.com/ptvans/huebrew)
+  (plain static files, no build tool). Its deployable files are **committed**
+  in `public/huebrew/` and ship at `/huebrew/`. To update it: change and commit
+  in `../huebrew`, then here run `npm run build:huebrew`
+  (`scripts/build-huebrew.sh`, which calls huebrew's `scripts/build.sh`; set
+  `HUEBREW_DIR` if the repo is elsewhere) and commit `public/huebrew/`.
 - Routing is hash-based (`/#/case-study/...`, `/protos/#/...`), so no server
   rewrites are needed.
 - `package.json` keeps `"homepage": "."` (relative asset paths), so the same
@@ -21,8 +27,8 @@ still need the steps below.
 ## What's in the repo for Vercel
 
 - `vercel.json` — framework `create-react-app`, `npm ci`, `npm run build`,
-  output `build`; a 308 redirect `/protos` → `/protos/` (the prototype's
-  relative asset paths need the trailing slash); one-year immutable caching for
+  output `build`; 308 redirects `/protos` → `/protos/` and `/huebrew` →
+  `/huebrew/` (both apps use relative asset paths, which need the trailing slash); one-year immutable caching for
   the hashed files under `/static/` and `/protos/assets/`.
 - `package.json` → `"engines": { "node": "22.x" }` (overrides the project's
   Node 26 setting).
