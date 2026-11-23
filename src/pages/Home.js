@@ -16,7 +16,7 @@ function Home({ theme, toggleTheme }) {
               className="avatar-image hero-period"
             />
           </h1>
-          <p className="hero-subtitle">CREATIVE TECHNOLOGIST & PRODUCT DESIGNER</p>
+          <p className="hero-subtitle">CREATIVE TECHNOLOGIST // PRODUCT DESIGNER</p>
         </header>
 
         <section className="pitch-section">
