@@ -77,6 +77,9 @@ function Home({ theme, toggleTheme }) {
             <li>
               <Link to="/case-study/cloud-infrastructure">CloudPhysics: Diagnose Trouble in Cloud Infrastructure</Link>
             </li>
+            <li>
+              <Link to="/case-study/ml-training-tools">Apple: Improve 3D Annotation Tools for Model Training</Link>
+            </li>
             <li className="case-studies-more">
               (More available upon request...)
             </li>

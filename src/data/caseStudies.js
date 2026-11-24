@@ -824,5 +824,53 @@ export const caseStudies = {
         ]
       }
     ]
+  },
+  'ml-training-tools': {
+    title: 'Improve 3D Annotation Tools for Model Training',
+    subtitle: 'Apple',
+    sections: [
+      {
+        id: 'context',
+        title: 'Context',
+        content: [
+          { type: 'heading', value: 'Context' },
+          {
+            type: 'text',
+            value: 'Machine learning models are trained on large sets of labeled data. For 3D data, people use specialized annotation tools to label what the model should learn.'
+          },
+          {
+            type: 'text',
+            value: 'Details of this work are confidential, so this summary is brief. More is available on request.',
+            italic: true
+          }
+        ]
+      },
+      {
+        id: 'work',
+        title: 'Work',
+        content: [
+          { type: 'heading', value: 'Work' },
+          {
+            type: 'text',
+            value: 'I expanded and refined features of 3D annotation tools used in the model training workflow.'
+          },
+          {
+            type: 'placeholder',
+            value: 'Add what you can share in general terms: the kind of problem annotators faced and how visualization helped.'
+          }
+        ]
+      },
+      {
+        id: 'role',
+        title: 'Role',
+        content: [
+          { type: 'heading', value: 'Role' },
+          {
+            type: 'text',
+            value: 'Roles: data visualization, UX/UI design and UI development. Team: product designer and engineers.'
+          }
+        ]
+      }
+    ]
   }
 };
