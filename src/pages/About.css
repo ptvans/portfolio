@@ -30,6 +30,12 @@
 
 .about-studio strong {
   font-weight: 800;
+  color: #ffffff;
+}
+
+/* White would disappear on the light theme; use its heading color instead. */
+body.light .about-studio strong {
+  color: #363b56;
 }
 
 .about-header {
