@@ -9,7 +9,6 @@ A minimalist product design portfolio website built with React, featuring case s
 - **Image Lightbox**: Click any image to view in full-screen overlay
 - **Theme Toggle**: Switch between light and dark modes (preference saved to localStorage)
 - **Responsive Design**: Works beautifully on desktop and mobile
-- **GitHub Pages Deployment**: Automatic deployment via GitHub Actions
 
 ## Getting Started
 
@@ -42,40 +41,9 @@ npm run build
 
 This creates an optimized production build in the `build/` folder.
 
-## Deployment to GitHub Pages
+## Deployment
 
-> **Moving to Vercel at www.getthom.com.** See [DEPLOYMENT.md](DEPLOYMENT.md) for the
-> Vercel setup and the cutover plan. GitHub Pages stays live until the switch.
-
-This project is configured to automatically deploy to GitHub Pages when you push to the `main` branch.
-
-### Setup Instructions
-
-1. **Enable GitHub Pages in your repository:**
-   - Go to your repository Settings
-   - Navigate to "Pages" in the sidebar
-   - Under "Build and deployment", set Source to "GitHub Actions"
-
-2. **Push your code to GitHub:**
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
-   git push -u origin main
-   ```
-
-3. The GitHub Action will automatically build and deploy your site.
-
-4. **If using a subdirectory** (e.g., `username.github.io/portfolio`):
-   - Update the `homepage` field in `package.json` to:
-     ```json
-     "homepage": "https://YOUR_USERNAME.github.io/YOUR_REPO"
-     ```
-
-5. **If using a custom domain**:
-   - Update the `homepage` field in `package.json` to your domain
-   - Add a `CNAME` file to the `public/` folder with your domain
+The site is hosted on Vercel at www.getthom.com. See [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Customizing Content
 
@@ -138,9 +106,6 @@ portfolio/
 │   ├── App.js                    # Main app with routing
 │   ├── App.css                   # Global styles
 │   └── index.js                  # Entry point
-├── .github/
-│   └── workflows/
-│       └── deploy.yml            # GitHub Actions workflow
 └── package.json
 ```
 
@@ -149,8 +114,7 @@ portfolio/
 - **React** - UI framework
 - **React Router** - Client-side routing
 - **Create React App** - Build tooling
-- **GitHub Actions** - CI/CD
-- **GitHub Pages** - Hosting
+- **Vercel** - Hosting
 
 ## License
 
