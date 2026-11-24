@@ -76,7 +76,7 @@ function About({ theme, toggleTheme }) {
         </header>
 
         <section className="about-block">
-          <h2>Skills</h2>
+          <h2>Expertise</h2>
           <ul className="about-skills">
             {SKILLS.map((skill) => (
               <li key={skill}>{skill}</li>
@@ -85,7 +85,6 @@ function About({ theme, toggleTheme }) {
         </section>
 
         <section className="about-block">
-          <h2>Specialties</h2>
           <p>
             Specializing in B2B/SaaS across many industry verticals, including employee tools, enterprise
             software, workflows, automation, autonomous systems, machine learning, data visualization, app
