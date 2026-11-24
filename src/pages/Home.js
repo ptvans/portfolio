@@ -9,7 +9,7 @@ function Home({ theme, toggleTheme }) {
       <div className="home-container">
         <header className="hero">
           <h1 className="hero-title">
-            Get Thom
+            Thom
             <img
               src="./images/paul-blue-avatar-pfp.jpg"
               alt="."
