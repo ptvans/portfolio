@@ -28,6 +28,10 @@
   color: var(--body-text);
 }
 
+.about-studio strong {
+  font-weight: 800;
+}
+
 .about-header {
   margin-bottom: 56px;
 }

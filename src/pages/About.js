@@ -63,7 +63,7 @@ function About({ theme, toggleTheme }) {
         <section className="about-intro">
           <img src="./images/paul-profile.jpg" alt="Paul Van" className="about-photo" />
           <p className="about-studio">
-            &ldquo;Thom&rdquo; is a design studio run by Paul Van.
+            <strong>Thom</strong> is a design studio founded by Paul Van.
           </p>
         </section>
 
