@@ -467,6 +467,362 @@ export const caseStudies = {
         ]
       }
     ]
+  },
+  'california-groundwater': {
+    title: "Make California's Groundwater Crisis Visible",
+    subtitle: 'Stanford University · Water in the West',
+    sections: [
+      {
+        id: 'context',
+        title: 'Context',
+        content: [
+          { type: 'heading', value: 'Context' },
+          {
+            type: 'text',
+            value: 'Water in the West, a research group at Stanford University, had analyzed the groundwater crisis in the State of California and needed to bring that research to policymakers and the public.'
+          },
+          {
+            type: 'text',
+            value: 'We partnered with their team for a six-month project, assisting with data analysis, report writing, interactive data visualization design, and a publishing framework for a series of online stories.'
+          },
+          {
+            type: 'image',
+            alt: 'Hero image from the Understanding California\'s Groundwater series',
+            caption: 'IMAGE NEEDED: hero visualization or story landing page'
+          }
+        ]
+      },
+      {
+        id: 'problem',
+        title: 'Problem',
+        content: [
+          { type: 'heading', value: 'Problem' },
+          {
+            type: 'text',
+            value: 'Groundwater is invisible. Its decline happens underground, over decades, across thousands of wells, and the data is scattered across agencies. That makes the scale of overdraft hard for non-experts to grasp, and hard to act on.'
+          },
+          {
+            type: 'text',
+            parts: [
+              'The research team wanted to tell ',
+              { type: 'link', text: 'a complex story about groundwater overdraft and its impacts', url: 'https://waterinthewest.stanford.edu/groundwater' },
+              ' in a form that could inform policy.'
+            ]
+          },
+          {
+            type: 'placeholder',
+            value: 'Add the audience and the key questions the stories had to answer (e.g. legislators during the SGMA debate, journalists, the public).'
+          }
+        ]
+      },
+      {
+        id: 'approach',
+        title: 'Approach & Collaboration',
+        content: [
+          { type: 'heading', value: 'Approach & Collaboration' },
+          {
+            type: 'text',
+            value: 'Team: creative director, technology lead, and the Water in the West researchers. My roles: data analysis, data visualization design, content strategy, and the publishing framework.'
+          },
+          {
+            type: 'list',
+            items: [
+              'Data analysis: work the research datasets into findings that could be shown, not just stated',
+              'Report writing: shape the research into a series of short, readable stories',
+              'Visualization design: one interactive graphic per key finding',
+              'Publishing framework: a reusable template so each new story shipped quickly and consistently'
+            ]
+          },
+          {
+            type: 'placeholder',
+            value: 'Describe the visualization principles you applied: chart choices, color scales, annotation, accessibility, how you handled uncertainty in the data.'
+          }
+        ]
+      },
+      {
+        id: 'solution',
+        title: 'Solution',
+        content: [
+          { type: 'heading', value: 'Solution' },
+          {
+            type: 'text',
+            value: 'The result was "Understanding California\'s Groundwater," a multimedia series of articles and interactive data visualizations published by Water in the West.'
+          },
+          {
+            type: 'text',
+            value: 'Among the graphics in the published series: an interactive map of 55 groundwater conflicts reported from 2008 to 2012, showing where they occurred, what the problems were and how they were handled; and a comparison putting the Central Valley\'s loss of about 140 cubic kilometers of freshwater in terms of Lake Mead\'s capacity.'
+          },
+          {
+            type: 'image',
+            alt: 'Interactive map of groundwater conflicts in California',
+            caption: 'IMAGE NEEDED: groundwater conflict map'
+          },
+          {
+            type: 'image',
+            alt: 'Groundwater depletion compared with reservoir capacity',
+            caption: 'IMAGE NEEDED: capacity comparison graphic'
+          }
+        ]
+      },
+      {
+        id: 'impact',
+        title: 'Impact',
+        content: [
+          { type: 'heading', value: 'Impact' },
+          {
+            type: 'placeholder',
+            value: 'Add outcomes: readership, press coverage, citations in policy discussions, or how the researchers used the series.'
+          },
+          {
+            type: 'text',
+            parts: [
+              { type: 'link', text: 'See the series on Water in the West', url: 'https://waterinthewest.stanford.edu/groundwater' },
+              '.'
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  'city-monitoring': {
+    title: 'Spot Service Problems Across 650+ Cities',
+    subtitle: 'Uber',
+    sections: [
+      {
+        id: 'context',
+        title: 'Context',
+        content: [
+          { type: 'heading', value: 'Context' },
+          {
+            type: 'text',
+            value: 'Uber must track the performance of the rider and driver apps across 650+ cities, to detect system-level problems as well as real-world events that can degrade and disrupt service.'
+          },
+          {
+            type: 'image',
+            alt: 'City monitoring overview',
+            caption: 'IMAGE NEEDED: monitoring overview (obscure data if needed)'
+          }
+        ]
+      },
+      {
+        id: 'problem',
+        title: 'Problem',
+        content: [
+          { type: 'heading', value: 'Problem' },
+          {
+            type: 'text',
+            value: 'With hundreds of cities each producing many signals, operations analysts could not watch everything. They needed to know quickly when a city was behaving abnormally, and enough context to tell an outage from a real-world event.'
+          },
+          {
+            type: 'placeholder',
+            value: 'Add which signals were monitored and how analysts found problems before this tool.'
+          }
+        ]
+      },
+      {
+        id: 'approach',
+        title: 'Approach & Collaboration',
+        content: [
+          { type: 'heading', value: 'Approach & Collaboration' },
+          {
+            type: 'text',
+            value: 'Team: lead designer, three engineers, two data scientists and a product manager. My roles: user research, user experience, visual design and data visualization design.'
+          },
+          {
+            type: 'placeholder',
+            value: 'Describe research with operations analysts, and how you visualized predicted ranges and anomalies so they could be read at a glance.'
+          }
+        ]
+      },
+      {
+        id: 'solution',
+        title: 'Solution',
+        content: [
+          { type: 'heading', value: 'Solution' },
+          {
+            type: 'text',
+            value: 'We created statistical models to monitor key signals coming from each city, and provided detailed alerts to operations analysts when systems exceeded our predicted ranges.'
+          },
+          {
+            type: 'image',
+            alt: 'Signal compared against its predicted range',
+            caption: 'IMAGE NEEDED: a signal plotted against its predicted range'
+          },
+          {
+            type: 'image',
+            alt: 'Alert detail for an analyst',
+            caption: 'IMAGE NEEDED: alert detail view'
+          }
+        ]
+      },
+      {
+        id: 'impact',
+        title: 'Impact',
+        content: [
+          { type: 'heading', value: 'Impact' },
+          {
+            type: 'placeholder',
+            value: 'Add outcomes: detection time, incidents caught, adoption by analysts.'
+          }
+        ]
+      }
+    ]
+  },
+  'move-o-scope': {
+    title: 'Explore Your Whole History of Movement',
+    subtitle: 'Halftone · Move-O-Scope',
+    sections: [
+      {
+        id: 'context',
+        title: 'Context',
+        content: [
+          { type: 'heading', value: 'Context' },
+          {
+            type: 'text',
+            value: 'As avid users of the Moves app, which tracks your movements throughout the day, we were disappointed that it only displayed a single day\'s worth of data at a time.'
+          },
+          {
+            type: 'image',
+            alt: 'Move-O-Scope map overview',
+            caption: 'IMAGE NEEDED: Move-O-Scope map overview'
+          }
+        ]
+      },
+      {
+        id: 'problem',
+        title: 'Problem',
+        content: [
+          { type: 'heading', value: 'Problem' },
+          {
+            type: 'text',
+            value: 'Self-tracking data gets interesting over months and years: routines, trips, changes in habits. A one-day view hides all of that.'
+          }
+        ]
+      },
+      {
+        id: 'solution',
+        title: 'Solution',
+        content: [
+          { type: 'heading', value: 'Solution' },
+          {
+            type: 'text',
+            value: 'Built on the Moves API in 2014, Move-O-Scope lets people explore and filter their entire history of movements, with a map overview, shortcuts and analysis.'
+          },
+          {
+            type: 'text',
+            value: 'People can filter the view by date, day of week and time of day to rediscover what they were up to on a given day.'
+          },
+          {
+            type: 'image',
+            alt: 'Filtering by day of week and time of day',
+            caption: 'IMAGE NEEDED: filters by day of week and time of day'
+          },
+          {
+            type: 'placeholder',
+            value: 'Describe the visualization design: map encoding, density at scale, how filters and map stay linked.'
+          }
+        ]
+      },
+      {
+        id: 'role',
+        title: 'Role',
+        content: [
+          { type: 'heading', value: 'Role' },
+          {
+            type: 'text',
+            value: 'Roles: product concept, UX/UI design and development. Team: product designer and lead engineer.'
+          }
+        ]
+      },
+      {
+        id: 'impact',
+        title: 'Impact',
+        content: [
+          { type: 'heading', value: 'Impact' },
+          {
+            type: 'text',
+            value: 'Donations from users helped maintain the project, and people shared personal stories from the tool on social media.'
+          },
+          {
+            type: 'placeholder',
+            value: 'Add numbers if you have them: users, maps generated, press.'
+          }
+        ]
+      }
+    ]
+  },
+  'cloud-infrastructure': {
+    title: 'Diagnose Trouble in Cloud Infrastructure',
+    subtitle: 'CloudPhysics',
+    sections: [
+      {
+        id: 'context',
+        title: 'Context',
+        content: [
+          { type: 'heading', value: 'Context' },
+          {
+            type: 'text',
+            value: 'CloudPhysics develops tools that let virtual infrastructure administrators diagnose system health and solve problems proactively rather than reactively.'
+          },
+          {
+            type: 'text',
+            value: 'Their existing product needed to evolve and expand to stay competitive as other companies entered the space.'
+          }
+        ]
+      },
+      {
+        id: 'approach',
+        title: 'Approach & Collaboration',
+        content: [
+          { type: 'heading', value: 'Approach & Collaboration' },
+          {
+            type: 'text',
+            value: 'We worked with multiple groups on design strategy, the use of data in marketing, and improving the existing user experience. We ran several rounds of brainstorming, then designed and developed new modules for integration into the product.'
+          }
+        ]
+      },
+      {
+        id: 'solution',
+        title: 'Solution',
+        content: [
+          { type: 'heading', value: 'Solution' },
+          {
+            type: 'text',
+            value: 'One module shows storage capacity risk: datastores plotted by estimated days until full, with filters for datastore type, location and vCenter, each showing how many datastores it holds.'
+          },
+          {
+            type: 'image',
+            alt: 'Datastores by estimated days to full, with faceted filters',
+            caption: 'IMAGE NEEDED: estimated days to full, with filters'
+          },
+          {
+            type: 'placeholder',
+            value: 'Confirm what the module does, and add the other modules you designed.'
+          }
+        ]
+      },
+      {
+        id: 'role',
+        title: 'Role',
+        content: [
+          { type: 'heading', value: 'Role' },
+          {
+            type: 'text',
+            value: 'Roles: product strategy, UX/UI design and development. Team: product designer and lead engineer.'
+          }
+        ]
+      },
+      {
+        id: 'impact',
+        title: 'Impact',
+        content: [
+          { type: 'heading', value: 'Impact' },
+          {
+            type: 'placeholder',
+            value: 'Add outcomes: modules shipped, customer use, results.'
+          }
+        ]
+      }
+    ]
   }
 };
-

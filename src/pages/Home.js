@@ -62,6 +62,21 @@ function Home({ theme, toggleTheme }) {
             <li>
               <Link to="/case-study/app-performance">Facebook: Make the Mobile Apps Faster</Link>
             </li>
+          </ul>
+          <h2 className="case-studies-subhead">Data visualization</h2>
+          <ul>
+            <li>
+              <Link to="/case-study/california-groundwater">Stanford: Make California's Groundwater Crisis Visible</Link>
+            </li>
+            <li>
+              <Link to="/case-study/city-monitoring">Uber: Spot Service Problems Across 650+ Cities</Link>
+            </li>
+            <li>
+              <Link to="/case-study/move-o-scope">Halftone: Explore Your Whole History of Movement</Link>
+            </li>
+            <li>
+              <Link to="/case-study/cloud-infrastructure">CloudPhysics: Diagnose Trouble in Cloud Infrastructure</Link>
+            </li>
             <li className="case-studies-more">
               (More available upon request...)
             </li>

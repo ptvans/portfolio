@@ -128,6 +128,23 @@ function CaseStudy({ theme, toggleTheme }) {
                     ))}
                   </ol>
                 );
+              } else if (block.type === 'placeholder') {
+                // Draft note for content still to be written; shown so gaps can't be missed.
+                return (
+                  <p key={index} className="content-placeholder">
+                    <strong>To fill in:</strong> {block.value}
+                  </p>
+                );
+              } else if (block.type === 'image' && !block.src) {
+                // Image still to be added: a labeled empty frame, not clickable.
+                return (
+                  <figure key={index} className="content-image">
+                    <div className="image-placeholder" role="img" aria-label={block.alt}>
+                      {block.alt}
+                    </div>
+                    {block.caption && <figcaption>{block.caption}</figcaption>}
+                  </figure>
+                );
               } else if (block.type === 'image') {
                 return (
                   <figure key={index} className="content-image">

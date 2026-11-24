@@ -230,3 +230,7 @@ body.light .case-studies-section .case-studies-more {
   opacity: 1;
 }
 
+
+.case-studies-section .case-studies-subhead {
+  margin-top: 32px;
+}
