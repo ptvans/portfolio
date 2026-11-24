@@ -5,6 +5,29 @@
   margin-bottom: 48px;
 }
 
+.about-intro {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.about-photo {
+  flex: none;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.about-studio {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+  line-height: 1.45;
+  color: var(--body-text);
+}
+
 .about-header {
   margin-bottom: 56px;
 }

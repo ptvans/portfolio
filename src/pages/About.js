@@ -60,6 +60,13 @@ function About({ theme, toggleTheme }) {
           <img src="./images/paul-blue-avatar-pfp.jpg" alt="" className="avatar-image" />
         </Link>
 
+        <section className="about-intro">
+          <img src="./images/paul-profile.jpg" alt="Paul Van" className="about-photo" />
+          <p className="about-studio">
+            &ldquo;Thom&rdquo; is a design studio run by Paul Van.
+          </p>
+        </section>
+
         <header className="about-header">
           <h1>About</h1>
           <p className="about-lede">
