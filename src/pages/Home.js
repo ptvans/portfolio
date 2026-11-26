@@ -68,6 +68,15 @@ function Home({ theme, toggleTheme }) {
           </ul>
         </section>
 
+        <section className="case-studies-section experiments-section">
+          <h2>Experiments</h2>
+          <ul>
+            <li>
+              <a href="./relationship-matrix/">Relationship Matrix: What We Want From a Partner, in 3D</a>
+            </li>
+          </ul>
+        </section>
+
         <section className="connect-section">
           <h2>Connect</h2>
           <ul>

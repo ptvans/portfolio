@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relationship Matrix</title>
+<meta name="description" content="What we want from a partner, mapped on two tensions — safety vs. growth, practical vs. spiritual — with money as a third dimension.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#002b36">
+<link rel="icon" href="../favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Averia+Sans+Libre:wght@400;700&family=Figtree:ital,wght@0,400..700;1,400&display=swap" rel="stylesheet">
+<style>
+  /* Solarized (dark) */
+  :root {
+    --base03: #002b36; --base02: #073642; --base01: #586e75; --base00: #657b83;
+    --base0: #839496;  --base1: #93a1a1;  --base2: #eee8d5;  --base3: #fdf6e3;
+    --yellow: #b58900; --orange: #cb4b16; --red: #dc322f; --magenta: #d33682;
+    --violet: #6c71c4; --blue: #268bd2;  --cyan: #2aa198;  --green: #859900;
+
+    --bg: var(--base03);
+    --surface: var(--base02);
+    --line: rgba(147, 161, 161, 0.18);
+    --text: var(--base0);
+    --strong: var(--base1);
+    --heading: var(--base2);
+    --muted: var(--base01);
+    --a: var(--orange);
+    --b: var(--blue);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); }
+  body {
+    font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; color: inherit; }
+  .page { max-width: 1240px; margin: 0 auto; padding: 28px 24px 40px; }
+
+  /* Header */
+  .back { color: var(--muted); text-decoration: none; font-size: 13px; letter-spacing: .02em; }
+  .back:hover { color: var(--strong); }
+  h1 {
+    font-family: 'Averia Sans Libre', 'Figtree', sans-serif; font-weight: 700;
+    color: var(--heading); font-size: 34px; line-height: 1.1; margin: 14px 0 8px;
+    letter-spacing: .01em;
+  }
+  .lede { max-width: 64ch; margin: 0 0 20px; color: var(--text); }
+  .lede b { color: var(--strong); font-weight: 600; }
+
+  /* Controls */
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .seg {
+    display: inline-flex; padding: 3px; gap: 2px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--line);
+  }
+  .seg button {
+    border: 0; background: transparent; padding: 7px 13px; border-radius: 7px;
+    color: var(--text); cursor: pointer; font-size: 14px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+  }
+  .seg button:hover { color: var(--heading); }
+  .seg button[aria-pressed="true"] { background: var(--bg); color: var(--heading); box-shadow: 0 0 0 1px var(--line); }
+  .seg button:focus-visible, .ghost:focus-visible, .card:focus-visible, .linkish:focus-visible, .stage:focus-visible {
+    outline: 2px solid var(--cyan); outline-offset: 2px;
+  }
+  .key {
+    display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 5px;
+    font-size: 11px; font-weight: 700; color: var(--base03);
+  }
+  .key.a { background: var(--a); } .key.b { background: var(--b); }
+  .money { transition: opacity .35s ease; }
+  .money[data-off] { opacity: .35; pointer-events: none; }
+  .ghost {
+    border: 1px solid var(--line); background: transparent; color: var(--text);
+    padding: 7px 12px; border-radius: 8px; cursor: pointer; font-size: 13px;
+    transition: opacity .35s ease;
+  }
+  .ghost:hover { color: var(--heading); }
+  .ghost[data-off] { opacity: 0; pointer-events: none; }
+  .hint { color: var(--muted); font-size: 13px; transition: opacity .35s ease; }
+  .hint[data-off] { opacity: 0; }
+
+  /* Layout */
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 20px; align-items: start; }
+  .stage {
+    position: relative; width: 100%; height: min(74vh, 760px); min-height: 480px;
+    border-radius: 16px; overflow: hidden; user-select: none; -webkit-user-select: none;
+    background:
+      radial-gradient(ellipse at 50% 45%, rgba(7, 54, 66, .9), rgba(0, 43, 54, 0) 70%),
+      var(--bg);
+    border: 1px solid var(--line);
+    touch-action: auto;
+  }
+  .stage[data-3d] { cursor: grab; touch-action: pan-y; }
+  .stage[data-3d].dragging { cursor: grabbing; }
+  .stage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .labels { position: absolute; inset: 0; pointer-events: none; }
+
+  /* Axis labels */
+  .ax {
+    position: absolute; left: 0; top: 0; white-space: nowrap; pointer-events: none;
+    font-family: 'Averia Sans Libre', 'Figtree', sans-serif; font-weight: 700;
+    font-size: 15px; letter-spacing: .08em; text-transform: uppercase; color: var(--base1);
+    line-height: 1.15;
+  }
+  .ax small {
+    display: block; font-family: 'Figtree', sans-serif; font-weight: 400; font-size: 12px;
+    letter-spacing: .02em; text-transform: none; color: var(--muted);
+  }
+  .ax.z-a { color: var(--a); } .ax.z-b { color: var(--b); }
+
+  /* Point cards */
+  .card {
+    position: absolute; left: 0; top: 0; width: max-content; max-width: 210px;
+    pointer-events: auto; cursor: pointer; text-align: left;
+    background: rgba(7, 54, 66, .92); border: 1px solid var(--line);
+    border-left: 3px solid var(--c); border-radius: 10px; padding: 8px 11px 9px;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, .28);
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .card:hover { background: rgba(7, 54, 66, 1); border-color: rgba(147, 161, 161, .35); border-left-color: var(--c); }
+  .card[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--c), 0 8px 26px rgba(0, 0, 0, .35); }
+  .card .t {
+    display: block; font-family: 'Averia Sans Libre', 'Figtree', sans-serif; font-weight: 700;
+    color: var(--c); font-size: 15px; line-height: 1.15; margin-bottom: 4px;
+  }
+  .card .t .mk { font-family: 'Figtree', sans-serif; font-size: 11px; font-weight: 600; opacity: .8; margin-left: 4px; }
+  .cloud { display: flex; flex-wrap: wrap; gap: 1px 7px; align-items: baseline; line-height: 1.25; }
+  .cloud span { white-space: nowrap; }
+  .w3 { font-size: 14px; color: var(--base2); font-weight: 600; }
+  .w2 { font-size: 13px; color: var(--base1); }
+  .w1 { font-size: 12px; color: var(--base0); }
+  .tag {
+    position: absolute; left: 0; top: 0; white-space: nowrap; pointer-events: auto; cursor: pointer;
+    font-size: 12px; color: var(--c); border: 0; background: none; padding: 2px 4px;
+  }
+
+  /* Panel */
+  .panel {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+    padding: 20px 20px 22px; min-height: 200px;
+  }
+  .panel h2 {
+    font-family: 'Averia Sans Libre', 'Figtree', sans-serif; font-weight: 700; color: var(--heading);
+    font-size: 24px; line-height: 1.15; margin: 2px 0 6px;
+  }
+  .panel h3 {
+    font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+    font-weight: 600; margin: 18px 0 7px;
+  }
+  .panel p { margin: 0 0 10px; }
+  .eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--c, var(--muted)); font-weight: 600; }
+  .essence { color: var(--strong); font-style: italic; }
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .chip {
+    font-size: 13px; padding: 2px 9px; border-radius: 999px; color: var(--base1);
+    background: rgba(0, 43, 54, .7); border: 1px solid var(--line);
+  }
+  .chip.light { border-color: rgba(133, 153, 0, .45); }
+  .chip.shadow { border-color: rgba(220, 50, 47, .45); color: var(--base0); }
+  .fear { border-left: 2px solid var(--red); padding-left: 10px; color: var(--strong); }
+  .drift { border-left: 2px solid var(--c, var(--cyan)); padding-left: 10px; color: var(--strong); }
+  .panel-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .close {
+    border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 20px; line-height: 1;
+    padding: 2px 4px; border-radius: 6px;
+  }
+  .close:hover { color: var(--heading); }
+  .list { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+  .linkish {
+    display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; border: 0; cursor: pointer;
+    background: transparent; padding: 7px 8px; border-radius: 8px; color: var(--strong);
+  }
+  .linkish:hover { background: rgba(0, 43, 54, .6); color: var(--heading); }
+  .linkish .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); flex: none; }
+  .linkish .sub { color: var(--muted); font-size: 12px; margin-left: auto; white-space: nowrap; }
+  .axis-key { display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; font-size: 14px; }
+  .axis-key b { color: var(--strong); font-weight: 600; white-space: nowrap; }
+  .note { font-size: 13px; color: var(--muted); margin-top: 16px; }
+
+  /* Narrow stage: smaller cards, only the strongest words */
+  .stage[data-compact] .card { max-width: 150px; padding: 6px 9px 7px; }
+  .stage[data-compact] .card .t { font-size: 13.5px; }
+  .stage[data-compact] .w1 { display: none; }
+  .stage[data-compact] .w2 { font-size: 12px; }
+  .stage[data-compact] .w3 { font-size: 13px; }
+  /* vertical-axis labels run along the axis so the cards can use the space beside it */
+  .stage[data-compact] .ax.vert { writing-mode: vertical-rl; font-size: 11px; letter-spacing: .14em; }
+  .stage[data-compact] .ax.vert small { display: none; }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .stage { height: min(78vh, 640px); min-height: 440px; }
+  }
+  @media (max-width: 560px) {
+    .page { padding: 18px 16px 32px; }
+    h1 { font-size: 28px; }
+    .stage { height: 118vw; min-height: 420px; max-height: 620px; border-radius: 12px; }
+    .stage[data-compact] .card { max-width: 128px; }
+    .stage[data-compact] .w2 { font-size: 11.5px; }
+    .stage[data-compact] .w3 { font-size: 12.5px; }
+    .tag { display: none; }
+    .ax { font-size: 12px; } .ax small { font-size: 10.5px; }
+    .hint { display: none; }
+    .seg button { padding: 7px 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <a class="back" href="../">← Thom</a>
+    <h1>Relationship Matrix</h1>
+    <p class="lede">
+      What we look for in a partner tends to sort along two tensions: whether we are seeking
+      <b>safety</b> or <b>growth</b> (how much fear is steering), and whether the need is
+      <b>spiritual</b> or <b>practical</b>. Add money as a third dimension and every position splits in two.
+    </p>
+  </header>
+
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Dimensions">
+      <button type="button" data-dim="2" aria-pressed="true">2D</button>
+      <button type="button" data-dim="3" aria-pressed="false">3D · add money</button>
+    </div>
+    <div class="seg money" role="group" aria-label="Money attitude" data-off>
+      <button type="button" data-money="A" aria-pressed="true" disabled><span class="key a">A</span>Fluid</button>
+      <button type="button" data-money="B" aria-pressed="false" disabled><span class="key b">B</span>Strategic</button>
+    </div>
+    <button type="button" class="ghost" id="reset" data-off tabindex="-1">Reset view</button>
+    <span class="hint" id="hint" data-off>Drag to rotate · arrow keys work too</span>
+  </div>
+
+  <main class="layout">
+    <div class="stage" id="stage" tabindex="0" role="img"
+         aria-label="Relationship matrix. Horizontal axis runs from Safety (high fear) to Growth (low fear); vertical axis from Practical (material) to Spiritual.">
+      <svg id="svg" aria-hidden="true"></svg>
+      <div class="labels" id="labels"></div>
+    </div>
+    <aside class="panel" id="panel" aria-live="polite"></aside>
+  </main>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ------------------------------------------------------------------ data */
+
+  const COL = {
+    magenta: '#d33682', cyan: '#2aa198', yellow: '#b58900', green: '#859900',
+    orange: '#cb4b16', blue: '#268bd2', red: '#dc322f',
+    base01: '#586e75', base0: '#839496', base1: '#93a1a1', base2: '#eee8d5', base02: '#073642', base03: '#002b36',
+  };
+
+  // x: -1 Safety (high fear) … +1 Growth (low fear)
+  // y: -1 Practical (material) … +1 Spiritual
+  const P = 0.55;
+  const QUADS = [
+    {
+      id: 'soul', name: 'Soulmates', axes: 'Spiritual × Safety', x: -P, y: P, color: COL.magenta,
+      essence: 'To be fully known, and still chosen.',
+      cloud: [['understood', 3], ['seen', 3], ['honesty', 3], ['acceptance', 2], ['trust', 2], ['belonging', 2], ['attunement', 1], ['tenderness', 1]],
+      facets: {
+        partner: ['empathetic', 'honest', 'emotionally fluent', 'loyal', 'accepting', 'attentive'],
+        together: ['long talks', 'shared rituals', 'quiet presence', 'inside language', 'remembering'],
+        excel: ['attunement', 'deep listening', 'repair after conflict', 'emotional honesty'],
+        needs: ['to be seen', 'acceptance', 'belonging', 'emotional safety', 'being chosen'],
+      },
+      fear: 'Being unknown — alone inside your own life.',
+    },
+    {
+      id: 'trav', name: 'Fellow Travelers', axes: 'Spiritual × Growth', x: P, y: P, color: COL.cyan,
+      essence: 'Two people who make each other more themselves.',
+      cloud: [['inspired', 3], ['challenged', 3], ['discovery', 3], ['vulnerability', 2], ['actualization', 2], ['curiosity', 2], ['courage', 1], ['play', 1]],
+      facets: {
+        partner: ['curious', 'courageous', 'self-aware', 'inspiring', 'open', 'playful'],
+        together: ['explore', 'learn', 'make things', 'travel', 'take on hard things', 'reinvent'],
+        excel: ['mutual challenge', 'creative collaboration', 'honest feedback', 'cheering each other on'],
+        needs: ['inspiration', 'freedom', 'meaning', 'novelty', 'respect for the journey'],
+      },
+      fear: 'Stagnation — a life that stops becoming.',
+    },
+    {
+      id: 'harbor', name: 'Safe Harbor', axes: 'Practical × Safety', x: -P, y: -P, color: COL.yellow,
+      essence: 'Someone who will be there. Every time.',
+      cloud: [['security', 3], ['predictability', 3], ['availability', 2], ['commitment', 2], ['savings', 2], ['reliability', 2], ['insurance', 1], ['never leave me', 1]],
+      facets: {
+        partner: ['reliable', 'consistent', 'present', 'committed', 'protective', 'steady'],
+        together: ['routines', 'home-making', 'planning ahead', 'caretaking', 'showing up'],
+        excel: ['dependability', 'keeping promises', 'contingency planning', 'calm under stress'],
+        needs: ['predictability', 'security', 'availability', 'provision', '“never leave me”'],
+      },
+      fear: 'Abandonment and scarcity — being left without.',
+    },
+    {
+      id: 'build', name: 'Builders', axes: 'Practical × Growth', x: P, y: -P, color: COL.green,
+      essence: 'A team that gets things done — and gets ahead.',
+      cloud: [['effective', 3], ['productive', 3], ['making money', 2], ['efficient', 2], ['ambition', 2], ['running the house', 2], ['teamwork', 1], ['juggling it all', 1]],
+      facets: {
+        partner: ['capable', 'driven', 'organized', 'resourceful', 'accountable'],
+        together: ['build a career or business', 'run the household', 'divide and conquer', 'set goals', 'make money'],
+        excel: ['execution', 'logistics', 'earning', 'efficiency', 'juggling responsibilities'],
+        needs: ['effectiveness', 'progress', 'momentum', 'shared ambition', 'a well-run life'],
+      },
+      fear: 'Failure and chaos — falling behind.',
+    },
+  ];
+
+  const MONEY = {
+    A: {
+      key: 'A', name: 'Fluid', color: COL.orange,
+      about: 'Money as flow. Spend it, share it, trust more will come — a kind of material spiritualism.',
+      light: ['spontaneous', 'generous', 'scrappy', 'present-tense', 'resourceful', 'unattached'],
+      shadow: ['careless', 'naive', 'wasteful', 'avoids the numbers'],
+    },
+    B: {
+      key: 'B', name: 'Strategic', color: COL.blue,
+      about: 'Money as a tool. Learn it, plan it, make it work — capability you can lean on.',
+      light: ['responsible', 'prudent', 'skilled', 'savvy', 'uses leverage', 'capable'],
+      shadow: ['controlling', 'anxious', 'scorekeeping', 'rigid'],
+    },
+  };
+
+  // dx/dy: how the money attitude moves the point away from its 2D origin.
+  const VARIANTS = [
+    {
+      q: 'soul', m: 'A', name: 'Romantics', dx: -0.08, dy: 0.14,
+      essence: 'Love spoken through generosity and shared experience.',
+      cloud: [['generous', 3], ['experiences', 3], ['gifts', 2], ['spontaneous', 2], ['romance', 2], ['we’ll figure it out', 1]],
+      light: ['spending as affection', 'experiences over savings', 'giving without counting'],
+      shadow: ['money talks avoided to keep the peace', 'surprises that turn into debt'],
+      drift: 'Rises further into the spiritual, and edges toward fear: money worries that go unspoken still go somewhere.',
+    },
+    {
+      q: 'soul', m: 'B', name: 'Open Books', dx: 0.13, dy: -0.06,
+      essence: 'Honesty that reaches all the way to the bank statement.',
+      cloud: [['transparency', 3], ['joint goals', 3], ['no secrets', 2], ['money dates', 2], ['shared accounts', 2], ['trust', 1]],
+      light: ['full financial transparency', 'planning together as intimacy', 'shared goals'],
+      shadow: ['every purchase becomes a conversation', 'love audited'],
+      drift: 'Moves toward growth (security frees attention for each other) and a little toward the practical.',
+    },
+    {
+      q: 'trav', m: 'A', name: 'Free Spirits', dx: 0.15, dy: 0.12,
+      essence: 'Rich in experience, light on possessions.',
+      cloud: [['adventure', 3], ['sabbaticals', 3], ['scrappy', 2], ['minimalism', 2], ['improvisation', 2], ['side quests', 1]],
+      light: ['freedom over stuff', 'happy to be broke for a good story', 'creative with little'],
+      shadow: ['no runway', 'one emergency from a crisis'],
+      drift: 'Pushes further into growth and spirit — while quietly storing up risk for later.',
+    },
+    {
+      q: 'trav', m: 'B', name: 'Patrons', dx: -0.03, dy: -0.13,
+      essence: 'Funding each other’s becoming.',
+      cloud: [['runway', 3], ['investing in each other', 3], ['freedom fund', 2], ['tuition', 2], ['ventures', 2], ['leverage', 1]],
+      light: ['money as runway for each other’s leaps', 'paying for courses, career changes, art'],
+      shadow: ['dreams with an ROI target', 'growth as a project plan'],
+      drift: 'Drifts toward the practical: someone has to model the runway.',
+    },
+    {
+      q: 'harbor', m: 'A', name: 'Scrappy Survivors', dx: -0.15, dy: -0.13,
+      essence: 'We’ll get through it together — paycheck to paycheck.',
+      cloud: [['making do', 3], ['loyalty', 3], ['pooling', 2], ['frugal', 2], ['hustle', 2], ['hard times', 1]],
+      light: ['resourceful', 'bonded through hardship', 'loyal when it counts'],
+      shadow: ['scarcity anxiety', 'money fights', 'nothing in reserve'],
+      drift: 'Sinks deeper into fear and the material: without a cushion, safety becomes the whole agenda.',
+    },
+    {
+      q: 'harbor', m: 'B', name: 'Fortress', dx: 0.12, dy: -0.04,
+      essence: 'Every risk insured, every contingency planned.',
+      cloud: [['emergency fund', 3], ['insurance', 3], ['paid-off home', 2], ['savings', 2], ['wills', 2], ['stability', 1]],
+      light: ['real reserves', 'insurance and estate plans', 'calm in a crisis'],
+      shadow: ['hoarding', 'can’t spend on joy', 'risk-aversion as identity'],
+      drift: 'Eases toward growth: a real cushion lowers the fear.',
+    },
+    {
+      q: 'build', m: 'A', name: 'Hustlers', dx: 0.09, dy: -0.13,
+      essence: 'Work hard, play hard, earn it back.',
+      cloud: [['side gigs', 3], ['high earning', 3], ['momentum', 2], ['upgrades', 2], ['the grind', 2], ['big wins', 1]],
+      light: ['high energy, high output', 'generous with the wins', 'fast to act'],
+      shadow: ['lifestyle creep', 'burnout', 'nothing compounds'],
+      drift: 'Pulls toward the material, and further into growth’s appetite for risk.',
+    },
+    {
+      q: 'build', m: 'B', name: 'Wealth Builders', dx: 0.12, dy: 0.11,
+      essence: 'Compounding, together.',
+      cloud: [['compounding', 3], ['portfolio', 3], ['leverage', 2], ['real estate', 2], ['savvy', 2], ['the long game', 1]],
+      light: ['skilled and savvy', 'money working so you don’t have to', 'long horizons'],
+      shadow: ['love as a balance sheet', 'partnership as merger'],
+      drift: 'Rises toward the spiritual: compounding eventually buys time, and time buys meaning.',
+    },
+  ];
+
+  const ZM = 0.95; // depth of the A (−) and B (+) money planes
+  const qById = Object.fromEntries(QUADS.map(q => [q.id, q]));
+  VARIANTS.forEach(v => { v.id = v.q + '-' + v.m; v.base = qById[v.q]; v.color = v.base.color; });
+  const vById = Object.fromEntries(VARIANTS.map(v => [v.id, v]));
+
+  /* ----------------------------------------------------------------- state */
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const VIEW3D = { yaw: 0.62, pitch: 0.38 };
+  const st = {
+    dim: 2, money: 'A', selected: null,
+    t: 0, m: 0,                      // animated: 0→1 dimension, 0(A)→1(B) money
+    yaw: 0, pitch: 0,                // animated camera
+    goal: { yaw: 0, pitch: 0 },      // camera target
+    userCam: { ...VIEW3D },          // remembered 3D orbit
+  };
+
+  /* ------------------------------------------------------------------- dom */
+
+  const $ = s => document.querySelector(s);
+  const stage = $('#stage'), svg = $('#svg'), labels = $('#labels'), panel = $('#panel');
+  const dimBtns = [...document.querySelectorAll('[data-dim]')];
+  const moneyBtns = [...document.querySelectorAll('[data-money]')];
+  const moneySeg = $('.money'), resetBtn = $('#reset'), hint = $('#hint');
+
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const cloudHTML = words => '<span class="cloud">' + words.map(([w, n]) => `<span class="w${n}">${esc(w)}</span>`).join('') + '</span>';
+
+  function makeAxis(cls, html) {
+    const el = document.createElement('div');
+    el.className = 'ax ' + cls; el.innerHTML = html; labels.appendChild(el); return el;
+  }
+  const AX = {
+    up: makeAxis('vert', 'Spiritual'),
+    down: makeAxis('vert', 'Practical<small>(material)</small>'),
+    left: makeAxis('', 'Safety<small>(high fear)</small>'),
+    right: makeAxis('', 'Growth<small>(low fear)</small>'),
+    za: makeAxis('z-a', 'A · Fluid'),
+    zb: makeAxis('z-b', 'B · Strategic'),
+  };
+  AX.right.style.textAlign = 'right';
+
+  function makeCard(item, isVariant) {
+    const el = document.createElement('button');
+    el.type = 'button'; el.className = 'card'; el.style.setProperty('--c', item.color);
+    el.dataset.id = item.id;
+    const mk = isVariant ? `<span class="mk" style="color:${MONEY[item.m].color}">${item.m}</span>` : '';
+    el.innerHTML = `<span class="t">${esc(item.name)}${mk}</span>${cloudHTML(item.cloud)}`;
+    el.setAttribute('aria-label', `${item.name}: ${item.cloud.map(c => c[0]).join(', ')}`);
+    el.addEventListener('click', () => { if (!drag.moved) select(item.id); });
+    labels.appendChild(el);
+    return el;
+  }
+  function makeTag(v) {
+    const el = document.createElement('button');
+    el.type = 'button'; el.className = 'tag'; el.tabIndex = -1; el.style.setProperty('--c', v.color);
+    el.textContent = v.name;
+    el.addEventListener('click', () => { if (!drag.moved) { setMoney(v.m); select(v.id); } });
+    labels.appendChild(el);
+    return el;
+  }
+  QUADS.forEach(q => { q.card = makeCard(q, false); });
+  VARIANTS.forEach(v => { v.card = makeCard(v, true); v.tag = makeTag(v); });
+
+  /* ------------------------------------------------------------ projection */
+
+  let W = 0, H = 0, S = 0, compact = false;
+  function resize() {
+    const r = stage.getBoundingClientRect();
+    W = r.width; H = r.height;
+    compact = W < 640;
+    toggleAttr(stage, 'data-compact', compact);
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    dirty = true;
+  }
+
+  const D = 6; // camera distance, in world units
+  function project(x, y, z) {
+    const cy = Math.cos(st.yaw), sy = Math.sin(st.yaw), cp = Math.cos(st.pitch), sp = Math.sin(st.pitch);
+    const x1 = x * cy + z * sy, z1 = -x * sy + z * cy;
+    const y2 = y * cp - z1 * sp, z2 = y * sp + z1 * cp;
+    const f = D / (D - z2);
+    return { x: W / 2 + x1 * S * f, y: H / 2 - y2 * S * f, z: z2, f };
+  }
+
+  const lerp = (a, b, k) => a + (b - a) * k;
+  const fmt = n => n.toFixed(1);
+  const pts = arr => arr.map(p => fmt(p.x) + ',' + fmt(p.y)).join(' ');
+  function square(z) { return [project(-1, -1, z), project(1, -1, z), project(1, 1, z), project(-1, 1, z)]; }
+  function line(a, b, attrs) { return `<line x1="${fmt(a.x)}" y1="${fmt(a.y)}" x2="${fmt(b.x)}" y2="${fmt(b.y)}" ${attrs}/>`; }
+
+  function variantPos(v) {
+    const z = (v.m === 'A' ? -ZM : ZM) * st.t;
+    return [v.base.x + v.dx * st.t, v.base.y + v.dy * st.t, z];
+  }
+  const activeness = v => v.m === 'A' ? 1 - st.m : st.m;
+
+  /* ---------------------------------------------------------------- render */
+
+  function render() {
+    const t = st.t, small = W < 560;
+    S = Math.min(W, H) / 2 * (small ? 0.84 : 0.8) * lerp(1, 0.72, t);
+    let out = '';
+
+    // Faint end frames for A and B
+    if (t > 0.01) {
+      out += `<polygon points="${pts(square(-ZM))}" fill="none" stroke="${COL.orange}" stroke-opacity="${0.28 * t}" stroke-dasharray="3 5"/>`;
+      out += `<polygon points="${pts(square(ZM))}" fill="none" stroke="${COL.blue}" stroke-opacity="${0.28 * t}" stroke-dasharray="3 5"/>`;
+    }
+
+    // Base (2D) plane with ruled grid
+    const g = 1 - 0.5 * t;
+    out += `<polygon points="${pts(square(0))}" fill="${COL.base02}" fill-opacity="${0.55 * g}" stroke="${COL.base1}" stroke-opacity="${0.16 * g}"/>`;
+    for (let i = -0.75; i <= 0.76; i += 0.25) {
+      if (Math.abs(i) < 0.01) continue;
+      out += line(project(-1, i, 0), project(1, i, 0), `stroke="${COL.base1}" stroke-opacity="${0.05 * g}"`);
+      out += line(project(i, -1, 0), project(i, 1, 0), `stroke="${COL.base1}" stroke-opacity="${0.05 * g}"`);
+    }
+
+    // The sliding money plane
+    if (t > 0.01) {
+      const zm = lerp(-ZM, ZM, st.m) * t;
+      const mc = mixHex(COL.orange, COL.blue, st.m);
+      out += `<polygon points="${pts(square(zm))}" fill="${mc}" fill-opacity="${0.1 * t}" stroke="${mc}" stroke-opacity="${0.7 * t}" stroke-width="1.25"/>`;
+    }
+
+    // Axes, with the notebook's ball ends
+    const axW = `stroke="${COL.base1}" stroke-opacity="0.55" stroke-width="1.5"`;
+    const xl = project(-1, 0, 0), xr = project(1, 0, 0), yb = project(0, -1, 0), yt = project(0, 1, 0);
+    out += line(xl, xr, axW) + line(yb, yt, axW);
+    [xl, xr, yb, yt].forEach(p => { out += `<circle cx="${fmt(p.x)}" cy="${fmt(p.y)}" r="3.5" fill="${COL.base03}" stroke="${COL.base1}" stroke-opacity="0.7" stroke-width="1.5"/>`; });
+    if (t > 0.01) {
+      const za = project(0, 0, -ZM * t), zb = project(0, 0, ZM * t);
+      out += `<line x1="${fmt(za.x)}" y1="${fmt(za.y)}" x2="${fmt(zb.x)}" y2="${fmt(zb.y)}" stroke="url(#zgrad)" stroke-width="1.5" stroke-opacity="${t}"/>`;
+      out += `<defs><linearGradient id="zgrad" gradientUnits="userSpaceOnUse" x1="${fmt(za.x)}" y1="${fmt(za.y)}" x2="${fmt(zb.x)}" y2="${fmt(zb.y)}"><stop offset="0" stop-color="${COL.orange}"/><stop offset="1" stop-color="${COL.blue}"/></linearGradient></defs>`;
+      out += `<circle cx="${fmt(za.x)}" cy="${fmt(za.y)}" r="4" fill="${COL.orange}" fill-opacity="${t}"/>`;
+      out += `<circle cx="${fmt(zb.x)}" cy="${fmt(zb.y)}" r="4" fill="${COL.blue}" fill-opacity="${t}"/>`;
+    }
+
+    // Points, depth-sorted
+    const items = [];
+    QUADS.forEach(q => {
+      const p = project(q.x, q.y, 0);
+      items.push({ kind: 'q', item: q, p });
+    });
+    if (t > 0.01) {
+      VARIANTS.forEach(v => {
+        const [x, y, z] = variantPos(v);
+        const p = project(x, y, z), o = project(v.base.x, v.base.y, 0);
+        const a = activeness(v);
+        out += line(o, p, `stroke="${v.color}" stroke-opacity="${(0.15 + 0.5 * a) * t}" stroke-dasharray="2 4" stroke-width="1.25"`);
+        items.push({ kind: 'v', item: v, p, a });
+      });
+    }
+    items.sort((i, j) => i.p.z - j.p.z);
+    items.forEach(({ kind, item, p, a }) => {
+      const sel = st.selected === item.id;
+      if (kind === 'q') {
+        // solid dot in 2D, hollow "origin" ring in 3D
+        const r = lerp(7, 5, t) * p.f;
+        out += `<circle cx="${fmt(p.x)}" cy="${fmt(p.y)}" r="${fmt(r)}" fill="${item.color}" fill-opacity="${1 - 0.85 * t}" stroke="${item.color}" stroke-width="1.5" stroke-opacity="${0.4 + 0.3 * (1 - t)}"/>`;
+        if (sel) out += `<circle cx="${fmt(p.x)}" cy="${fmt(p.y)}" r="${fmt(r + 5)}" fill="none" stroke="${item.color}" stroke-opacity="0.6"/>`;
+        if (t < 0.5) out += `<circle cx="${fmt(p.x)}" cy="${fmt(p.y)}" r="16" fill="transparent" data-id="${item.id}" style="cursor:pointer"/>`;
+      } else {
+        const r = lerp(3.5, 6.5, a) * p.f;
+        out += `<circle cx="${fmt(p.x)}" cy="${fmt(p.y)}" r="${fmt(r)}" fill="${item.color}" fill-opacity="${(0.35 + 0.65 * a) * t}" stroke="${COL.base03}" stroke-width="1.5" stroke-opacity="${t}"/>`;
+        if (sel) out += `<circle cx="${fmt(p.x)}" cy="${fmt(p.y)}" r="${fmt(r + 5)}" fill="none" stroke="${item.color}" stroke-opacity="${0.7 * t}"/>`;
+        if (t > 0.5) out += `<circle cx="${fmt(p.x)}" cy="${fmt(p.y)}" r="14" fill="transparent" data-id="${item.id}" style="cursor:pointer"/>`;
+      }
+    });
+    svg.innerHTML = out;
+
+    placeAxisLabels();
+    placeCards(items);
+  }
+
+  function place(el, x, y, opacity, z) {
+    el.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
+    el.style.opacity = opacity.toFixed(3);
+    el.style.visibility = opacity < 0.02 ? 'hidden' : 'visible';
+    if (z != null) el.style.zIndex = z;
+  }
+
+  function placeAxisLabels() {
+    const t = st.t;
+    const sz = el => [el.offsetWidth, el.offsetHeight];
+    const up = project(0, 1, 0), dn = project(0, -1, 0), lf = project(-1, 0, 0), rt = project(1, 0, 0);
+    const [uw, uh] = sz(AX.up), [dw, dh] = sz(AX.down), [lw, lh] = sz(AX.left), [rw, rh] = sz(AX.right);
+    if (compact) {
+      place(AX.up, up.x - uw - 3, up.y + 8, 1, 1);
+      place(AX.down, dn.x - dw - 3, dn.y - dh - 8, 1, 1);
+    } else {
+      place(AX.up, up.x + 10, up.y - uh / 2 + 4, 1, 1);
+      place(AX.down, dn.x + 10, dn.y - dh / 2, 1, 1);
+    }
+    place(AX.left, clampX(lf.x - 2, lw), lf.y - lh - 8, 1, 1);
+    place(AX.right, clampX(rt.x - rw + 2, rw), rt.y - rh - 8, 1, 1);
+    const za = project(0, 0, -ZM * t - 0.12), zb = project(0, 0, ZM * t + 0.12);
+    const [aw, ah] = sz(AX.za), [bw, bh] = sz(AX.zb);
+    place(AX.za, clampX(za.x - aw - 4, aw), za.y - ah - 2, t, 1);
+    place(AX.zb, clampX(zb.x + 4, bw), zb.y + 2, t, 1);
+  }
+  const clampX = (x, w) => Math.max(8, Math.min(W - w - 8, x));
+  const clampY = (y, h) => Math.max(8, Math.min(H - h - 8, y));
+
+  function placeCards(items) {
+    const t = st.t, small = W < 560;
+    // read pass
+    const sizes = new Map();
+    QUADS.forEach(q => sizes.set(q.card, [q.card.offsetWidth, q.card.offsetHeight]));
+    VARIANTS.forEach(v => { sizes.set(v.card, [v.card.offsetWidth, v.card.offsetHeight]); sizes.set(v.tag, [v.tag.offsetWidth, v.tag.offsetHeight]); });
+    const gap = small ? 8 : 12;
+    // write pass
+    items.forEach(({ kind, item, p, a }, depthRank) => {
+      const sx = Math.sign(item.x ?? item.base.x), sy = Math.sign(item.y ?? item.base.y);
+      if (kind === 'q') {
+        // 2D: centered over/under its point, kept inside its own quadrant so it
+        // never crosses an axis or the axis labels.
+        const [w, h] = sizes.get(item.card);
+        const cx = W / 2, cy = H / 2, pad = 6;
+        const x0 = sx > 0 ? cx + pad : 8, x1 = sx > 0 ? W - w - 8 : cx - w - (compact ? 22 : pad);
+        const y0 = sy > 0 ? 8 : cy + 24, y1 = sy > 0 ? cy - h - 24 : H - h - 8;
+        const x = Math.max(x0, Math.min(x1, p.x - w / 2));
+        const y = Math.max(y0, Math.min(y1, sy > 0 ? p.y - gap - h : p.y + gap));
+        const o = Math.max(0, 1 - t * 1.6);
+        place(item.card, x, y, o, 20 + depthRank);
+        item.card.tabIndex = o > 0.5 ? 0 : -1;
+      } else {
+        const [w, h] = sizes.get(item.card);
+        const x = sx > 0 ? p.x + gap : p.x - gap - w;
+        const y = sy > 0 ? p.y - gap - h : p.y + gap;
+        const o = Math.max(0, t * 1.6 - 0.6) * a;
+        place(item.card, clampX(x, w), clampY(y, h), o, 40 + depthRank);
+        item.card.tabIndex = o > 0.5 ? 0 : -1;
+        const [tw, th] = sizes.get(item.tag);
+        const tx = sx > 0 ? p.x + 8 : p.x - 8 - tw;
+        place(item.tag, clampX(tx, tw), p.y - th / 2, Math.max(0, t * 1.6 - 0.6) * (1 - a) * 0.75, 30 + depthRank);
+      }
+    });
+    VARIANTS.forEach(v => {
+      v.card.setAttribute('aria-pressed', String(st.selected === v.id));
+      if (t <= 0.01) { place(v.card, 0, 0, 0); place(v.tag, 0, 0, 0); }
+    });
+    QUADS.forEach(q => q.card.setAttribute('aria-pressed', String(st.selected === q.id)));
+  }
+
+  function mixHex(a, b, k) {
+    const pa = [1, 3, 5].map(i => parseInt(a.slice(i, i + 2), 16));
+    const pb = [1, 3, 5].map(i => parseInt(b.slice(i, i + 2), 16));
+    return '#' + pa.map((v, i) => Math.round(lerp(v, pb[i], k)).toString(16).padStart(2, '0')).join('');
+  }
+
+  /* -------------------------------------------------------------- animation */
+
+  let dirty = true, last = performance.now();
+  function tick(now) {
+    const dt = Math.min(0.12, (now - last) / 1000); last = now;
+    const k = reduceMotion ? 1 : 1 - Math.exp(-dt * 5.5);
+    const goals = { t: st.dim === 3 ? 1 : 0, m: st.money === 'B' ? 1 : 0, yaw: st.goal.yaw, pitch: st.goal.pitch };
+    let moving = false;
+    for (const key in goals) {
+      const d = goals[key] - st[key];
+      if (Math.abs(d) > 0.0005) { st[key] += d * (key === 'm' ? Math.min(1, k * 1.2) : k); moving = true; }
+      else st[key] = goals[key];
+    }
+    if (moving || dirty) { render(); dirty = moving; } // one more frame after settling
+    requestAnimationFrame(tick);
+  }
+
+  /* ------------------------------------------------------------ interaction */
+
+  function setDim(d) {
+    if (st.dim === d) return;
+    st.dim = d;
+    st.goal = d === 3 ? { ...st.userCam } : { yaw: 0, pitch: 0 };
+    dimBtns.forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.dim === d)));
+    const on = d === 3;
+    moneyBtns.forEach(b => { b.disabled = !on; });
+    toggleAttr(moneySeg, 'data-off', !on);
+    toggleAttr(resetBtn, 'data-off', !on); resetBtn.tabIndex = on ? 0 : -1;
+    toggleAttr(hint, 'data-off', !on);
+    toggleAttr(stage, 'data-3d', on);
+    // carry the selection across dimensions
+    if (st.selected) {
+      if (on && qById[st.selected]) st.selected = st.selected + '-' + st.money;
+      else if (!on && vById[st.selected]) st.selected = vById[st.selected].q;
+    }
+    renderPanel(); dirty = true;
+  }
+  function setMoney(m) {
+    if (st.money === m) return;
+    st.money = m;
+    moneyBtns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.money === m)));
+    if (st.selected && vById[st.selected]) st.selected = vById[st.selected].q + '-' + m;
+    renderPanel(); dirty = true;
+  }
+  function select(id) {
+    if (id && vById[id] && vById[id].m !== st.money) setMoney(vById[id].m);
+    st.selected = id; renderPanel(); dirty = true;
+  }
+  const toggleAttr = (el, a, on) => on ? el.setAttribute(a, '') : el.removeAttribute(a);
+
+  dimBtns.forEach(b => b.addEventListener('click', () => setDim(+b.dataset.dim)));
+  moneyBtns.forEach(b => b.addEventListener('click', () => setMoney(b.dataset.money)));
+  resetBtn.addEventListener('click', () => { st.userCam = { ...VIEW3D }; st.goal = { ...VIEW3D }; });
+
+  // Orbit by dragging (3D only); a press without movement on a point selects it.
+  const drag = { on: false, moved: false, x: 0, y: 0, id: null };
+  stage.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    drag.on = true; drag.moved = false; drag.x = e.clientX; drag.y = e.clientY;
+    drag.id = e.target.dataset ? e.target.dataset.id || null : null;
+    if (e.target.tagName === 'circle' || e.target === svg) stage.setPointerCapture(e.pointerId);
+  });
+  stage.addEventListener('pointermove', e => {
+    if (!drag.on) return;
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (!drag.moved && Math.hypot(dx, dy) < 5) return;
+    if (st.dim !== 3) return;
+    if (!drag.moved) { drag.moved = true; stage.classList.add('dragging'); }
+    drag.x = e.clientX; drag.y = e.clientY;
+    orbit(dx * 0.008, dy * 0.006, true);
+  });
+  const endDrag = e => {
+    if (!drag.on) return;
+    drag.on = false; stage.classList.remove('dragging');
+    if (!drag.moved && e.type === 'pointerup') {
+      if (drag.id) select(drag.id);
+      else if (e.target === svg) select(null);
+    }
+    // let the click that follows a drag see `moved`, then clear it
+    setTimeout(() => { drag.moved = false; }, 0);
+  };
+  stage.addEventListener('pointerup', endDrag);
+  stage.addEventListener('pointercancel', endDrag);
+
+  function orbit(dYaw, dPitch, immediate) {
+    st.userCam.yaw = Math.max(-1.45, Math.min(1.45, st.userCam.yaw + dYaw));
+    st.userCam.pitch = Math.max(-0.35, Math.min(1.25, st.userCam.pitch + dPitch));
+    st.goal = { ...st.userCam };
+    if (immediate) { st.yaw = st.goal.yaw; st.pitch = st.goal.pitch; dirty = true; }
+  }
+  stage.addEventListener('keydown', e => {
+    if (st.dim !== 3) return;
+    const step = 0.12;
+    const map = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
+    if (map[e.key]) { e.preventDefault(); orbit(map[e.key][0], map[e.key][1], false); }
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && st.selected) select(null); });
+
+  /* ----------------------------------------------------------------- panel */
+
+  const chips = (arr, cls = '') => '<div class="chips">' + arr.map(w => `<span class="chip ${cls}">${esc(w)}</span>`).join('') + '</div>';
+  const FACETS = [['partner', 'In a partner'], ['together', 'Doing together'], ['excel', 'Excelling at'], ['needs', 'Needs met']];
+
+  function renderPanel() {
+    const id = st.selected;
+    let html = '';
+    if (id && qById[id]) {
+      const q = qById[id];
+      html = `<div class="panel-top"><span class="eyebrow" style="--c:${q.color}">${esc(q.axes)}</span>${closeBtn()}</div>
+        <h2>${esc(q.name)}</h2><p class="essence">${esc(q.essence)}</p>
+        ${FACETS.map(([k, label]) => `<h3>${label}</h3>${chips(q.facets[k])}`).join('')}
+        <h3>The fear underneath</h3><p class="fear">${esc(q.fear)}</p>
+        <p class="note">Switch to 3D to see how money splits this into ${VARIANTS.filter(v => v.q === q.id).map(v => `<b style="color:${MONEY[v.m].color}">${esc(v.name)}</b>`).join(' and ')}.</p>`;
+    } else if (id && vById[id]) {
+      const v = vById[id], m = MONEY[v.m], sib = vById[v.q + '-' + (v.m === 'A' ? 'B' : 'A')];
+      html = `<div class="panel-top"><span class="eyebrow" style="--c:${v.color}">${esc(v.base.name)} × <span style="color:${m.color}">${m.key} · ${esc(m.name)}</span></span>${closeBtn()}</div>
+        <h2>${esc(v.name)}</h2><p class="essence">${esc(v.essence)}</p>
+        <h3>Money looks like</h3>${chips(v.light, 'light')}
+        <h3>Shadow side</h3>${chips(v.shadow, 'shadow')}
+        <h3>How money moves this point</h3><p class="drift" style="--c:${v.color}">${esc(v.drift)}</p>
+        <h3>Still underneath</h3><p>${esc(v.base.essence)} <span style="color:var(--muted)">Needs: ${esc(v.base.facets.needs.slice(0, 3).join(', '))}.</span></p>
+        <h3>Compare</h3><ul class="list">${listItem(sib.id, sib.name, sib.color, MONEY[sib.m].key + ' · ' + MONEY[sib.m].name)}${listItem(v.q, v.base.name + ' (no money)', v.color, '2D origin', true)}</ul>`;
+    } else if (st.dim === 3) {
+      const m = MONEY[st.money];
+      html = `<span class="eyebrow" style="--c:${m.color}">Money attitude ${m.key}</span>
+        <h2 style="color:${m.color}">${esc(m.name)}</h2><p>${esc(m.about)}</p>
+        <h3>At its best</h3>${chips(m.light, 'light')}
+        <h3>At its worst</h3>${chips(m.shadow, 'shadow')}
+        <h3>Where each position lands</h3>
+        <ul class="list">${VARIANTS.filter(v => v.m === st.money).map(v => listItem(v.id, v.name, v.color, v.base.name)).join('')}</ul>
+        <p class="note">Hollow rings mark the 2D positions. Each dashed line shows how this money attitude pulls a position — toward fear or growth, the material or the spiritual.</p>`;
+    } else {
+      html = `<span class="eyebrow">How to read it</span>
+        <h2>Two tensions</h2>
+        <div class="axis-key">
+          <b>Safety ↔ Growth</b><span>How much fear is steering. Safety guards against loss; growth reaches for more.</span>
+          <b>Practical ↔ Spiritual</b><span>Material needs and logistics versus meaning, being known, becoming.</span>
+        </div>
+        <h3>Four kinds of wanting</h3>
+        <ul class="list">${QUADS.map(q => listItem(q.id, q.name, q.color, q.axes)).join('')}</ul>
+        <p class="note">Each cluster mixes what someone wants in a partner, what they want to do together, what they want to excel at, and which needs they want met. Select one for the breakdown, or turn on <b>3D</b> to add money.</p>`;
+    }
+    panel.innerHTML = html;
+    panel.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => {
+      const go = b.dataset.go;
+      if (b.dataset.dim2) setDim(2);
+      select(go);
+    }));
+    const c = panel.querySelector('.close'); if (c) c.addEventListener('click', () => select(null));
+  }
+  const closeBtn = () => `<button type="button" class="close" aria-label="Close">×</button>`;
+  const listItem = (id, name, color, sub, dim2) =>
+    `<li><button type="button" class="linkish" data-go="${id}"${dim2 ? ' data-dim2="1"' : ''} style="--c:${color}"><span class="dot"></span>${esc(name)}<span class="sub">${esc(sub)}</span></button></li>`;
+
+  /* ------------------------------------------------------------------ boot */
+
+  new ResizeObserver(resize).observe(stage);
+  resize();
+  renderPanel();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { dirty = true; });
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

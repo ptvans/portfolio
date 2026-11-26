@@ -6,7 +6,8 @@
   "outputDirectory": "build",
   "redirects": [
     { "source": "/protos", "destination": "/protos/", "permanent": true },
-    { "source": "/huebrew", "destination": "/huebrew/", "permanent": true }
+    { "source": "/huebrew", "destination": "/huebrew/", "permanent": true },
+    { "source": "/relationship-matrix", "destination": "/relationship-matrix/", "permanent": true }
   ],
   "headers": [
     {

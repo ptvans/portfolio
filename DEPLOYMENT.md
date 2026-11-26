@@ -18,6 +18,9 @@ still need the steps below.
   in `../huebrew`, then here run `npm run build:huebrew`
   (`scripts/build-huebrew.sh`, which calls huebrew's `scripts/build.sh`; set
   `HUEBREW_DIR` if the repo is elsewhere) and commit `public/huebrew/`.
+- The Relationship Matrix is one self-contained static page,
+  `public/relationship-matrix/index.html` (inline CSS/JS, no build step), served
+  at `/relationship-matrix/`.
 - Routing is hash-based (`/#/case-study/...`, `/protos/#/...`), so no server
   rewrites are needed.
 - `package.json` keeps `"homepage": "."` (relative asset paths), so the same
