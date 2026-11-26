@@ -130,9 +130,10 @@
   .card .t .mk { font-family: 'Figtree', sans-serif; font-size: 11px; font-weight: 600; opacity: .8; margin-left: 4px; }
   .cloud { display: flex; flex-wrap: wrap; gap: 1px 7px; align-items: baseline; line-height: 1.25; }
   .cloud span { white-space: nowrap; }
-  .w3 { font-size: 14px; color: var(--base2); font-weight: 600; }
-  .w2 { font-size: 13px; color: var(--base1); }
-  .w1 { font-size: 12px; color: var(--base0); }
+  .cloud span { font-size: 13px; }
+  .w3 { color: var(--base2); font-weight: 600; }
+  .w2 { color: var(--base1); }
+  .w1 { color: var(--base0); }
   .tag {
     position: absolute; left: 0; top: 0; white-space: nowrap; pointer-events: auto; cursor: pointer;
     font-size: 12px; color: var(--c); border: 0; background: none; padding: 2px 4px;
@@ -170,6 +171,13 @@
   }
   .close:hover { color: var(--heading); }
   .list { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+  .inline-link {
+    border: 0; background: none; padding: 0; font: inherit; font-weight: 700; cursor: pointer;
+    text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  }
+  .inline-link:hover { text-decoration-color: currentColor; }
+  .inline-link:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; border-radius: 3px; }
   .linkish {
     display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; border: 0; cursor: pointer;
     background: transparent; padding: 7px 8px; border-radius: 8px; color: var(--strong);
@@ -185,8 +193,7 @@
   .stage[data-compact] .card { max-width: 150px; padding: 6px 9px 7px; }
   .stage[data-compact] .card .t { font-size: 13.5px; }
   .stage[data-compact] .w1 { display: none; }
-  .stage[data-compact] .w2 { font-size: 12px; }
-  .stage[data-compact] .w3 { font-size: 13px; }
+  .stage[data-compact] .cloud span { font-size: 12px; }
   /* vertical-axis labels run along the axis so the cards can use the space beside it */
   .stage[data-compact] .ax.vert { writing-mode: vertical-rl; font-size: 11px; letter-spacing: .14em; }
   .stage[data-compact] .ax.vert small { display: none; }
@@ -200,8 +207,7 @@
     h1 { font-size: 28px; }
     .stage { height: 118vw; min-height: 420px; max-height: 620px; border-radius: 12px; }
     .stage[data-compact] .card { max-width: 128px; }
-    .stage[data-compact] .w2 { font-size: 11.5px; }
-    .stage[data-compact] .w3 { font-size: 12.5px; }
+    .stage[data-compact] .cloud span { font-size: 11.5px; }
     .tag { display: none; }
     .ax { font-size: 12px; } .ax small { font-size: 10.5px; }
     .hint { display: none; }
@@ -239,7 +245,7 @@
 
   <main class="layout">
     <div class="stage" id="stage" tabindex="0" role="img"
-         aria-label="Relationship matrix. Horizontal axis runs from Safety (high fear) to Growth (low fear); vertical axis from Practical (material) to Spiritual.">
+         aria-label="Relationship matrix. Horizontal axis runs from Safety (high fear) to Growth (low fear); vertical axis from Practical to Spiritual.">
       <svg id="svg" aria-hidden="true"></svg>
       <div class="labels" id="labels"></div>
     </div>
@@ -260,7 +266,7 @@
   };
 
   // x: -1 Safety (high fear) … +1 Growth (low fear)
-  // y: -1 Practical (material) … +1 Spiritual
+  // y: -1 Practical … +1 Spiritual
   const P = 0.55;
   const QUADS = [
     {
@@ -430,7 +436,7 @@
   }
   const AX = {
     up: makeAxis('vert', 'Spiritual'),
-    down: makeAxis('vert', 'Practical<small>(material)</small>'),
+    down: makeAxis('vert', 'Practical'),
     left: makeAxis('', 'Safety<small>(high fear)</small>'),
     right: makeAxis('', 'Growth<small>(low fear)</small>'),
     za: makeAxis('z-a', 'A · Fluid'),
@@ -760,7 +766,7 @@
         <h2>${esc(q.name)}</h2><p class="essence">${esc(q.essence)}</p>
         ${FACETS.map(([k, label]) => `<h3>${label}</h3>${chips(q.facets[k])}`).join('')}
         <h3>The fear underneath</h3><p class="fear">${esc(q.fear)}</p>
-        <p class="note">Switch to 3D to see how money splits this into ${VARIANTS.filter(v => v.q === q.id).map(v => `<b style="color:${MONEY[v.m].color}">${esc(v.name)}</b>`).join(' and ')}.</p>`;
+        <p class="note">Switch to 3D to see how money splits this into ${VARIANTS.filter(v => v.q === q.id).map(v => `<button type="button" class="inline-link" data-go="${v.id}" data-dim3="1" style="color:${MONEY[v.m].color}">${esc(v.name)}</button>`).join(' and ')}.</p>`;
     } else if (id && vById[id]) {
       const v = vById[id], m = MONEY[v.m], sib = vById[v.q + '-' + (v.m === 'A' ? 'B' : 'A')];
       html = `<div class="panel-top"><span class="eyebrow" style="--c:${v.color}">${esc(v.base.name)} × <span style="color:${m.color}">${m.key} · ${esc(m.name)}</span></span>${closeBtn()}</div>
@@ -794,6 +800,7 @@
     panel.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => {
       const go = b.dataset.go;
       if (b.dataset.dim2) setDim(2);
+      if (b.dataset.dim3) setDim(3);
       select(go);
     }));
     const c = panel.querySelector('.close'); if (c) c.addEventListener('click', () => select(null));
