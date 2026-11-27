@@ -244,10 +244,12 @@ body {
     position: absolute;
     background-position-y: top;
     background-position-x: center;
-    transition: transform 1.6s ease-in-out;
 }
-/* On scenes 7–8 the Earth turns counterclockwise (angle set in js/fx/main.js) */
-.earth-turned #earth-day, .earth-turned #earth-night { transform: rotate(var(--earth-turn, -20deg)); }
+/* On scenes 7–8 the Earth turns counterclockwise, by an amount that follows the
+   sun angle (set in js/fx/main.js). It animates only when turning on or off;
+   while the slider moves it follows directly. */
+.earth-turned #earth-day, .earth-turned #earth-night { transform: rotate(var(--earth-turn, -30deg)); }
+.earth-turning #earth-day, .earth-turning #earth-night { transition: transform 1.6s ease-in-out; }
 
 #particles {
     position: absolute;
@@ -358,11 +360,11 @@ body {
     }
     
     #sun {
-        width: 70px;
-        height: 70px;
-        top: 435px;
-        left: 285px;
-        background-size: 70px;
+        width: 35px;
+        height: 35px;
+        top: 452px;
+        left: 302px;
+        background-size: 35px;
     }
     
     #particle-detail {
@@ -428,11 +430,11 @@ body {
     }
     
     #sun {
-        width: 100px;
-        height: 100px;
-        top: 550px;
-        left: 340px;
-        background-size: 100px;
+        width: 50px;
+        height: 50px;
+        top: 575px;
+        left: 365px;
+        background-size: 50px;
     }
     
     #particle-detail {
@@ -497,11 +499,11 @@ body {
     }
     
     #sun {
-        width: 125px;
-        height: 125px;
-        top: 617px;
-        left: 507px;
-        background-size: 125px;
+        width: 62px;
+        height: 62px;
+        top: 648px;
+        left: 538px;
+        background-size: 62px;
     }
 
     #particle-detail {
@@ -575,11 +577,11 @@ body {
     }
     
     #sun {
-        width: 175px;
-        height: 175px;
-        top: 707px;
-        left: 487px;
-        background-size: 175px;
+        width: 88px;
+        height: 88px;
+        top: 750px;
+        left: 530px;
+        background-size: 88px;
     }
 
     #particle-detail {
@@ -675,12 +677,37 @@ body {
     background-color: rgba(20, 20, 20, 0.45);
     box-shadow: 0px 1px 3px rgba(100, 100, 100, 0.65);
 }
+/* The title bar is also the button that collapses and expands the chart */
 #chart-dock .dock-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 0 4px;
+    padding: 0;
+    border: 0;
+    background: none;
     color: #ddd;
+    font-family: Lato, sans-serif;
     font-size: 13px;
     line-height: 17px;
-    margin-bottom: 4px;
+    text-align: left;
+    cursor: pointer;
 }
+#chart-dock .dock-title:hover { color: #fff; }
+#chart-dock .dock-title:focus { outline: none; }
+#chart-dock .dock-title:focus-visible { outline: 2px solid #e8e1b8; outline-offset: 2px; }
+#chart-dock .chev {
+    width: 8px;
+    height: 8px;
+    margin: 0 4px 3px 10px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);          /* points down: collapse */
+}
+#chart-dock.collapsed .chev { transform: rotate(-135deg); margin-bottom: -3px; }   /* points up: expand */
+#chart-dock.collapsed .dock-title { margin-bottom: 0; }
+#chart-dock.collapsed #chart-dock-holder { display: none; }
 
 /* The observer's card: their live view of the sky, the sun-height slider
    and how far the sunlight travels, as one component beside the observer */
@@ -837,7 +864,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
     .text-box p, #sunlight-fx { transition: none; }
     .fx-atmosphere { animation: none !important; }
-    #earth-day, #earth-night { transition: none; }
+    .earth-turning #earth-day, .earth-turning #earth-night { transition: none; }
 }
 
 /* ==========================================================

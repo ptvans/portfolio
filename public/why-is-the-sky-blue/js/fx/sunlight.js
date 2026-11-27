@@ -32,10 +32,15 @@ export function createSunlight(content, { sun, observer, earth, atmosphere }) {
 
   let packets = [], angle = 90, raf = 0, last = 0, spawnDebt = 0, dpr = 1, running = false;
 
+  // The canvas covers the whole window (the low sun sits out in the side
+  // margin), while drawing still uses #content's coordinates.
+  let offX = 0, offY = 0;
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const w = content.clientWidth, h = Math.max(window.innerHeight, 600);
-    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+    const c = content.getBoundingClientRect();
+    offX = c.left; offY = c.top;
+    const w = window.innerWidth, h = Math.max(window.innerHeight, 600);
+    Object.assign(canvas.style, { left: -offX + 'px', top: -offY + 'px', width: w + 'px', height: h + 'px' });
     canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
   }
 
@@ -43,7 +48,8 @@ export function createSunlight(content, { sun, observer, earth, atmosphere }) {
     const s = box(sun), o = box(observer), e = box(earth), a = box(atmosphere);
     const earthR = e.w * 356.5 / 750;   // the planet's disc inside earth-day.png
     return {
-      sun: { x: s.x + s.w / 2, y: s.y + s.h / 2, r: s.w * 0.46 },
+      // The stream keeps the width it had with the sun at twice today's size.
+      sun: { x: s.x + s.w / 2, y: s.y + s.h / 2, beam: s.w * 2 * 0.46 },
       obs: { x: o.x + o.w / 2, y: o.y + o.h * 0.55 },
       earth: { x: e.x + e.w / 2, y: e.y + e.h / 2, r: earthR },
       atmosR: a.w ? a.w / 2 : earthR * 1.37,
@@ -54,7 +60,7 @@ export function createSunlight(content, { sun, observer, earth, atmosphere }) {
     const band = BANDS[Math.floor(Math.random() * BANDS.length)];
     const dx = g.obs.x - g.sun.x, dy = g.obs.y - g.sun.y, len = Math.hypot(dx, dy);
     const ux = dx / len, uy = dy / len;
-    const off = (Math.random() - 0.5) * g.sun.r * 0.55;    // spread across the beam
+    const off = (Math.random() - 0.5) * g.sun.beam * 0.55;    // spread across the beam
     const sx = g.sun.x - uy * off, sy = g.sun.y + ux * off;
 
     // Where the beam enters the atmosphere (first crossing of the halo circle).
@@ -102,7 +108,7 @@ export function createSunlight(content, { sun, observer, earth, atmosphere }) {
   function draw(g) {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.setTransform(dpr, 0, 0, dpr, offX * dpr, offY * dpr);
 
     // The glow of scattered light: it swells, then fades as the light moves off.
     ctx.globalCompositeOperation = 'lighter';
@@ -122,7 +128,7 @@ export function createSunlight(content, { sun, observer, earth, atmosphere }) {
     beam.addColorStop(angle < 0 ? 0.8 : 1, 'rgba(255,250,210,0.05)');
     beam.addColorStop(1, `rgba(255,250,210,${angle < 0 ? 0 : 0.05})`);
     ctx.strokeStyle = beam;
-    ctx.lineWidth = g.sun.r * 0.5;
+    ctx.lineWidth = g.sun.beam * 0.5;
     ctx.lineCap = 'round';
     ctx.beginPath(); ctx.moveTo(g.sun.x, g.sun.y); ctx.lineTo(g.obs.x, g.obs.y); ctx.stroke();
 

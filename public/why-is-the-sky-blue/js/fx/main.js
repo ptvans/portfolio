@@ -14,6 +14,7 @@ createAtmosphere($('particles'), $('earth-day'));
 const magnifier = createMagnifier($('particle-detail'));
 const bigChart = createScatterChart($('chart-holder'));
 const dock = $('chart-dock');
+const dockToggle = dock.querySelector('.dock-title');
 createScatterChart($('chart-dock-holder'), { compact: true });
 
 const skyFrame = $('sky-view');
@@ -30,16 +31,20 @@ const slider = $('sun-angle');
 const MIN_CARD_W = 210;
 const MIN_DOCK_W = 200;
 
-// On scenes 7–8 the Earth turns this far counterclockwise, carrying the observer
-// up and to the left, to make room for the observer's card and the chart.
-const EARTH_TURN = 20;
-document.documentElement.style.setProperty('--earth-turn', `${-EARTH_TURN}deg`);
-let observerShift = { dx: 0, dy: 0 };
+// On scenes 7–8 the Earth turns so that the observer's horizon makes the true
+// sun angle with the light reaching them: 30° counterclockwise with the sun
+// overhead, turning back clockwise as it sets, to the turn that puts the low
+// sun's spot exactly on the observer's horizon.
+const TURN_OVERHEAD = 30;
+let home = null;     // the observer's spot before any turn, and the Earth's center
+let turn = 0;
+let turningTimer = 0;
 let angle = 90, docked = false;
 let cardBox = null;   // where placeCard() put the card, in #content coordinates, at full height
 
 function setAngle(deg) {
   angle = deg;
+  setTurn(turnFor(deg));
   sunlight.setAngle(deg);
   if (sky) sky.render(deg);
   const set = deg < 0;
@@ -67,7 +72,8 @@ function setAngle(deg) {
 // The observer's card sits beside the observer (or below, if there's no room),
 // with its pointer aimed at the observer, clear of the scene text above.
 function placeCard() {
-  const o = box($('observer'));
+  // Clear the observer's rightmost spot (lowest sun), so the card can stay put while they move.
+  const o = observerAt(turnFor(-6)).box;
   const c = content.getBoundingClientRect();
   const gap = Math.max(14, o.w * 0.35);
   const ox = o.x + o.w / 2, oy = o.y + o.h / 2;
@@ -114,13 +120,21 @@ function placeCard() {
   card.style.left = x + 'px';
   card.style.top = y + 'px';
   card.dataset.notch = side;
-  const notch = side === 'left' ? oy - y : ox - x;
-  card.style.setProperty('--notch', Math.max(14, Math.min(notch, (side === 'left' ? h : w) - 14)) + 'px');
   if (scale < 1) {
     card.style.transformOrigin = `${Math.max(14, ox - x)}px 0`;
     card.style.transform = `scale(${scale.toFixed(3)})`;
   }
-  cardBox = { x, y, w: w * scale, h: h * scale };
+  cardBox = { x, y, w: w * scale, h: h * scale, side, innerW: w, innerH: h };
+  updateNotch();
+}
+
+// Aim the card's pointer at wherever the observer stands now.
+function updateNotch() {
+  if (!cardBox || !home) return;
+  const o = observerAt(turn);
+  const left = cardBox.side === 'left';
+  const n = left ? o.y - cardBox.y : o.x - cardBox.x;
+  card.style.setProperty('--notch', Math.max(14, Math.min(n, (left ? cardBox.innerH : cardBox.innerW) - 14)) + 'px');
 }
 
 // A scene's text box, measured even while its scene is hidden.
@@ -141,7 +155,7 @@ function textBox(el) {
 function placeDock() {
   if (!cardBox) placeCard();
   const c = content.getBoundingClientRect();
-  const o = box($('observer'));
+  const o = observerAt(turnFor(90)).box;   // the observer's leftmost spot (sun overhead)
   const gap = 14;
   const right = c.left + Math.min(cardBox.x, o.x) - gap;
   const bottom = Math.min(c.top + cardBox.y + cardBox.h, window.innerHeight - 60);
@@ -153,26 +167,86 @@ function placeDock() {
   dock.style.top = Math.max(8, bottom - h) + 'px';
 }
 
-// Put the observer where they stand once the Earth has turned: the CSS spot,
-// rotated counterclockwise around the Earth's center.
-function placeObserver() {
+// The observer's spot as drawn in the CSS, before the Earth turns.
+function measureHome() {
   const obs = $('observer');
   obs.style.left = obs.style.top = obs.style.right = '';
   const o = box(obs), e = box($('earth-day'));
-  const ex = e.x + e.w / 2, ey = e.y + e.h / 2;
-  const ox = o.x + o.w / 2, oy = o.y + o.h / 2;
-  const a = -EARTH_TURN * Math.PI / 180;   // negative: counterclockwise on screen
-  const dx = ox - ex, dy = oy - ey;
-  const nx = ex + dx * Math.cos(a) - dy * Math.sin(a);
-  const ny = ey + dx * Math.sin(a) + dy * Math.cos(a);
-  obs.style.right = 'auto';
-  obs.style.left = (nx - o.w / 2) + 'px';
-  obs.style.top = (ny - o.h / 2) + 'px';
-  observerShift = { dx: nx - ox, dy: ny - oy };
+  const ex = e.x + e.w / 2, ey = e.y + e.h / 2, ox = o.x + o.w / 2, oy = o.y + o.h / 2;
+  home = { ex, ey, ox, oy, w: o.w, h: o.h, r: Math.hypot(ox - ex, oy - ey) };
 }
 
+const rad = d => d * Math.PI / 180;
+
+// Where the observer stands once the Earth has turned T degrees counterclockwise.
+function observerAt(T) {
+  const a = rad(-T), dx = home.ox - home.ex, dy = home.oy - home.ey;
+  const x = home.ex + dx * Math.cos(a) - dy * Math.sin(a);
+  const y = home.ey + dx * Math.sin(a) + dy * Math.cos(a);
+  return { x, y, box: { x: x - home.w / 2, y: y - home.h / 2, w: home.w, h: home.h } };
+}
+
+// The sun's overhead and low spots as drawn for the original layout (scenes.js supplies them).
+function sunAnchors() {
+  return window.SkyFx && window.SkyFx.sunAnchorCenters ? window.SkyFx.sunAnchorCenters() : null;
+}
+
+// How far the Earth turns for a sun angle: TURN_OVERHEAD at 90°, easing back
+// to the turn that puts the low sun's spot on the observer's horizon at 0°.
+function turnFor(deg) {
+  const a = sunAnchors();
+  let atHorizon = 22;
+  if (a) {
+    const homeUp = Math.atan2(home.ox - home.ex, -(home.oy - home.ey));   // clockwise from straight up
+    const toSun = Math.atan2(a.down.x - home.ox, -(a.down.y - home.oy));
+    atHorizon = (homeUp - toSun) * 180 / Math.PI - 90;
+  }
+  return atHorizon + (TURN_OVERHEAD - atHorizon) * deg / 90;
+}
+
+// Turn the Earth (the CSS rotation) and move the observer with it.
+function setTurn(T) {
+  turn = T;
+  document.documentElement.style.setProperty('--earth-turn', `${-T}deg`);
+  const o = observerAt(T), obs = $('observer');
+  obs.style.right = 'auto';
+  obs.style.left = o.box.x + 'px';
+  obs.style.top = o.box.y + 'px';
+  updateNotch();
+}
+
+// Where the sun sits for a given angle: in the direction that makes exactly
+// that angle with the observer's horizon, at a distance between its overhead
+// and low spots.
+function sunCenter(deg) {
+  const o = observerAt(turnFor(deg));
+  const ux = (o.x - home.ex) / home.r, uy = (o.y - home.ey) / home.r;   // the observer's "up"
+  const b = rad(90 - deg);                                                // tipped toward the left
+  const dx = ux * Math.cos(b) + uy * Math.sin(b);
+  const dy = -ux * Math.sin(b) + uy * Math.cos(b);
+  let r = 400;
+  const a = sunAnchors();
+  if (a) {
+    const rUp = Math.hypot(a.up.x - home.ox, a.up.y - home.oy);
+    const rDown = Math.hypot(a.down.x - home.ox, a.down.y - home.oy);
+    r = rDown + (rUp - rDown) * Math.max(-0.1, Math.min(1, deg / 90));
+  }
+  return { x: o.x + dx * r, y: o.y + dy * r };
+}
+
+// The chart's title bar collapses it to just the bar, or expands it again.
+// It stays as the viewer left it while they move between scenes.
+dockToggle.addEventListener('click', () => {
+  const collapsed = dock.classList.toggle('collapsed');
+  dockToggle.setAttribute('aria-expanded', String(!collapsed));
+  dockToggle.title = collapsed ? 'Show the chart' : 'Hide the chart';
+  placeDock();
+});
+dockToggle.title = 'Hide the chart';
+
 function layout() {
-  placeObserver();
+  measureHome();
+  setTurn(turnFor(angle));
   placeCard();
   placeDock();
   if (sky) sky.render(angle);   // the view may have changed size
@@ -185,6 +259,10 @@ function showDock() {
   dock.style.display = 'block';
   placeDock();
   const from = bigChart.el.getBoundingClientRect();
+  if (dock.classList.contains('collapsed')) {   // nothing to shrink into; just appear
+    dock.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600 });
+    return;
+  }
   const toSvg = dock.querySelector('svg').getBoundingClientRect();
   const D = dock.getBoundingClientRect();
   if (!from.width || prefersReducedMotion()) {
@@ -219,12 +297,19 @@ function fade(el, show, ms = 600) {
   }
 }
 
-placeObserver();
+measureHome();
+setTurn(turnFor(angle));
 
 window.SkyFx = {
   box,
-  // How far the observer moved when the Earth turned (the sun's arc moves with them).
-  observerShift: () => observerShift,
+  sunCenter,
+  // Turn the Earth for scenes 7–8 (true) or back (false), animating the change.
+  turnEarth(on) {
+    content.classList.toggle('earth-turned', on);
+    content.classList.add('earth-turning');
+    clearTimeout(turningTimer);
+    turningTimer = setTimeout(() => content.classList.remove('earth-turning'), 1700);
+  },
   magnifier,
   setAngle,
   startSky() {

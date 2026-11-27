@@ -77,7 +77,7 @@ function sunAnchors() {
 
 function px(p) { return { left: p.left + "px", top: p.top + "px" }; }
 
-// The anchors above were drawn for the original sun, which was twice today's size.
+// The anchors above were drawn for the original sun, which was four times today's size.
 // The sun keeps the same centers.
 function originalSunSize() {
     switch(mq) {
@@ -108,20 +108,16 @@ function sunBehindEarth() {
     return placeCenter(c.x + dx / d * push, c.y + dy / d * push);
 }
 
+// The sun in the sky: js/fx/main.js works out where, from the observer's
+// horizon (the Earth turns with the angle), using the anchors above.
 function sunPlacement(deg) {
-    var a = sunAnchors();
-    var o = Fx.box($("#observer")[0]);
-    var ox = o.x + o.w / 2, oy = o.y + o.h / 2;
-    var shift = Fx.observerShift();
-    function polar(p) {
-        var c = anchorCenter(p), x = c.x + shift.dx - ox, y = c.y + shift.dy - oy;
-        return { a: Math.atan2(y, x), r: Math.sqrt(x * x + y * y) };
-    }
-    var up = polar(a.up), down = polar(a.down);   // relative to where the observer first stood
-    var t = Math.max(-0.1, Math.min(1, deg / 90));   // below 0°, the sun keeps sinking along the arc
-    var ang = down.a + (up.a - down.a) * t, r = down.r + (up.r - down.r) * t;
-    return placeCenter(ox + r * Math.cos(ang), oy + r * Math.sin(ang));
+    var c = Fx.sunCenter(deg);
+    return placeCenter(c.x, c.y);
 }
+Fx.sunAnchorCenters = function() {
+    var a = sunAnchors();
+    return { up: anchorCenter(a.up), down: anchorCenter(a.down) };
+};
 
 // Fade helpers that are safe to interrupt midway.
 function showText(sel, ms) {
@@ -346,7 +342,7 @@ var View = Backbone.View.extend({
 
         $(".stage").stop(true, true).not("#stage-" + name).fadeOut(Q);
         $(".text-box p").removeClass("under-sun");
-        $("#content").toggleClass("earth-turned", n === 6 || n === 7);
+        Fx.turnEarth(n === 6 || n === 7);
         if (n === 0) $("#shade").stop(true, true).slideDown(Q); else $("#shade").stop(true, true).slideUp(Q);
         show("#earth-day", true);
         show("#earth-night", n >= 1 && n <= 5);
@@ -481,7 +477,7 @@ var View = Backbone.View.extend({
         var model = this.model, view = this;
 
         Fx.showDock();   // the chart shrinks into place on the Earth and stays
-        $("#content").addClass("earth-turned");   // the Earth turns to make room
+        Fx.turnEarth(true);   // the Earth turns to make room
         $("#stage-physics").fadeOut(600, function() {
             model.set({ sunAngle: 90 });
             model.set({ sunPosition: "sky" });
@@ -503,7 +499,7 @@ var View = Backbone.View.extend({
         cancelAnimationFrame(this.tween);
         Fx.stopSky();
         Fx.hideDock();
-        $("#content").removeClass("earth-turned");
+        Fx.turnEarth(false);
         $("#sun, #observer").fadeOut(400);
         $("#stage-skyblue").fadeOut(600);
         $("#stage-skyothercolors").fadeOut(600);
@@ -594,6 +590,8 @@ fitWrapper();
 
 var model = new Model();
 var view = new View({"model": model, el: "body"});
+
+Fx.layout();   // now that the screen size and the sun's anchors are known
 
 // Open at the scene named in the link, if any.
 var startAt = _.indexOf(SLUGS, location.hash.slice(1));
