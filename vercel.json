@@ -7,7 +7,8 @@
   "redirects": [
     { "source": "/protos", "destination": "/protos/", "permanent": true },
     { "source": "/huebrew", "destination": "/huebrew/", "permanent": true },
-    { "source": "/relationship-matrix", "destination": "/relationship-matrix/", "permanent": true }
+    { "source": "/relationship-matrix", "destination": "/relationship-matrix/", "permanent": true },
+    { "source": "/why-is-the-sky-blue", "destination": "/why-is-the-sky-blue/", "permanent": true }
   ],
   "headers": [
     {

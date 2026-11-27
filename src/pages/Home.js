@@ -74,6 +74,9 @@ function Home({ theme, toggleTheme }) {
             <li>
               <a href="./relationship-matrix/">Relationship Matrix: What We Want From a Partner, in 3D</a>
             </li>
+            <li>
+              <a href="./why-is-the-sky-blue/">Why Is the Sky Blue? A Step-by-Step Animated Explainer</a>
+            </li>
           </ul>
         </section>
 

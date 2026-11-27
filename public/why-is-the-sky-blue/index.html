@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <meta charset="utf-8">
+        <title>Why is the Sky Blue? | Halftone</title>
+        <link href="css/style.css" rel="stylesheet" media="screen">
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link rel="image_src" href="img/cover-image.png" />
+        
+        <!--opengraph required properties -->
+        <meta property="og:title" content="Why is the Sky Blue? | Halftone" />
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content="It's a simple question that few can answer correctly. We created this simple animated explanation to demonstrate the power of using clear narrative structures to educate and inform. Imagine if you had seen something like this when you were in school." />
+        <meta property="og:url" content="https://www.getthom.com/why-is-the-sky-blue/" />
+        <meta property="og:image" content="https://www.getthom.com/why-is-the-sky-blue/img/cover-image.png" />
+        <link rel="canonical" href="https://www.getthom.com/why-is-the-sky-blue/" />
+        
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script>
+            // The phone layout is drawn 480px wide; on narrower screens, show all of it scaled to fit.
+            if (screen.width < 480) {
+                document.querySelector('meta[name=viewport]').setAttribute('content', 'width=480');
+            }
+        </script>
+        <link href='https://fonts.googleapis.com/css?family=Lato:100,300,300italic,400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Amatic+SC:400,700' rel='stylesheet' type='text/css'>
+    
+        <meta name="description" content="Why Is the Sky Blue? A tiny explanatory illustration brought to you by Halftone.">
+        <meta name="author" content="Halftone">
+        <script src="js/vendor/jquery-1.9.1.min.js"></script>
+        <script src="js/scenes.js"></script>
+        <script type="module" src="js/fx/main.js"></script>
+    </head>
+    
+    <body>
+        <div id="wrapper">
+            <div id="navigation">
+                <button type="button" id="prev" class="bttn prev" aria-label="Back" title="Back"></button>
+                <button type="button" id="next" class="bttn next"></button>
+            </div>
+            <nav id="progress" aria-label="Scenes"></nav>
+            <div id="scene-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+            <div id="content">
+                <div id="sun"></div>
+                <div id="particles"></div> 
+            
+                <div id="shade"></div>
+
+                <div id="earth-day"></div>
+                <div id="earth-night"></div>
+            
+                <div id="particle-detail"></div>
+
+                <div id="observer"></div>
+
+                <div id="observer-card" data-notch="left">
+                    <div class="card-title">The observer's view</div>
+                    <div id="sky-view" role="img" aria-label="The observer's view of the sky">
+                        <canvas id="sky-canvas"></canvas>
+                    </div>
+                    <div class="card-extra">
+                        <div class="angle-row">
+                            <label for="sun-angle">Sun height</label>
+                            <input id="sun-angle" type="range" min="-6" max="90" step="1" value="90">
+                            <output id="sun-angle-out" for="sun-angle">90°</output>
+                        </div>
+                        <div class="readout">
+                            <div class="distance-line" id="miles-line">Sunlight travels through</div>
+                            <div class="distance-big" id="miles-big"><span id="miles">62</span> miles <span class="distance-unit">of air</span></div>
+                            <div class="distance-bar" aria-hidden="true">
+                                <div id="miles-fill" class="distance-fill"></div>
+                                <div class="distance-mark" title="Sun straight overhead"></div>
+                            </div>
+                            <div id="miles-sub" class="distance-sub"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="stage-intro" class="stage">
+                    <div id="title-container">
+                        <div id="title">Why is the Sky Blue?</div>
+                    </div>
+                </div>
+                <div id="stage-night" class="stage">
+                    <div id="conclude-text" class="text-box text-wide"><p><img class="icon" src="img/ocean.png" />Some say it's due to the blue oceans.</p><p><img class="icon" src="img/molecule.png" />Some think it's what's in the atmosphere <br /><em>(mostly nitrogen and oxygen)</em>. </p><p><img class="icon" src="img/space.png" />Some believe it's because outer space is blue. </p>
+                    </div>
+                </div>
+                <div id="stage-particles" class="stage">
+                    <div id="particle-text" class="text-box text-narrow">
+                        <p>But truthfully, it has to do with the size of the particles in the Earth's atmosphere. </p><p> They are considered <span class="highlight">"small"&nbsp;particles</span> <span class="italic">(much less than 1 nanometer across)</span>. </p>
+                    </div>
+                </div>
+                <div id="stage-scatter" class="stage">
+                    <div id="scatter-text" class="text-box text-narrow"> These small particles <span class="highlight">scatter</span> sunlight as it passes through.
+                   </div>
+                </div>
+                <div id="stage-raleigh" class="stage">
+                    <div id="rayleigh-text" class="text-box text-wide"> <div id="rayleigh"></div> <p>Sunlight contains all visible colors of light, and more.</p>
+                       <p>In the 1870s, a man named <a href="http://en.wikipedia.org/wiki/Rayleigh_scattering" title="Rayleigh Scattering on Wikipedia" target="_blank">Rayleigh</a> found that each color (or <span class="highlight">wavelength</span>) of light is scattered to a different degree.  </p>                                                      
+                    </div>
+                </div>
+                <div id="stage-physics" class="stage">
+                    <div id="wavelength-chart" class="text-box text-wide">
+                        <div>Here's how many times more each color is scattered than <span class="red">red&nbsp;light</span> when the sun is <span class="highlight overhead">directly&nbsp;overhead</span>.</div>
+                        <div id="chart-holder"></div>
+                        <div class="chart-hint">Move along the chart to compare colors.</div>
+                    </div>
+                </div>
+                <div id="stage-skyblue" class="stage">
+                    <div id="daylight-text" class="text-box text-narrow"><p>More <span class="blue">blue&nbsp;light</span> than other colors is scattered out of the sunlight traveling through the atmosphere. </p>
+                        <p>This creates a diffuse <span class="blue">blue&nbsp;glow</span>, and makes the sun appear <span class="yellow">yellow</span> in color.</p>
+                    </div>
+                </div>
+                <div id="stage-skyothercolors" class="stage">
+                    <div id="sunset-text" class="text-box text-wide"><p>When the sun is lower in the sky, sunlight travels a longer distance through the atmosphere to reach an observer.  </p><p>This means it encounters more particles that scatter out most of the <span class="blue">blue&nbsp;light</span>, as well as some <span class="green">green</span> and <span class="yellow">yellow light</span>. This leaves mostly <span class="red">red light</span> when the sunlight reaches the observer.</p>
+                    </div>
+                </div>
+                <div id="stage-conclusion" class="stage">
+                    <div id="inter-text" class="text-box text-wide"> <p>Well, there you have it.</p>  <p>The sky is blue because Earth's atmosphere contains small particles that scatter more blue light than other colors.</p></div>
+                </div>
+            </div>
+            <aside id="chart-dock" aria-label="Scattering compared with red light, sun directly overhead">
+                <div class="dock-title">Scattering compared with red light, <span class="overhead">sun directly overhead</span></div>
+                <div id="chart-dock-holder"></div>
+            </aside>
+
+
+            <div id="license">
+                <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" style="border-width:0; margin:5px;" src="https://i.creativecommons.org/l/by-nc-sa/3.0/80x15.png" /></a><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">Why is the Sky Blue</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://www.getthom.com" property="cc:attributionName" rel="cc:attributionURL">halftone.co</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.
+            </div>
+            
+        </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+    <script src="js/vendor/backbone.min.js"></script>
+    <script src="js/vendor/polyfill.js"></script>
+    <script src="js/vendor/enquire.js"></script>
+
+    <div id="share-bar">
+        <div id="logo">
+            <a href="https://www.getthom.com"><img src="img/halftone-logo.png"/></a>
+        </div>
+    </div>
+    </body>
+</html>
+

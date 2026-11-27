@@ -1,0 +1,934 @@
+* { 
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box; 
+}
+
+body {
+    background-color: #2f2f2f !important;
+    font-family: Lato,"san-serif,arial" !important;
+	font-size: 24px;
+}
+
+#license {
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    opacity: 0.2;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.25);
+    font-size: 12px;
+    border-top: solid 1px #4d8391;
+}
+
+#license:hover {
+    opacity: 1.0;
+    background-color: rgba(255, 255, 255, 0.65);
+}
+
+.bttn {
+    width: 230px;
+    height: 80px;
+    color: #e5e5e5;
+    font-weight: 700;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 4px;
+    font-size: 48px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-color: rgba(20, 20, 20, 0.3);
+    box-shadow: 0px 1px 3px rgba(100, 100, 100, 0.65);
+    text-shadow: 0px 1px 3px rgba(50, 50, 50, 0.8);
+    padding: 20px;
+    line-height: 36px;
+    opacity: 0.8;
+    font-family: 'Amatic SC';
+}
+
+/* While a scene animates in, the buttons dim (staying put, so keyboard focus isn't lost) */
+.bttn.disabled {
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.next {
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    background-size: 200px;
+    background-image: url('../img/arrow-next.png');
+    background-position: center;
+    text-align: left;
+    float: right;
+}
+
+.clear {
+    margin-top: 30px;
+    clear: both;
+}
+
+.bttn:hover {
+    background-color: #555;
+}
+
+#shade {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 1800px;
+    background-color: #80cfe5;
+}
+
+#title-container {
+    text-align: center;
+    position: absolute;
+    height: 100px;
+    line-height: 30px; 
+    width: 100%;
+}
+
+#title {
+    font-size: 40px;
+    font-family: Amatic SC;
+    color: #fff;
+    display: inline;
+    text-align: center;
+}
+
+#earth-night {
+    background-image: url('../img/earth-night.png');
+}
+
+#earth-day {
+    background-image: url('../img/earth-day.png');
+}
+
+#particles {
+    background-image: url('../img/particles.png');
+}
+
+#sun {
+    background-image: url('../img/sun.png');
+}
+
+#sun.in {
+}
+
+#sun.up {
+}
+
+#particle-detail {
+    position: absolute;
+}
+
+#observer{
+    position: absolute;
+    background-image: url('../img/observer.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.text-box {
+    position: absolute;
+    color: #eee;
+    text-align: center;
+}
+
+.text-box a {
+    text-decoration: underline;
+    color: #fff;
+}
+
+.text-box a:hover {
+    text-decoration: underline;
+    color: #fff;
+    font-weight: 400;
+}
+
+.text-narrow {
+    width: 345px;
+}
+
+.text-wide {
+    width: 600px;
+}
+
+.text-box p {
+    margin-bottom: 20px;
+}
+
+.icon {
+    margin-right: 15px;
+    margin-top: -10px;
+}
+
+.blue, .green, .red, .yellow, .highlight {
+    border-radius: 3px;
+    color: #333;
+    font-weight: 400;
+    padding: 2px 10px 5px 10px;
+}
+
+.highlight {
+    background-color: #e8e1b8;
+}
+
+.blue {
+    background-color: #83e5fc;
+}
+
+.yellow {
+    background-color: #efed9c;
+}
+
+.green {
+    background-color: #9dea9b;
+}
+
+.red {
+    background-color: #e08989;
+}
+
+.italic {
+    font-style: italic;
+}
+
+#rayleigh {
+    height: 150px;
+    width: 150px;
+    border-radius: 75px;
+    background-size: 150px;
+    background-image: url('../img/john-strutt-crop.jpg');
+    float: left;
+    margin-right: 15px;
+}
+
+#wavelength-chart img {
+    margin-top: 30px;
+}
+
+#inter-text {
+
+}
+
+#conclude-text {
+
+}
+
+#content {
+    width: 1000px;
+    margin: 0px auto;
+    position: relative;
+}
+
+#wrapper {
+    overflow-y: hidden;
+    overflow-x: visible;
+    width: 100%;
+}
+
+#navigation {
+    width: 100%;
+    position: absolute;
+    z-index: 100;
+}
+
+.stage {
+    z-index: 10000;
+    display: none;
+}
+
+#earth-night, #particle-detail, #wavelength-chart, #sun, #particles, #observer {
+    display: none;
+}
+
+#earth-night, #earth-day {
+    position: absolute;
+    background-position-y: top;
+    background-position-x: center;
+}
+
+#particles {
+    position: absolute;
+    top: 400px;
+    opacity: 0.5;
+    background-position-y: top;
+    background-position-x: center;
+}
+
+#sun {
+    position: absolute;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#share-bar {
+    position: absolute;
+    bottom: 20px;
+    width: 100px;
+    left: 20px;
+    display: none;
+}
+
+#logo {
+    margin-top: 40px;
+    width: 100px;
+    border: 0px;
+}
+
+/* Landscape phones and down */
+@media (max-width: 480px) { 
+    #content {
+        width: 480px;
+        height: 100%;
+    }
+    
+    .bttn {
+        width: 110px;
+        height: 40px;
+        font-size: 24px;
+        padding: 10px;
+        line-height: 22px;
+    }
+    
+    .next {
+        background-size: 100px;
+    }
+    
+    #title-container {
+        top: 140px;
+    }
+    
+    #title {
+        font-size: 58px;
+        width: 480px;
+    }
+    
+    .text-box {
+        font-size: 18px;
+        line-height: 22px;
+        font-weight: 300;
+        top: 60px;
+        left: 20px;
+    }
+    
+    .icon {
+        height: 20px;
+        width: 20px;
+    }
+    
+    .blue, .green, .red, .yellow, .highlight {
+        border-radius: 2px;
+        padding: 0px 5px 1px 5px;
+    }
+    
+    .text-wide {
+        width: 440px;
+    }
+    
+    .text-narrow {
+        width: 250px;
+    }
+    
+    #earth-night, #earth-day {
+        width: 400px;
+        height: 400px;
+        background-size: 400px;
+        top: 270px;
+        left: 40px;
+    }
+    
+    #particles {
+        width: 480px;
+        height: 480px;
+        top: 220px;
+        left: 0px;
+        background-size: 480px;
+    }
+    
+    #sun {
+        width: 70px;
+        height: 70px;
+        top: 435px;
+        left: 285px;
+        background-size: 70px;
+    }
+    
+    #particle-detail {
+        top: 80px;
+        left: 320px;
+        width: 150px;
+        height: 245px;
+        background-size: 150px;
+    }
+    
+    #observer {
+        top: 290px;
+        right: 100px;
+        width: 35px;
+        height: 40px;
+        background-size: 35px;
+    }
+
+}
+
+/* Landscape phone to portrait tablet */
+@media (min-width: 481px) and (max-width: 767px) {
+    #content {
+        width: 760px;
+        height: 100%;
+    }
+    
+    #title {
+        font-size: 90px;
+        width: 760px;
+    }
+    
+    #title-container {
+        top: 180px;
+    }
+    
+    .text-box {
+        font-size: 18px;
+        line-height: 30px;
+        font-weight: 300;
+        top: 130px;
+        left: 80px;
+    }
+    
+    .icon {
+        height: 24px;
+        width: 24px;
+    }
+    
+    #earth-night, #earth-day {
+        width: 600px;
+        height: 600px;
+        background-size: 600px;
+        top: 390px;
+        left: 80px;
+    }
+    
+    #particles {
+        width: 800px;
+        height: 800px;
+        left: -20px;
+        top: 300px;
+        background-size: 800px;
+    }
+    
+    #sun {
+        width: 100px;
+        height: 100px;
+        top: 550px;
+        left: 340px;
+        background-size: 100px;
+    }
+    
+    #particle-detail {
+        top: 60px;
+        left: 430px;
+        width: 200px;
+        height: 375px;
+        background-size: 200px
+    }
+    
+    #observer {
+        top: 440px;
+        right: 180px;
+        width: 45px;
+        height: 50px;
+        background-size: 45px;
+    }
+
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 1399px) {
+    #content {
+        width: 768px;
+        height: 100%;
+    }
+    
+    #title {
+        font-size: 130px;
+        width: 1200px;
+    }
+    
+    #title-container {
+        top: 250px;
+    }
+    
+    .text-box {
+        font-size: 24px;
+        line-height: 36px;
+        font-weight: 300;
+        top: 80px;
+        left: 80px;
+    }
+    
+    .icon {
+        height: 30px;
+        width: 30px;
+    }
+    
+    #earth-night, #earth-day {
+        width: 768px;
+        height: 768px;
+        background-size: 768px;
+        top: 485px;
+    }
+    
+    #particles {
+        width: 1000px;
+        height: 1000px;
+        left: -116px;
+        top: 360px;
+        background-size: 1000px;
+    }
+    
+    #sun {
+        width: 125px;
+        height: 125px;
+        top: 617px;
+        left: 507px;
+        background-size: 125px;
+    }
+
+    #particle-detail {
+        top: 0px;
+        left: 430px;
+        width: 300px;
+        height: 500px;
+        background-size: 300px;
+    }
+    
+    #observer {
+        top: 550px;
+        right: 140px;
+        width: 55px;
+        height: 50px;
+        background-size: 55px;
+    }
+
+}
+
+/* Large desktop */
+@media (min-width: 1400px) {
+    #content {
+        width: 1200px;
+        height: 100%;
+    }
+    
+    .next {
+        top: 5%;
+        right: 5%;
+    }
+    
+    #title {
+        font-size: 130px;
+        width: 1200px;
+    }
+    
+    #title-container {
+        top: 300px;
+    }
+    
+    .text-box {
+        font-size: 30px;
+        line-height: 42px;
+        font-weight: 100;
+        top: 100px;
+        left: 130px;
+    }
+    
+    .text-wide {
+        width: 900px;
+    }
+
+    .icon {
+        height: 40px;
+        width: 40px;
+    }
+    
+    #earth-night, #earth-day {
+        width: 1200px;
+        height: 1200px;
+        background-size: 1200px;
+        top: 525px;
+    }
+    
+    #particles {
+        width: 1500px;
+        height: 1500px;
+        left: -150px;
+        top: 400px;
+        background-size: 1500px;
+    }
+    
+    #sun {
+        width: 175px;
+        height: 175px;
+        top: 707px;
+        left: 487px;
+        background-size: 175px;
+    }
+
+    #particle-detail {
+        top: 50px;
+        left: 550px;
+        width: 300px;
+        height: 500px;
+        background-size: 300px;
+    }
+
+    #observer {
+        top: 640px;
+        right: 230px;
+        width: 65px;
+        height: 60px;
+        background-size: 65px;
+    }
+
+}
+/* ==========================================================
+   Round 1 additions: live particles, interactive chart,
+   observer's view and sun-angle control
+   ========================================================== */
+
+.fx-magnifier {
+    position: absolute;
+    pointer-events: none;
+}
+
+/* Sunlight crossing the atmosphere (slides 7–8) */
+#sunlight-fx {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.8s;
+}
+#sunlight-fx.on { opacity: 1; }
+#observer { z-index: 2; }
+
+/* Text the sun is passing behind fades back so neither is lost */
+.text-box p { transition: opacity 0.3s; }
+.text-box p.under-sun { opacity: 0.12; }
+
+/* Interactive scattering chart */
+#chart-holder {
+    max-width: 560px;
+    margin: 24px auto 0;
+}
+.scatter-chart {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    cursor: ew-resize;
+    touch-action: none;
+    font-family: Lato, sans-serif;
+}
+.scatter-chart:focus { outline: none; }
+.scatter-chart:focus-visible { outline: 2px solid #e8e1b8; outline-offset: 6px; border-radius: 4px; }
+.scatter-chart .grid { stroke: rgba(255, 255, 255, 0.08); }
+.scatter-chart .axis { stroke: #aaa; stroke-width: 1.5; }
+.scatter-chart .tick { fill: #aaa; font-weight: 400; }
+.scatter-chart .axis-title { fill: #ccc; font-weight: 400; }
+.scatter-chart .curve { fill: none; stroke: #e5e5e5; stroke-width: 2.5; }
+.scatter-chart .ref { stroke: #e08989; stroke-width: 1.5; stroke-dasharray: 5 4; }
+.scatter-chart .pill { fill: #dcdcdc; }
+.scatter-chart .pill-text { fill: #333; font-size: 1.3em; }
+.scatter-chart .marker-line { stroke: #fff; stroke-width: 1.5; stroke-dasharray: 3 3; }
+.scatter-chart .marker-dot { stroke: #fff; stroke-width: 2; }
+.scatter-chart .marker-box { fill: rgba(20, 20, 20, 0.75); }
+.scatter-chart .marker-text { fill: #eee; }
+.scatter-chart .marker-big { font-weight: 700; font-size: 1.15em; }
+.scatter-chart .marker-small { fill: #ccc; }
+.chart-hint {
+    font-size: 0.6em;
+    color: #aaa;
+    font-style: italic;
+    margin-top: 6px;
+}
+.highlight.overhead { font-weight: 700; }
+
+/* The chart, docked once the sun rises */
+#chart-dock {
+    display: none;
+    position: fixed;
+    left: 12px;
+    bottom: 28px;
+    width: 250px;
+    z-index: 20000;
+    padding: 10px 12px 8px;
+    border-radius: 4px;
+    background-color: rgba(20, 20, 20, 0.45);
+    box-shadow: 0px 1px 3px rgba(100, 100, 100, 0.65);
+}
+#chart-dock.in-margin { bottom: auto; }
+#chart-dock .dock-title {
+    color: #ddd;
+    font-size: 13px;
+    line-height: 17px;
+    margin-bottom: 4px;
+}
+#chart-dock .overhead {
+    color: #333;
+    background-color: #e8e1b8;
+    border-radius: 2px;
+    padding: 0 4px;
+    white-space: nowrap;
+}
+
+/* The observer's card: their live view of the sky, the sun-height slider
+   and how far the sunlight travels, as one component beside the observer */
+#observer-card {
+    display: none;
+    position: absolute;
+    z-index: 3;
+    width: 300px;
+    padding: 8px 8px 10px;
+    border-radius: 6px;
+    color: #e5e5e5;
+    background-color: rgba(20, 20, 20, 0.62);
+    box-shadow: 0px 1px 3px rgba(100, 100, 100, 0.65);
+    text-align: center;
+}
+/* a small pointer toward the observer */
+#observer-card::before {
+    content: '';
+    position: absolute;
+    border: 9px solid transparent;
+}
+#observer-card[data-notch=left]::before {
+    right: 100%;
+    top: var(--notch, 40px);
+    margin-top: -9px;
+    border-right-color: rgba(20, 20, 20, 0.62);
+}
+#observer-card[data-notch=top]::before {
+    bottom: 100%;
+    left: var(--notch, 40px);
+    margin-left: -9px;
+    border-bottom-color: rgba(20, 20, 20, 0.62);
+}
+#observer-card .card-title {
+    text-align: left;
+    font-size: 14px;
+    line-height: 18px;
+    color: #ccc;
+    margin: 0 2px 6px;
+}
+#sky-view {
+    aspect-ratio: 1.58;
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: #000;
+}
+#sky-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+#sky-view.no-webgl { background: linear-gradient(#5c9bd6, #a9d3ef); }
+
+/* Shown on the sunset scene only */
+#observer-card .card-extra { display: none; overflow: hidden; }
+#observer-card.expanded .card-extra { display: block; }
+
+#observer-card .angle-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 4px 0;
+}
+#observer-card label {
+    display: inline;
+    margin: 0;
+    font-size: 14px;
+    color: #ccc;
+    white-space: nowrap;
+}
+#observer-card input[type=range] {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    height: auto;
+    accent-color: #efed9c;
+    cursor: pointer;
+}
+#observer-card output {
+    width: 2.6em;
+    text-align: right;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}
+
+#observer-card .readout {
+    margin: 10px 4px 0;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+#observer-card .distance-line {
+    font-size: 14px;
+    line-height: 18px;
+    color: #ccc;
+}
+#observer-card .distance-big {
+    font-family: 'Amatic SC';
+    font-weight: 700;
+    font-size: 46px;
+    line-height: 48px;
+    color: #fff;
+    text-shadow: 0px 1px 3px rgba(50, 50, 50, 0.8);
+    white-space: nowrap;
+}
+#observer-card #miles { font-variant-numeric: tabular-nums; }
+#observer-card .distance-unit { font-size: 0.6em; color: #ccc; }
+#observer-card .distance-bar {
+    position: relative;
+    height: 10px;
+    margin: 4px 0 6px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.12);
+}
+#observer-card .distance-fill {
+    height: 100%;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #efed9c, #f2b36b 45%, #e08989);
+}
+#observer-card .distance-mark {
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    left: 8.8%;
+    width: 2px;
+    background-color: #fff;
+}
+#observer-card .distance-sub {
+    font-size: 13px;
+    line-height: 17px;
+    color: #ddd;
+    min-height: 17px;
+}
+#observer-card.below-horizon .distance-fill { opacity: 0.35; }
+
+@media (max-width: 480px) {
+    #chart-holder { max-width: 325px; margin-top: 10px; }
+    #chart-dock { width: 170px; padding: 6px 8px; }
+    #chart-dock .dock-title { font-size: 11px; line-height: 14px; }
+    #observer-card { width: 210px; padding: 6px 6px 8px; }
+    #observer-card .card-title, #observer-card label, #observer-card output { font-size: 12px; }
+    #observer-card .distance-big { font-size: 32px; line-height: 34px; }
+    #observer-card .distance-line, #observer-card .distance-sub { font-size: 11px; line-height: 14px; }
+}
+@media (min-width: 481px) and (max-width: 767px) {
+    #chart-holder { max-width: 450px; }
+    #chart-dock { width: 210px; }
+    #observer-card { width: 250px; }
+    #observer-card .distance-big { font-size: 38px; line-height: 40px; }
+}
+@media (min-width: 1400px) {
+    #chart-holder { max-width: 700px; }
+    #chart-dock { width: 300px; }
+    #observer-card { width: 360px; }
+    #observer-card .distance-big { font-size: 56px; line-height: 58px; }
+    #observer-card .distance-sub { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .text-box p, #sunlight-fx { transition: none; }
+}
+
+/* ==========================================================
+   Navigation and accessibility
+   ========================================================== */
+
+/* The navigation buttons are real <button>s with the original look */
+button.bttn {
+    display: block;
+    border: 0;
+    margin: 0;
+    text-align: left;
+    -webkit-appearance: none;
+    appearance: none;
+}
+.bttn:focus { outline: none; }
+.bttn:focus-visible { outline: 3px solid #e8e1b8; outline-offset: 3px; }
+
+/* Back: the same arrow, flipped, beside the next button */
+.prev {
+    display: none;
+    position: fixed;
+    top: 5px;
+    right: 240px;
+    width: 70px;
+    padding: 0;
+    background-image: url('../img/arrow-next.png');
+    background-size: 200px;
+    background-position: -105px center;
+    transform: scaleX(-1);
+}
+
+/* Progress dots, one link per scene */
+#progress {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20001;
+    display: flex;
+    gap: 2px;
+}
+#progress .dot {
+    position: relative;
+    display: block;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+}
+#progress .dot::after {
+    content: '';
+    position: absolute;
+    inset: 7px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    transition: inset 0.2s, background-color 0.2s;
+}
+#progress .dot:hover::after { background-color: rgba(255, 255, 255, 0.7); }
+#progress .dot[aria-current]::after { inset: 5px; background-color: #fff; }
+#progress .dot:focus { outline: none; }
+#progress .dot:focus-visible { outline: 2px solid #e8e1b8; }
+
+/* Read by screen readers, not shown */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@media (max-width: 480px) {
+    .prev { right: 120px; width: 44px; height: 40px; background-size: 100px; background-position: -50px center; }
+    #progress { left: auto; right: 10px; transform: none; bottom: 26px; }
+    #progress .dot { width: 18px; height: 18px; }
+    #progress .dot::after { inset: 6px; }
+    #progress .dot[aria-current]::after { inset: 4px; }
+}
+@media (min-width: 1400px) {
+    .prev { top: 5%; right: calc(5% + 235px); }
+}
+@media (prefers-reduced-motion: reduce) {
+    #progress .dot::after { transition: none; }
+}

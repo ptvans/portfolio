@@ -23,7 +23,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build:protos": "cd protos && npx tsc -b && npx vite build",
-    "build:huebrew": "bash scripts/build-huebrew.sh"
+    "build:huebrew": "bash scripts/build-huebrew.sh",
+    "build:sky": "bash scripts/build-sky.sh"
   },
   "eslintConfig": {
     "extends": [

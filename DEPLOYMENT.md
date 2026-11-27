@@ -21,6 +21,12 @@ still need the steps below.
 - The Relationship Matrix is one self-contained static page,
   `public/relationship-matrix/index.html` (inline CSS/JS, no build step), served
   at `/relationship-matrix/`.
+- "Why is the Sky Blue?" lives in its own repo, `blue-sky-why` (plain static
+  files, no build tool). Its deployable files are **committed** in
+  `public/why-is-the-sky-blue/` and ship at `/why-is-the-sky-blue/`. To update
+  it: change and commit in `../blue-sky-why`, then here run `npm run build:sky`
+  (`scripts/build-sky.sh`, which calls that repo's `scripts/build.sh`; set
+  `SKY_DIR` if the repo is elsewhere) and commit `public/why-is-the-sky-blue/`.
 - Routing is hash-based (`/#/case-study/...`, `/protos/#/...`), so no server
   rewrites are needed.
 - `package.json` keeps `"homepage": "."` (relative asset paths), so the same
@@ -31,7 +37,7 @@ still need the steps below.
 
 - `vercel.json` — framework `create-react-app`, `npm ci`, `npm run build`,
   output `build`; 308 redirects `/protos` → `/protos/` and `/huebrew` →
-  `/huebrew/` (both apps use relative asset paths, which need the trailing slash); one-year immutable caching for
+  `/huebrew/`, and the same for `/relationship-matrix` and `/why-is-the-sky-blue` (these apps use relative asset paths, which need the trailing slash); one-year immutable caching for
   the hashed files under `/static/` and `/protos/assets/`.
 - `package.json` → `"engines": { "node": "22.x" }` (overrides the project's
   Node 26 setting).
