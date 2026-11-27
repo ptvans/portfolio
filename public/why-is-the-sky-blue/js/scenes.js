@@ -325,7 +325,10 @@ var View = Backbone.View.extend({
         this.updateHash();
         $("#progress .dot").removeAttr("aria-current").eq(n).attr("aria-current", "step");
         $("#prev").toggle(n > 0);
-        var text = $(stage + " .text-box, " + stage + " #title").first().text().replace(/\s+/g, " ").trim();
+        var box = $(stage + " .text-box, " + stage + " #title").first().clone();
+        box.find("svg").remove();   // the chart describes itself; don't read out its axis numbers
+        var parts = box.find("p").length ? box.find("p").map(function() { return $(this).text(); }).get() : [box.text()];
+        var text = parts.join(" ").replace(/\s+/g, " ").trim();
         $("#scene-announcer").text("Scene " + (n + 1) + " of " + SLUGS.length + ". " + text);
     },
 
