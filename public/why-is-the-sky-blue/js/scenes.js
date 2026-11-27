@@ -112,11 +112,12 @@ function sunPlacement(deg) {
     var a = sunAnchors();
     var o = Fx.box($("#observer")[0]);
     var ox = o.x + o.w / 2, oy = o.y + o.h / 2;
+    var shift = Fx.observerShift();
     function polar(p) {
-        var c = anchorCenter(p), x = c.x - ox, y = c.y - oy;
+        var c = anchorCenter(p), x = c.x + shift.dx - ox, y = c.y + shift.dy - oy;
         return { a: Math.atan2(y, x), r: Math.sqrt(x * x + y * y) };
     }
-    var up = polar(a.up), down = polar(a.down);
+    var up = polar(a.up), down = polar(a.down);   // relative to where the observer first stood
     var t = Math.max(-0.1, Math.min(1, deg / 90));   // below 0°, the sun keeps sinking along the arc
     var ang = down.a + (up.a - down.a) * t, r = down.r + (up.r - down.r) * t;
     return placeCenter(ox + r * Math.cos(ang), oy + r * Math.sin(ang));
@@ -345,6 +346,7 @@ var View = Backbone.View.extend({
 
         $(".stage").stop(true, true).not("#stage-" + name).fadeOut(Q);
         $(".text-box p").removeClass("under-sun");
+        $("#content").toggleClass("earth-turned", n === 6 || n === 7);
         if (n === 0) $("#shade").stop(true, true).slideDown(Q); else $("#shade").stop(true, true).slideUp(Q);
         show("#earth-day", true);
         show("#earth-night", n >= 1 && n <= 5);
@@ -358,9 +360,8 @@ var View = Backbone.View.extend({
             model.set({ sunPosition: "sky" });
             Fx.showDock();
             Fx.startSky();
-            if (n === 7) { this.skyText = "other"; Fx.showControl(); } else { this.skyText = "blue"; Fx.hideControl(); }
+            this.skyText = n === 7 ? "other" : "blue";
         } else {
-            Fx.hideControl();
             Fx.hideDock();
             Fx.stopSky();
             model.set({ sunPosition: n >= 2 && n <= 5 ? "in" : "hidden" });
@@ -478,9 +479,9 @@ var View = Backbone.View.extend({
     },
     showSkyblue: function(callback) {
         var model = this.model, view = this;
-        Fx.hideControl();
 
-        Fx.showDock();   // the chart shrinks into a corner and stays
+        Fx.showDock();   // the chart shrinks into place on the Earth and stays
+        $("#content").addClass("earth-turned");   // the Earth turns to make room
         $("#stage-physics").fadeOut(600, function() {
             model.set({ sunAngle: 90 });
             model.set({ sunPosition: "sky" });
@@ -492,9 +493,7 @@ var View = Backbone.View.extend({
     showSkyothercolors: function(callback) {
         var view = this;
         this.skyText = "other";
-        this.tweenAngle(4, 2600, function() {
-            Fx.showControl();
-        });
+        this.tweenAngle(4, 2600);
         $("#stage-skyblue").delay(300).fadeOut(600, function() {
             $("#stage-skyothercolors").fadeIn(600, callback);
         });
@@ -504,7 +503,7 @@ var View = Backbone.View.extend({
         cancelAnimationFrame(this.tween);
         Fx.stopSky();
         Fx.hideDock();
-        Fx.hideControl();
+        $("#content").removeClass("earth-turned");
         $("#sun, #observer").fadeOut(400);
         $("#stage-skyblue").fadeOut(600);
         $("#stage-skyothercolors").fadeOut(600);

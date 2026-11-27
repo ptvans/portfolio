@@ -46,7 +46,7 @@ export function createScatterChart(container, { compact = false, initialNm = 450
     el('text', { x: L.ml - 8, y: y(t) + L.fs * 0.35, class: 'tick', 'text-anchor': 'end' }, svg).textContent = t + '×';
   }
   el('text', { x: L.ml - 8, y: L.mt - 12, class: 'axis-title', 'text-anchor': 'start' }, svg)
-    .textContent = compact ? 'times as much as red' : 'times as much scattering as red light';
+    .textContent = 'multiple of red scattering';
 
   // The curve, filled with the spectrum
   let d = '';
@@ -75,8 +75,9 @@ export function createScatterChart(container, { compact = false, initialNm = 450
   const mDot = el('circle', { r: compact ? 4 : 6, class: 'marker-dot' }, marker);
   const mBox = el('rect', { rx: 3, class: 'marker-box' }, marker);
   const mText = el('text', { class: 'marker-text', 'text-anchor': 'middle' }, marker);
-  const mBig = el('tspan', { class: 'marker-big' }, mText);
+  const mName = el('tspan', { class: 'marker-name' }, mText);
   const mSmall = el('tspan', { class: 'marker-small' }, mText);
+  const mBig = el('tspan', { class: 'marker-big' }, mText);
 
   let current = initialNm;
   function setNm(nm) {
@@ -88,9 +89,11 @@ export function createScatterChart(container, { compact = false, initialNm = 450
     mDot.setAttribute('fill', `rgb(${wavelengthRGB(current)})`);
 
     const name = colorName(current);
+    // Reads "blue, 4.4×"; the large chart adds the wavelength: "blue 450 nm, 4.4×".
+    mName.textContent = compact ? `${name}, ` : `${name} `;
+    mSmall.textContent = compact ? '' : `${current} nm, `;
     mBig.textContent = fmt(v);
-    mSmall.textContent = compact ? ` ${name}` : `  ${current} nm ${name}`;
-    const boxW = compact ? 78 : 168, boxH = L.fs * 1.9;
+    const boxW = compact ? 92 : 168, boxH = L.fs * 1.9;
     const bx = Math.min(L.W - L.mr - boxW, Math.max(L.ml, px - boxW / 2));
     let by = py - boxH - 10;
     if (by < 2) by = py + 12;

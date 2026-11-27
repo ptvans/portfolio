@@ -3,12 +3,14 @@ import { createMagnifier } from './magnifier.js';
 import { createScatterChart } from './chart.js';
 import { createSkyView } from './sky-view.js';
 import { createSunlight, box } from './sunlight.js';
+import { createAtmosphere } from './atmosphere.js';
 import { pathMiles, ATMOSPHERE_MILES, prefersReducedMotion } from './physics.js';
 
 const $ = id => document.getElementById(id);
 const MAX_MILES = pathMiles(0);
 
 const content = $('content');
+createAtmosphere($('particles'), $('earth-day'));
 const magnifier = createMagnifier($('particle-detail'));
 const bigChart = createScatterChart($('chart-holder'));
 const dock = $('chart-dock');
@@ -24,10 +26,17 @@ const sunlight = createSunlight(content, {
 });
 
 const card = $('observer-card');
-const cardExtra = card.querySelector('.card-extra');
 const slider = $('sun-angle');
 const MIN_CARD_W = 210;
+const MIN_DOCK_W = 200;
+
+// On scenes 7–8 the Earth turns this far counterclockwise, carrying the observer
+// up and to the left, to make room for the observer's card and the chart.
+const EARTH_TURN = 20;
+document.documentElement.style.setProperty('--earth-turn', `${-EARTH_TURN}deg`);
+let observerShift = { dx: 0, dy: 0 };
 let angle = 90, docked = false;
+let cardBox = null;   // where placeCard() put the card, in #content coordinates, at full height
 
 function setAngle(deg) {
   angle = deg;
@@ -56,8 +65,7 @@ function setAngle(deg) {
 }
 
 // The observer's card sits beside the observer (or below, if there's no room),
-// with its pointer aimed at the observer. It's placed at its full, expanded
-// height so that opening it on the sunset scene never makes it jump.
+// with its pointer aimed at the observer, clear of the scene text above.
 function placeCard() {
   const o = box($('observer'));
   const c = content.getBoundingClientRect();
@@ -67,29 +75,40 @@ function placeCard() {
   // Width: the CSS width, narrowed (down to MIN_CARD_W) to fit beside the observer.
   card.style.width = '';
   card.style.transform = '';
+  skyFrame.style.height = '';
+  skyFrame.style.aspectRatio = '';
   const cssW = box(card).w;
   const roomRight = window.innerWidth - c.left - 8 - (o.x + o.w + gap);
   const side = roomRight >= MIN_CARD_W ? 'left' : 'top';
   const w = side === 'left' ? Math.min(cssW, roomRight) : cssW;
   card.style.width = w + 'px';
-
-  // Height when fully open.
-  const expanded = card.classList.contains('expanded');
-  card.classList.add('expanded');
-  const h = box(card).h;
-  if (!expanded) card.classList.remove('expanded');
-
   const minX = -c.left + 8, maxX = window.innerWidth - c.left - w - 8;
-  const minY = -c.top + 8, maxY = window.innerHeight - c.top - h - 30;
-  let x, y, scale = 1;
+  const x = side === 'left' ? o.x + o.w + gap : Math.max(minX, Math.min(ox - w * 0.75, maxX));
+
+  // Vertical room: from below any scene text the card would sit under, to the window's bottom.
+  const bottomY = window.innerHeight - c.top - 30;
+  let topY = -c.top + 8;
+  for (const id of ['daylight-text', 'sunset-text']) {
+    const t = textBox($(id));
+    if (t.w && x < t.x + t.w && x + w > t.x) topY = Math.max(topY, t.y + t.h + 12);
+  }
+  // A wide card would be tall; cap the sky view's height so the whole card fits.
+  let h = box(card).h;
+  if (side === 'left' && h > bottomY - topY) {
+    skyFrame.style.aspectRatio = 'auto';   // keep the full width; just shorter
+    skyFrame.style.height = '0px';
+    const others = box(card).h;            // everything in the card but the view
+    skyFrame.style.height = Math.max(110, bottomY - topY - others) + 'px';
+    h = box(card).h;
+  }
+
+  let y, scale = 1;
   if (side === 'left') {
-    x = o.x + o.w + gap;
-    y = Math.max(minY, Math.min(oy - 60, maxY));   // the sky view level with the observer
+    y = Math.max(topY, Math.min(oy - 60, bottomY - h));   // the sky view level with the observer
   } else {
     // Below the observer; shrink rather than ride up over them.
-    x = Math.max(minX, Math.min(ox - w * 0.75, maxX));
     y = o.y + o.h + gap;
-    const room = window.innerHeight - c.top - 30 - y;
+    const room = bottomY - y;
     if (room < h) scale = Math.max(0.6, room / h);
   }
   card.style.left = x + 'px';
@@ -101,24 +120,59 @@ function placeCard() {
     card.style.transformOrigin = `${Math.max(14, ox - x)}px 0`;
     card.style.transform = `scale(${scale.toFixed(3)})`;
   }
+  cardBox = { x, y, w: w * scale, h: h * scale };
 }
 
-// The docked chart goes in the left margin when there's room, otherwise bottom-left.
+// A scene's text box, measured even while its scene is hidden.
+function textBox(el) {
+  const stage = el.parentElement;
+  const hidden = getComputedStyle(stage).display === 'none';
+  const saved = stage.style.cssText;
+  if (hidden) { stage.style.display = 'block'; stage.style.visibility = 'hidden'; }
+  const b = { x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight };
+  if (hidden) stage.style.cssText = saved;
+  return b;
+}
+
+// The docked chart sits on the Earth, left of the observer, level with the
+// card's bottom and above the progress dots. It is as wide as its CSS allows
+// (narrower only if the window has no room); on short windows it may overlap
+// the end of the sunlight's path into the observer.
 function placeDock() {
-  // Read the text column's position from CSS, since its scene may be hidden.
-  const cs = getComputedStyle($('daylight-text'));
+  if (!cardBox) placeCard();
   const c = content.getBoundingClientRect();
-  const textLeft = c.left + parseFloat(cs.left);
-  const w = dock.offsetWidth || 250;
-  dock.classList.toggle('in-margin', textLeft - 32 >= w);
-  if (dock.classList.contains('in-margin')) {
-    dock.style.top = Math.max(16, c.top + parseFloat(cs.top)) + 'px';
-  } else {
-    dock.style.top = '';
-  }
+  const o = box($('observer'));
+  const gap = 14;
+  const right = c.left + Math.min(cardBox.x, o.x) - gap;
+  const bottom = Math.min(c.top + cardBox.y + cardBox.h, window.innerHeight - 60);
+  dock.style.width = '';
+  const w = Math.max(MIN_DOCK_W, Math.min(box(dock).w, right - 8));
+  dock.style.width = w + 'px';
+  const h = box(dock).h;
+  dock.style.left = (right - w) + 'px';
+  dock.style.top = Math.max(8, bottom - h) + 'px';
+}
+
+// Put the observer where they stand once the Earth has turned: the CSS spot,
+// rotated counterclockwise around the Earth's center.
+function placeObserver() {
+  const obs = $('observer');
+  obs.style.left = obs.style.top = obs.style.right = '';
+  const o = box(obs), e = box($('earth-day'));
+  const ex = e.x + e.w / 2, ey = e.y + e.h / 2;
+  const ox = o.x + o.w / 2, oy = o.y + o.h / 2;
+  const a = -EARTH_TURN * Math.PI / 180;   // negative: counterclockwise on screen
+  const dx = ox - ex, dy = oy - ey;
+  const nx = ex + dx * Math.cos(a) - dy * Math.sin(a);
+  const ny = ey + dx * Math.sin(a) + dy * Math.cos(a);
+  obs.style.right = 'auto';
+  obs.style.left = (nx - o.w / 2) + 'px';
+  obs.style.top = (ny - o.h / 2) + 'px';
+  observerShift = { dx: nx - ox, dy: ny - oy };
 }
 
 function layout() {
+  placeObserver();
   placeCard();
   placeDock();
   if (sky) sky.render(angle);   // the view may have changed size
@@ -165,8 +219,12 @@ function fade(el, show, ms = 600) {
   }
 }
 
+placeObserver();
+
 window.SkyFx = {
   box,
+  // How far the observer moved when the Earth turned (the sun's arc moves with them).
+  observerShift: () => observerShift,
   magnifier,
   setAngle,
   startSky() {
@@ -178,23 +236,5 @@ window.SkyFx = {
   stopSky() { sunlight.stop(); fade(card, false, 400); },
   showDock,
   hideDock,
-  // Open the slider and distance readout under the observer's view.
-  showControl() {
-    if (card.classList.contains('expanded')) return;
-    card.classList.add('expanded');
-    placeCard();
-    if (prefersReducedMotion()) return;
-    const h = cardExtra.offsetHeight;
-    cardExtra.animate([{ height: '0px', opacity: 0 }, { height: h + 'px', opacity: 1 }],
-      { duration: 700, easing: 'cubic-bezier(.25,.8,.25,1)' });
-  },
-  hideControl() {
-    if (!card.classList.contains('expanded')) return;
-    const done = () => card.classList.remove('expanded');
-    if (prefersReducedMotion() || getComputedStyle(card).display === 'none') return done();
-    const h = cardExtra.offsetHeight;
-    cardExtra.animate([{ height: h + 'px', opacity: 1 }, { height: '0px', opacity: 0 }],
-      { duration: 400, easing: 'ease-in' }).onfinish = done;
-  },
   layout,
 };

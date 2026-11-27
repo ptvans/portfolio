@@ -105,10 +105,6 @@ body {
     background-image: url('../img/earth-day.png');
 }
 
-#particles {
-    background-image: url('../img/particles.png');
-}
-
 #sun {
     background-image: url('../img/sun.png');
 }
@@ -248,14 +244,28 @@ body {
     position: absolute;
     background-position-y: top;
     background-position-x: center;
+    transition: transform 1.6s ease-in-out;
 }
+/* On scenes 7–8 the Earth turns counterclockwise (angle set in js/fx/main.js) */
+.earth-turned #earth-day, .earth-turned #earth-night { transform: rotate(var(--earth-turn, -20deg)); }
 
 #particles {
     position: absolute;
     top: 400px;
-    opacity: 0.5;
-    background-position-y: top;
-    background-position-x: center;
+}
+
+/* The atmosphere, drawn by js/fx/atmosphere.js: two layers of particles
+   drifting very slowly in opposite directions around the Earth */
+.fx-atmosphere {
+    position: absolute;
+    pointer-events: none;
+}
+.fx-atmosphere.layer-0 { animation: atmosphere-drift 900s linear infinite; }
+.fx-atmosphere.layer-1 { animation: atmosphere-drift 600s linear infinite reverse; }
+#particles.still .fx-atmosphere { animation: none; }
+@keyframes atmosphere-drift {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 #sun {
@@ -286,15 +296,15 @@ body {
     }
     
     .bttn {
-        width: 110px;
-        height: 40px;
-        font-size: 24px;
-        padding: 10px;
-        line-height: 22px;
+        width: 145px;
+        height: 52px;
+        font-size: 30px;
+        padding: 10px 12px;
+        line-height: 32px;
     }
     
     .next {
-        background-size: 100px;
+        background-size: 130px;
     }
     
     #title-container {
@@ -345,7 +355,6 @@ body {
         height: 480px;
         top: 220px;
         left: 0px;
-        background-size: 480px;
     }
     
     #sun {
@@ -416,7 +425,6 @@ body {
         height: 800px;
         left: -20px;
         top: 300px;
-        background-size: 800px;
     }
     
     #sun {
@@ -486,7 +494,6 @@ body {
         height: 1000px;
         left: -116px;
         top: 360px;
-        background-size: 1000px;
     }
     
     #sun {
@@ -565,7 +572,6 @@ body {
         height: 1500px;
         left: -150px;
         top: 400px;
-        background-size: 1500px;
     }
     
     #sun {
@@ -649,7 +655,7 @@ body {
 .scatter-chart .marker-box { fill: rgba(20, 20, 20, 0.75); }
 .scatter-chart .marker-text { fill: #eee; }
 .scatter-chart .marker-big { font-weight: 700; font-size: 1.15em; }
-.scatter-chart .marker-small { fill: #ccc; }
+.scatter-chart .marker-small { fill: #aaa; }
 .chart-hint {
     font-size: 0.6em;
     color: #aaa;
@@ -661,29 +667,19 @@ body {
 /* The chart, docked once the sun rises */
 #chart-dock {
     display: none;
-    position: fixed;
-    left: 12px;
-    bottom: 28px;
-    width: 250px;
+    position: fixed;   /* placed beside the observer's card by placeDock() in js/fx/main.js */
+    width: 340px;      /* the most it gets; placeDock() narrows it to fit */
     z-index: 20000;
     padding: 10px 12px 8px;
     border-radius: 4px;
     background-color: rgba(20, 20, 20, 0.45);
     box-shadow: 0px 1px 3px rgba(100, 100, 100, 0.65);
 }
-#chart-dock.in-margin { bottom: auto; }
 #chart-dock .dock-title {
     color: #ddd;
     font-size: 13px;
     line-height: 17px;
     margin-bottom: 4px;
-}
-#chart-dock .overhead {
-    color: #333;
-    background-color: #e8e1b8;
-    border-radius: 2px;
-    padding: 0 4px;
-    white-space: nowrap;
 }
 
 /* The observer's card: their live view of the sky, the sun-height slider
@@ -692,7 +688,7 @@ body {
     display: none;
     position: absolute;
     z-index: 3;
-    width: 300px;
+    width: 480px;      /* the most it gets; placeCard() in js/fx/main.js narrows it to fit */
     padding: 8px 8px 10px;
     border-radius: 6px;
     color: #e5e5e5;
@@ -738,9 +734,6 @@ body {
 }
 #sky-view.no-webgl { background: linear-gradient(#5c9bd6, #a9d3ef); }
 
-/* Shown on the sunset scene only */
-#observer-card .card-extra { display: none; overflow: hidden; }
-#observer-card.expanded .card-extra { display: block; }
 
 #observer-card .angle-row {
     display: flex;
@@ -821,28 +814,30 @@ body {
 
 @media (max-width: 480px) {
     #chart-holder { max-width: 325px; margin-top: 10px; }
-    #chart-dock { width: 170px; padding: 6px 8px; }
-    #chart-dock .dock-title { font-size: 11px; line-height: 14px; }
-    #observer-card { width: 210px; padding: 6px 6px 8px; }
+    /* No room for the docked chart on phones; it stays on its own scene */
+    #chart-dock { display: none !important; }
+    #observer-card { width: 300px; padding: 6px 6px 8px; }
     #observer-card .card-title, #observer-card label, #observer-card output { font-size: 12px; }
     #observer-card .distance-big { font-size: 32px; line-height: 34px; }
     #observer-card .distance-line, #observer-card .distance-sub { font-size: 11px; line-height: 14px; }
 }
 @media (min-width: 481px) and (max-width: 767px) {
     #chart-holder { max-width: 450px; }
-    #chart-dock { width: 210px; }
-    #observer-card { width: 250px; }
+    #chart-dock { width: 260px; }
+    #observer-card { width: 340px; }
     #observer-card .distance-big { font-size: 38px; line-height: 40px; }
 }
 @media (min-width: 1400px) {
     #chart-holder { max-width: 700px; }
-    #chart-dock { width: 300px; }
-    #observer-card { width: 360px; }
+    #chart-dock { width: 420px; }
+    #observer-card { width: 600px; }
     #observer-card .distance-big { font-size: 56px; line-height: 58px; }
     #observer-card .distance-sub { font-size: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
     .text-box p, #sunlight-fx { transition: none; }
+    .fx-atmosphere { animation: none !important; }
+    #earth-day, #earth-night { transition: none; }
 }
 
 /* ==========================================================
@@ -920,7 +915,7 @@ button.bttn {
 }
 
 @media (max-width: 480px) {
-    .prev { right: 120px; width: 44px; height: 40px; background-size: 100px; background-position: -50px center; }
+    .prev { right: 158px; width: 58px; height: 52px; background-size: 130px; background-position: -62px center; }
     #progress { left: auto; right: 10px; transform: none; bottom: 26px; }
     #progress .dot { width: 18px; height: 18px; }
     #progress .dot::after { inset: 6px; }
