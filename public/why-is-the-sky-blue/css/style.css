@@ -211,8 +211,17 @@ body {
     margin-top: 30px;
 }
 
-#inter-text {
-
+/* The conclusion answers the three questions from scene 2, with the same icons */
+#inter-text .answers {
+    margin-top: 32px;
+}
+#inter-text .answers p {
+    margin-bottom: 14px;
+}
+@media (max-width: 480px) {
+    #inter-text p { margin-bottom: 10px; }
+    #inter-text .answers { margin-top: 14px; }
+    #inter-text .answers p { margin-bottom: 6px; }
 }
 
 /* The three questions sit a little lower and further apart than other text */
@@ -681,7 +690,6 @@ body {
     font-style: italic;
     margin-top: 6px;
 }
-.highlight.overhead { font-weight: 700; }
 
 /* The chart, docked once the sun rises */
 #chart-dock {

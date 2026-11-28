@@ -7,7 +7,7 @@ const MIN_NM = 400, MAX_NM = 700, MAX_Y = 7;
 
 const LAYOUTS = {
   full:    { W: 560, H: 300, ml: 58, mr: 22, mt: 30, mb: 66, fs: 15, xStep: 50, yTicks: [1, 2, 3, 4, 5, 6, 7] },
-  compact: { W: 300, H: 196, ml: 34, mr: 10, mt: 26, mb: 40, fs: 13, xStep: 100, yTicks: [1, 3, 5, 7] },
+  compact: { W: 300, H: 180, ml: 34, mr: 10, mt: 10, mb: 40, fs: 13, xStep: 100, yTicks: [1, 3, 5, 7] },
 };
 
 function el(name, attrs = {}, parent) {
@@ -45,8 +45,10 @@ export function createScatterChart(container, { compact = false, initialNm = 450
     el('line', { x1: L.ml, x2: L.W - L.mr, y1: y(t), y2: y(t), class: 'grid' }, svg);
     el('text', { x: L.ml - 8, y: y(t) + L.fs * 0.35, class: 'tick', 'text-anchor': 'end' }, svg).textContent = t + '×';
   }
-  el('text', { x: L.ml - 8, y: L.mt - 12, class: 'axis-title', 'text-anchor': 'start' }, svg)
-    .textContent = 'multiple of red scattering';
+  if (!compact) {   // the docked chart's title bar already says this
+    el('text', { x: L.ml - 8, y: L.mt - 12, class: 'axis-title', 'text-anchor': 'start' }, svg)
+      .textContent = 'Multiple of Red Scattering';
+  }
 
   // The curve, filled with the spectrum
   let d = '';
