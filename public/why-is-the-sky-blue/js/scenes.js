@@ -514,6 +514,19 @@ var View = Backbone.View.extend({
             $("#stage-skyothercolors").fadeIn(600, callback);
         });
     },
+    // Back from the sunset to the blue sky: the reverse of showSkyothercolors.
+    // The sun climbs back along its arc (the Earth and observer turning with it)
+    // while the text crossfades back.
+    showSkyblueFromSunset: function(callback) {
+        this.skyText = "blue";
+        this.tweenAngle(90, 2600);
+        $("#next").text("GOT IT");
+        if ($("#stage-skyothercolors").is(":visible")) {
+            hideText("#stage-skyothercolors", 600, function() { showText("#stage-skyblue", 600, callback); });
+        } else {
+            showText("#stage-skyblue", 600, callback);   // the slider had already switched the text
+        }
+    },
     showConclusion: function(callback) {
         var model = this.model, view = this, gen = this.gen;
         cancelAnimationFrame(this.tween);
@@ -583,6 +596,8 @@ var View = Backbone.View.extend({
         var forward = initial ? n === 0 : (n === from + 1 || (n === 0 && from === SLUGS.length - 1));
         if (forward) {
             this[fn](done);
+        } else if (from === 7 && n === 6) {
+            this.showSkyblueFromSunset(done);
         } else {
             this.applyState(n, done);
         }
