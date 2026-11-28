@@ -119,12 +119,15 @@ Fx.sunAnchorCenters = function() {
     return { up: anchorCenter(a.up), down: anchorCenter(a.down) };
 };
 
-// Fade helpers that are safe to interrupt midway.
-function showText(sel, ms) {
-    $(sel).stop(true).css({ display: "block", opacity: $(sel).is(":visible") ? $(sel).css("opacity") : 0 }).fadeTo(ms || 400, 1);
+// Fade helpers that are safe to interrupt midway: they pick up from whatever
+// opacity an interrupted animation left behind.
+function showText(sel, ms, done) {
+    var el = $(sel).stop(true);
+    el.css({ display: "block", opacity: el.is(":visible") ? el.css("opacity") : 0 })
+      .fadeTo(ms || 400, 1, function() { $(this).css("opacity", ""); if (done) done(); });
 }
-function hideText(sel, ms) {
-    $(sel).stop(true).fadeTo(ms || 300, 0, function() { $(this).hide().css("opacity", ""); });
+function hideText(sel, ms, done) {
+    $(sel).stop(true).fadeTo(ms || 300, 0, function() { $(this).hide().css("opacity", ""); if (done) done(); });
 }
 
 var SunView = Backbone.View.extend({
@@ -213,14 +216,10 @@ var View = Backbone.View.extend({
         "keydown": "processKey"
     },
 
-    eventsDisabled: {
-        "keydown": "processKey"
-    },
-
-    isEventsDisabled: false,
+    isAnimating: false,
 
     initialize: function() {
-        _.bindAll(this, 'render', 'enableButtons', 'disableButtons', 'onAngle', 'onSlider', 'checkTextOverlap');
+        _.bindAll(this, 'render', 'onAngle', 'onSlider', 'checkTextOverlap');
         this.model.on('change:currentStage', this.render);
         this.model.on('change:sunAngle', this.onAngle);
 
@@ -234,15 +233,21 @@ var View = Backbone.View.extend({
             .on("input change", this.onSlider)
             .on("keydown", function(e) { e.stopPropagation(); });  // arrows move the sun, not the scene
 
+        // The scene never scrolls. Without this, links like #particles or #rayleigh,
+        // which share a name with an element on the page, would scroll it out of place.
+        var wrapper = document.getElementById("wrapper");
+        wrapper.addEventListener("scroll", function() { if (wrapper.scrollTop || wrapper.scrollLeft) { wrapper.scrollTop = 0; wrapper.scrollLeft = 0; } });
+
         this.buildProgress();
+        // A heading for each scene, for screen-reader navigation (the intro's title is the page heading).
+        _.each(this.model.stages, function(name, i) {
+            if (i > 0) $("#stage-" + name).prepend($("<h2>", { "class": "visually-hidden", text: TITLES[i] }));
+        });
         $(window).on("hashchange", _.bind(this.onHash, this));
         this.listenForSwipes();
     },
 
     processKey: function(e) {
-        if (this.isEventsDisabled) {
-            return true;
-        }
         if (e.keyCode == 37) {
             this.previousStage();
             return false;
@@ -253,8 +258,19 @@ var View = Backbone.View.extend({
         return true;
     },
 
+    // Next moves on, or, while a scene is still animating in, finishes it at once.
     nextStage: function() {
-        this.model.next();
+        if (this.isAnimating) {
+            this.finishNow();
+        } else {
+            this.model.next();
+        }
+    },
+
+    finishNow: function() {
+        var n = this.model.get("currentStage");
+        this.gen = (this.gen || 0) + 1;
+        this.applyState(n, this.doneFor(n));
     },
 
     previousStage: function() {
@@ -286,11 +302,7 @@ var View = Backbone.View.extend({
     onHash: function() {
         var n = _.indexOf(SLUGS, location.hash.slice(1));
         if (n < 0) return;
-        if (this.isEventsDisabled) {
-            this.updateHash();   // mid-transition: ignore, and put the link back
-            return;
-        }
-        this.goTo(n);
+        this.goTo(n);   // safe even mid-animation: the jump stops whatever was running
     },
 
     updateHash: function() {
@@ -309,7 +321,7 @@ var View = Backbone.View.extend({
             start = (e.touches.length === 1 && !ignore) ? { x: t.clientX, y: t.clientY } : null;
         }, { passive: true });
         document.addEventListener("touchend", function(e) {
-            if (!start || view.isEventsDisabled) return;
+            if (!start) return;
             var t = e.changedTouches[0], dx = t.clientX - start.x, dy = t.clientY - start.y;
             start = null;
             if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx) * 0.6) return;
@@ -326,7 +338,7 @@ var View = Backbone.View.extend({
         $("#progress .dot").removeAttr("aria-current").eq(n).attr("aria-current", "step");
         $("#prev").toggle(n > 0);
         var box = $(stage + " .text-box, " + stage + " #title").first().clone();
-        box.find("svg").remove();   // the chart describes itself; don't read out its axis numbers
+        box.find("svg, .visually-hidden").remove();   // skip the chart's axis numbers and link notes
         var parts = box.find("p").length ? box.find("p").map(function() { return $(this).text(); }).get() : [box.text()];
         var text = parts.join(" ").replace(/\s+/g, " ").trim();
         $("#scene-announcer").text("Scene " + (n + 1) + " of " + SLUGS.length + ". " + text);
@@ -335,24 +347,27 @@ var View = Backbone.View.extend({
     // Set the page straight to a scene's finished state, with quick fades.
     // Used for going back and for jumping; "next" plays each scene's own animation.
     applyState: function(n, done) {
-        var model = this.model, Q = 300;
+        var view = this, model = this.model, Q = 300, gen = this.gen;
         var name = model.stages[n];
         cancelAnimationFrame(this.tween);
+        // Stop whatever was animating, without running its follow-on steps.
+        $(".stage, #shade, #earth-day, #earth-night, #particles, #particle-detail, #wavelength-chart, #observer, #sun").stop(true, false);
+        $("#shade").css("height", "");
         function show(sel, on) {
-            var el = $(sel).stop(true, true);
-            if (on) el.fadeIn(Q); else el.fadeOut(Q);
+            if (on) showText(sel, Q);
+            else if ($(sel).is(":visible")) hideText(sel, Q);
         }
 
-        $(".stage").stop(true, true).not("#stage-" + name).fadeOut(Q);
+        $(".stage").not("#stage-" + name).each(function() { show(this, false); });
         $(".text-box p").removeClass("under-sun");
         Fx.turnEarth(n === 6 || n === 7);
-        if (n === 0) $("#shade").stop(true, true).slideDown(Q); else $("#shade").stop(true, true).slideUp(Q);
+        show("#shade", n === 0);
         show("#earth-day", true);
         show("#earth-night", n >= 1 && n <= 5);
         show("#particles", n >= 2);
         show("#particle-detail", n === 2 || n === 3);
         if (n === 2 || n === 3) Fx.magnifier.setBeam(n === 3);
-        $("#wavelength-chart").toggle(n === 5);
+        $("#wavelength-chart").css("opacity", "").toggle(n === 5);
 
         if (n === 6 || n === 7) {
             model.set({ sunAngle: n === 6 ? 90 : 4 });
@@ -365,10 +380,12 @@ var View = Backbone.View.extend({
             Fx.stopSky();
             model.set({ sunPosition: n >= 2 && n <= 5 ? "in" : "hidden" });
         }
+        show("#observer", n === 6 || n === 7);
+        this.sunView.render();   // re-aim the sun, even if it was stopped partway
         $("#next").text(n === 0 ? "GO" : n === SLUGS.length - 1 ? "Restart" : "GOT IT");
 
         setTimeout(function() {
-            $("#stage-" + name).stop(true, true).fadeIn(Q, done);
+            if (gen === view.gen) showText("#stage-" + name, Q, done);
         }, Q);
     },
 
@@ -477,7 +494,7 @@ var View = Backbone.View.extend({
         });
     },
     showSkyblue: function(callback) {
-        var model = this.model, view = this;
+        var model = this.model, view = this, gen = this.gen;
 
         Fx.showDock();   // the chart shrinks into place on the Earth and stays
         Fx.turnEarth(true);   // the Earth turns to make room
@@ -485,7 +502,7 @@ var View = Backbone.View.extend({
             model.set({ sunAngle: 90 });
             model.set({ sunPosition: "sky" });
             $("#earth-night").fadeOut({"duration": 2400, "easing": "linear"});
-            setTimeout(Fx.startSky, 1800);
+            setTimeout(function() { if (gen === view.gen) Fx.startSky(); }, 1800);
             $("#stage-skyblue").delay(2400).fadeIn(600, callback);
         });
     },
@@ -498,7 +515,7 @@ var View = Backbone.View.extend({
         });
     },
     showConclusion: function(callback) {
-        var model = this.model;
+        var model = this.model, view = this, gen = this.gen;
         cancelAnimationFrame(this.tween);
         Fx.stopSky();
         Fx.hideDock();
@@ -507,26 +524,48 @@ var View = Backbone.View.extend({
         $("#stage-skyblue").fadeOut(600);
         $("#stage-skyothercolors").fadeOut(600);
         setTimeout(function() {
+            if (gen !== view.gen) return;
             $("#stage-conclusion").fadeIn(400, callback);
             model.set({ sunPosition: "hidden" });
         }, 620);
         $("#next").text("Restart");
     },
 
-    enableButtons: function() {
-        this.isEventsDisabled = false;
-        this.undelegateEvents();
-        this.delegateEvents(this.events);
-        $(".bttn").removeClass("disabled").removeAttr("aria-disabled");
+    // While a scene animates in, the buttons dim a little. They still work:
+    // Next finishes the animation at once, Back goes back.
+    setBusy: function(on) {
+        this.isAnimating = on;
+        $(".bttn").toggleClass("busy", on);
     },
 
-    // While a scene animates in, the buttons dim and ignore presses. They stay
-    // in place (rather than disappearing) so keyboard focus isn't lost.
-    disableButtons: function() {
-        this.isEventsDisabled = true;
-        this.undelegateEvents();
-        this.delegateEvents(this.eventsDisabled);
-        $(".bttn").addClass("disabled").attr("aria-disabled", "true");
+    // The step that runs when a scene has finished appearing. Each scene
+    // change gets a number; a late "done" from an earlier one is ignored.
+    doneFor: function(n) {
+        var view = this, gen = this.gen;
+        return function() {
+            if (gen !== view.gen) return;
+            view.settle(n);
+            view.setBusy(false);
+            view.afterStage();
+        };
+    },
+
+    // Make sure a finished scene shows only what it should: anything left
+    // over from an earlier scene is stopped and hidden.
+    settle: function(n) {
+        var name = this.model.stages[n];
+        function ensure(sel, on) {
+            var el = $(sel);
+            if (on && !el.is(":visible")) showText(el, 200);
+            if (!on && el.is(":visible")) hideText(el, 200);
+        }
+        $(".stage").not("#stage-" + name).each(function() { ensure(this, false); });
+        ensure("#stage-" + name, true);
+        ensure("#shade", n === 0);
+        ensure("#earth-night", n >= 1 && n <= 5);
+        ensure("#particles", n >= 2);
+        ensure("#particle-detail", n === 2 || n === 3);
+        if (n === 5) ensure("#wavelength-chart", true);
     },
 
     render: function() {
@@ -535,21 +574,15 @@ var View = Backbone.View.extend({
         var from = this.model.previous("currentStage");
         var currentStageStr = this.model.getCurrentStage();
         var fn = 'show' + currentStageStr.charAt(0).toUpperCase() + currentStageStr.slice(1);
-        function done() {
-            view.enableButtons();
-            view.afterStage();
-        }
-
-        if (n > 0) {
-            this.disableButtons();
-        }
+        this.gen = (this.gen || 0) + 1;
+        var done = this.doneFor(n);
+        this.setBusy(true);
         // Moving forward one scene (or restarting) plays that scene's own animation.
         var initial = !this.rendered;
         this.rendered = true;
         var forward = initial ? n === 0 : (n === from + 1 || (n === 0 && from === SLUGS.length - 1));
         if (forward) {
             this[fn](done);
-            if (n === 0) this.afterStage();
         } else {
             this.applyState(n, done);
         }

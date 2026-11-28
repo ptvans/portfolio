@@ -46,19 +46,19 @@ body {
     font-family: 'Amatic SC';
 }
 
-/* While a scene animates in, the buttons dim (staying put, so keyboard focus isn't lost) */
-.bttn.disabled {
-    opacity: 0.15;
-    pointer-events: none;
+/* While a scene animates in, the buttons dim a little but still work:
+   Next finishes the animation at once, Back goes back */
+.bttn.busy {
+    opacity: 0.55;
 }
 
 .next {
     position: fixed;
     top: 5px;
     right: 5px;
-    background-size: 200px;
+    background-size: 150px;
     background-image: url('../img/arrow-next.png');
-    background-position: center;
+    background-position: 55px center;
     text-align: left;
     float: right;
 }
@@ -95,6 +95,12 @@ body {
     color: #fff;
     display: inline;
     text-align: center;
+    /* it's the page's heading (h1): undo the heading defaults */
+    margin: 0;
+    font-weight: 400;
+    line-height: inherit;
+    /* a soft shadow so the white title stands out from the light sky */
+    text-shadow: 0 2px 18px rgba(8, 52, 66, 0.35), 0 1px 2px rgba(8, 52, 66, 0.3);   /* very dark teal-blue, #083442 */
 }
 
 #earth-night {
@@ -209,8 +215,18 @@ body {
 
 }
 
+/* The three questions sit a little lower and further apart than other text */
 #conclude-text {
+    margin-top: 70px;
+}
 
+#conclude-text p {
+    margin-bottom: 44px;
+}
+
+@media (max-width: 767px) {
+    #conclude-text { margin-top: 36px; }
+    #conclude-text p { margin-bottom: 32px; }
 }
 
 #content {
@@ -306,7 +322,8 @@ body {
     }
     
     .next {
-        background-size: 130px;
+        background-size: 100px;
+        background-position: 32px center;
     }
     
     #title-container {
@@ -548,7 +565,7 @@ body {
     .text-box {
         font-size: 30px;
         line-height: 42px;
-        font-weight: 100;
+        font-weight: 300;
         top: 100px;
         left: 130px;
     }
@@ -880,6 +897,8 @@ button.bttn {
     -webkit-appearance: none;
     appearance: none;
 }
+/* Back starts hidden (no scene before the intro); scenes.js shows it from scene 2 on */
+button.bttn.prev { display: none; }
 .bttn:focus { outline: none; }
 .bttn:focus-visible { outline: 3px solid #e8e1b8; outline-offset: 3px; }
 
@@ -892,8 +911,8 @@ button.bttn {
     width: 70px;
     padding: 0;
     background-image: url('../img/arrow-next.png');
-    background-size: 200px;
-    background-position: -105px center;
+    background-size: 150px;
+    background-position: -74px center;
     transform: scaleX(-1);
 }
 
@@ -942,7 +961,7 @@ button.bttn {
 }
 
 @media (max-width: 480px) {
-    .prev { right: 158px; width: 58px; height: 52px; background-size: 130px; background-position: -62px center; }
+    .prev { right: 158px; width: 58px; height: 52px; background-size: 100px; background-position: -44px center; }
     #progress { left: auto; right: 10px; transform: none; bottom: 26px; }
     #progress .dot { width: 18px; height: 18px; }
     #progress .dot::after { inset: 6px; }
